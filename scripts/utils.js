@@ -1,3 +1,5 @@
+//Fill a select element with options fetched from an API endpoint
+
 export async function fillSelect(id) {
   let select = document.getElementById(id);
   let path = "/api/solar_manager/";
@@ -5,16 +7,19 @@ export async function fillSelect(id) {
   let default_option_message = "";
 
   switch (id) {
-    case "annee":
+    //Index page
+    case "annee-installation-select":
       path += "annees";
       error_message = "Erreur lors de la récupération des années";
-      default_option_message = "Séléctionner une année";
+      default_option_message = "Sélectionner une année";
       break;
-    case "region":
+    case "region-select":
       path += "region";
       error_message = "Erreur lors de la récupération des regions";
-      default_option_message = "Séléctionner une region";
+      default_option_message = "Sélectionner une region";
       break;
+
+    //Recherche page
     case "departements-select":
       path += "departements";
       error_message = "Erreur lors de la récupération des départements : ";

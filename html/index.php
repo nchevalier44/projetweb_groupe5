@@ -76,7 +76,7 @@
     <div class="row justify-content-center align-items-center g-3 mb-3">
       <div class="col-auto">
         <label for="annee" class="form-label fw-semibold">Années :</label>
-        <select name="annee" id="annee" class="annee-select">
+        <select name="annee" id="annee" class="annee-installation-select">
         </select>
       </div>
       <div class="col-auto">
@@ -93,6 +93,7 @@
   <?php
   include_once "footer.html";
   ?>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../scripts/index.js" type="module"></script>
 </body>

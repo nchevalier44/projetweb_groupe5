@@ -1,6 +1,6 @@
 import { fillSelect } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  fillSelect("region");
-  fillSelect("annee");
+  fillSelect("region-select");
+  fillSelect("annee-installation-select");
 });
