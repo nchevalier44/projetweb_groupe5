@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Accueil Solar Manager</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
-      crossorigin="anonymous" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
-      crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../styles/index.css" />
-    
-    
-  </head>
-  <body>
 
-    <?php
-    include_once "navbar.html";
-    ?>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accueil Solar Manager</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
+    crossorigin="anonymous" />
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../styles/index.css" />
 
-<header class="d-flex align-items-center mb-4">
+
+</head>
+
+<body>
+
+  <?php
+  include_once "navbar.html";
+  ?>
+
+  <header class="d-flex align-items-center mb-4">
     <img src="../images/logo.png" alt="Logo" class="logo me-3">
     <div>
       <h1 class="m-0 fw-bold lh-1">Solar<br>Manager</h1>
@@ -73,15 +75,13 @@
   <section class=" container text-center">
     <div class="row justify-content-center align-items-center g-3 mb-3">
       <div class="col-auto">
-        <label for="annee" class="form-label fw-semibold">Années</label>
-        <select id="annee" class="form-select">
-          <option>2025</option>
+        <label for="annee" class="form-label fw-semibold">Années :</label>
+        <select name="annee" id="annee" class="annee-select">
         </select>
       </div>
       <div class="col-auto">
-        <label for="region" class="form-label fw-semibold">Régions</label>
-        <select id="region" class="form-select">
-          <option>Pays de La Loire</option>
+        <label for="region" class="form-label fw-semibold">Régions :</label>
+        <select name="region" id="region" class="region-select">
         </select>
       </div>
     </div>
@@ -90,10 +90,11 @@
   </section>
 
 
-<?php
-    include_once "footer.html";
-    ?>
+  <?php
+  include_once "footer.html";
+  ?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../scripts/index.js"></script>
+</body>
 
-  </body>
 </html>
