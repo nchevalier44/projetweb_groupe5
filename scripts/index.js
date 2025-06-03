@@ -1,6 +1,7 @@
 import { fillSelect } from "./utils.js";
 
 function displayStatistics(data) {
+  // Function to display statistics
   data = [
     { id: 1, value: "20 000" },
     { id: 2, value: "12" },
@@ -20,6 +21,7 @@ function displayStatistics(data) {
 
 let data = [];
 document.addEventListener("DOMContentLoaded", () => {
+  //Wait for the DOM to be fully loaded to fill the selects and statistics
   fillSelect("region");
   fillSelect("annee");
   displayStatistics(data);
