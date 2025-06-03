@@ -24,3 +24,29 @@ document.addEventListener("DOMContentLoaded", () => {
   fillSelect("annee-installation-select");
   displayStatistics(data);
 });
+
+
+function updateTextNbInstallation() {
+  let paragraphe = document.getElementById("nb-installation-annee-region");
+
+  let select_annee = document.getElementById("annee-installation-select");
+  let select_region = document.getElementById("region-select");
+  let annee = select_annee.options[select_annee.selectedIndex].text;
+  let region = select_region.options[select_region.selectedIndex].text;
+  
+  //Clear paragraph text
+  paragraphe.innerText = "Nombre d'installations";
+  if(select_annee.value != ""){
+    paragraphe.innerText += " en " + annee;
+  }
+  if(select_region != ""){
+    paragraphe.innerText += " en " + region;
+  }
+
+  if(select_annee.value == "" && select_region.value == ""){
+    paragraphe.innerText = "Nombre total d'installations";
+  }
+}
+
+document.getElementById("annee-installation-select").addEventListener("change", updateTextNbInstallation);
+document.getElementById("region-select").addEventListener("change", updateTextNbInstallation);

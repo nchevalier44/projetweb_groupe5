@@ -15,6 +15,8 @@
     integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="../styles/index.css" />
+    <script src="../scripts/index.js" type="module"></script>
+
 
 
 </head>
@@ -76,15 +78,14 @@
     <div class="row justify-content-center align-items-center g-3 mb-3">
       <div class="col-auto">
         <label for="annee-installation" class="form-label fw-semibold">Années :</label>
-        <select name="annee-installation" id="annee-installation-select" class="form-select">
-        </select>
+        <select name="annee-installation" id="annee-installation-select" class="form-select"></select>
       </div>
       <div class="col-auto">
         <label for="region" class="form-label fw-semibold">Régions :</label>
         <select name="region" id="region-select" class="form-select"></select>
       </div>
     </div>
-    <p class="fw-semibold mt-3">Nombre d’installations en 2025 en Pays de La Loire</p>
+    <p class="fw-semibold mt-3" id="nb-installation-annee-region">Nombre d’installations en 2025 en Pays de La Loire</p>
     <p class="stat-value">3500</p>
   </section>
 
@@ -94,7 +95,6 @@
   ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../scripts/index.js" type="module"></script>
 </body>
 
 </html>
