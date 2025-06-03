@@ -1,0 +1,19 @@
+
+footer {
+    margin-top: auto;
+    background-color: #90BE6D !important;
+    font-family: 'Inter', sans-serif;
+    font-size: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+}
+
+#footer-left {
+    text-align: left;
+}
+
+#fotter-right {
+    text-align: right;
+}
