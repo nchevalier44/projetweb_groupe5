@@ -48,25 +48,25 @@
       <div class="col-12 col-sm-6 col-md-3">
         <div class="stat-card">
           <div class="fw-semibold">Nombre d’installations total</div>
-          <div class="stat-value">20 000</div>
+          <div class="stat-value" id="nbinstal"></div>
         </div>
       </div>
       <div class="col-12 col-sm-6 col-md-3">
         <div class="stat-card">
           <div class="fw-semibold">Nombre de marques de panneaux solaires</div>
-          <div class="stat-value">180</div>
+          <div class="stat-value" id="nbpanneau"></div>
         </div>
       </div>
       <div class="col-12 col-sm-6 col-md-3">
         <div class="stat-card">
           <div class="fw-semibold">Nombre de marques d’onduleurs</div>
-          <div class="stat-value">170</div>
+          <div class="stat-value" id="nbonduleur"></div>
         </div>
       </div>
       <div class="col-12 col-sm-6 col-md-3">
         <div class="stat-card">
           <div class="fw-semibold">Nombre d’installateurs</div>
-          <div class="stat-value">560</div>
+          <div class="stat-value" id="nbinstallateur"></div>
         </div>
       </div>
     </div>
