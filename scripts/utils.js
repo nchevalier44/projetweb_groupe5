@@ -33,7 +33,8 @@ export async function fillSelect(id) {
       break;
     case "marques-panneaux-select":
       path += "marques_panneaux";
-      error_message = "Erreur lors de la récupération des marques de panneaux : ";
+      error_message =
+        "Erreur lors de la récupération des marques de panneaux : ";
       default_option_message = "Choisissez une marque de panneau";
       break;
   }

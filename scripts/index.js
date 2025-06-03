@@ -1,6 +1,7 @@
 import { fillSelect } from "./utils.js";
 
 function displayStatistics(data) {
+  // Function to display statistics
   data = [
     { id: 1, value: "20 000" },
     { id: 2, value: "12" },
