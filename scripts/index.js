@@ -21,8 +21,7 @@ function displayStatistics(data) {
 
 let data = [];
 document.addEventListener("DOMContentLoaded", () => {
-  //Wait for the DOM to be fully loaded to fill the selects and statistics
-  fillSelect("region");
-  fillSelect("annee");
+  fillSelect("region-select");
+  fillSelect("annee-installation-select");
   displayStatistics(data);
 });

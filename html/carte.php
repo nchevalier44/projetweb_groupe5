@@ -41,12 +41,12 @@
 
         <form id="searchForm" class="row text-center">
             <div class="col m-4">
-                <label for="annee-instal" class="form-label">Année d'installation</label>
-                <select class="form-select" name="annee-instal" id="annee"></select>
+                <label for="annee-installation" class="form-label">Année d'installation</label>
+                <select class="form-select" name="annee-installation" id="annee-installation-select"></select>
             </div>
             <div class="col m-4">
-                <label for="departement" class="form-label">Département</label>
-                <select class="form-select" name="departement" id="departements-select"></select>
+                <label for="departements" class="form-label">Département</label>
+                <select class="form-select" name="departements" id="departements-select"></select>
             </div>
 
         </form>
@@ -58,7 +58,7 @@
     ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="../scripts/carte.js"></script>
+    <script src="../scripts/carte.js" type="module"></script>
 </body>
 
 </html>
