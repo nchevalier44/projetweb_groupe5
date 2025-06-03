@@ -75,14 +75,13 @@
   <section class=" container text-center">
     <div class="row justify-content-center align-items-center g-3 mb-3">
       <div class="col-auto">
-        <label for="annee" class="form-label fw-semibold">Années :</label>
-        <select name="annee" id="annee" class="annee-installation-select">
+        <label for="annee-installation" class="form-label fw-semibold">Années :</label>
+        <select name="annee-installation" id="annee-installation-select" class="form-select">
         </select>
       </div>
       <div class="col-auto">
         <label for="region" class="form-label fw-semibold">Régions :</label>
-        <select name="region" id="region" class="region-select">
-        </select>
+        <select name="region" id="region-select" class="form-select"></select>
       </div>
     </div>
     <p class="fw-semibold mt-3">Nombre d’installations en 2025 en Pays de La Loire</p>
