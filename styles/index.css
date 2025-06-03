@@ -1,20 +1,12 @@
 
-body{
-    background-color: #E0E0E0;
-}
-
-.navbar{
-    background-color : #90BE6D !important;
-    align-items: center;
-}
-
-
+/* A mettre dans tous les css */
 html,
 body {
     height: 100%;
     margin: 0;
     padding: 0;
 }
+
 body {
     background-color: #E0E0E0;
     min-height: 100vh;
@@ -24,4 +16,50 @@ body {
 
 footer {
     margin-top: auto;
+}
+/*jusque ici*/
+
+header {
+    justify-content: center;
+    margin: 32px auto 32px auto;
+    max-width: 900px;
+    width: 100%;
+    padding: 0 24px;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+}
+
+.intro-box {
+    background-color: #fcf1cc;
+    border: 2px solid #f9c74f;
+    border-radius: 12px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+}
+
+.stat-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #0077b6;
+}
+
+section {
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+}
+
+.mb-0{
+    font-size: 110%;
+    text-align: justify;
 }

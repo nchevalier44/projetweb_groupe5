@@ -18,12 +18,82 @@
     
   </head>
   <body>
+
     <?php
     include_once "navbar.html";
     ?>
 
+<header class="d-flex align-items-center mb-4">
+    <img src="../images/logo.png" alt="Logo" class="logo me-3">
+    <div>
+      <h1 class="m-0 fw-bold lh-1">Solar<br>Manager</h1>
+    </div>
+  </header>
+
+  <section class="container intro-box mb-5">
+    <p class="mb-0">
+      Notre plateforme met en valeur la transition énergétique à travers les données d’installations solaires chez les particuliers.<br>
+      Elle propose des outils simples pour rechercher, filtrer et analyser ces données.<br>
+      Vous y trouverez des statistiques globales, des informations précises par installation et une visualisation sur carte.<br>
+      L’objectif est de rendre les données accessibles et compréhensibles pour tous.<br>
+      Explorez dès maintenant les milliers d’installations solaires réparties en France.
+    </p>
+  </section>
+
+  <section class="container text-center mb-5">
+    <h2 class="fw-bold mb-4">Statistiques</h2>
+    <div class="row g-4 justify-content-center">
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="stat-card">
+          <div class="fw-semibold">Nombre d’installations total</div>
+          <div class="stat-value">20 000</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="stat-card">
+          <div class="fw-semibold">Nombre de marques de panneaux solaires</div>
+          <div class="stat-value">180</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="stat-card">
+          <div class="fw-semibold">Nombre de marques d’onduleurs</div>
+          <div class="stat-value">170</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="stat-card">
+          <div class="fw-semibold">Nombre d’installateurs</div>
+          <div class="stat-value">560</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class=" container text-center">
+    <div class="row justify-content-center align-items-center g-3 mb-3">
+      <div class="col-auto">
+        <label for="annee" class="form-label fw-semibold">Années</label>
+        <select id="annee" class="form-select">
+          <option>2025</option>
+        </select>
+      </div>
+      <div class="col-auto">
+        <label for="region" class="form-label fw-semibold">Régions</label>
+        <select id="region" class="form-select">
+          <option>Pays de La Loire</option>
+        </select>
+      </div>
+    </div>
+    <p class="fw-semibold mt-3">Nombre d’installations en 2025 en Pays de La Loire</p>
+    <p class="stat-value">3500</p>
+  </section>
+
+
 <?php
     include_once "footer.html";
     ?>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
   </body>
 </html>
