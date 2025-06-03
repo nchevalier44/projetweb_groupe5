@@ -1,0 +1,18 @@
+#container-form {
+    background-color: #5BBFF5;
+    border: solid 3px #000000;
+}
+
+.container-installation{
+    background-color: #0077B6 !important;
+    border: solid 3px #000000;
+    color: white;
+}
+
+#installations-list {
+    gap: 2%;
+}
+
+.title-installation{
+    text-align: center;
+}
