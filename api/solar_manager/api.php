@@ -4,178 +4,22 @@ header('Content-Type: application/json');
 
 $db = connectDB();
 
-// 1. Nombre d’installations par année (utiliser An_installation)
-function getNbInstallationParAn($db){
-    $stmt = $db->query("
-        SELECT An_installation AS annee, COUNT(*) AS nombre_installations
-        FROM installation
-        GROUP BY annee
-        ORDER BY annee
-    ");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 
 
-// 2. Nombre d’installations par région (region.Reg_nom)
-function getNbInstallationsParRegion($db){
-    $stmt = $db->query("
-        SELECT r.Reg_nom AS nom, COUNT(*) AS nombre_installations
-        FROM installation i
-        JOIN localisation l ON i.id_localisation = l.id
-        JOIN ville v ON l.code_insee = v.code_insee
-        JOIN departement d ON v.id = d.id
-        JOIN region r ON d.id_region = r.id
-        GROUP BY r.Reg_nom
-        ORDER BY r.Reg_nom
-    ");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 
 
-// 3. Nombre d’installations par année et région (par défaut 2025 / Pays de la Loire si aucun filtre)
-function getNbInstallationsParRegionAnnee($db){
-    $region = $_GET['region'] ?? 'Pays de la Loire';
-    $annee = $_GET['annee'] ?? 2025;
 
-    $stmt = $db->prepare("
-        SELECT r.Reg_nom AS region, i.An_installation AS annee, COUNT(*) AS nombre_installations
-        FROM installation i
-        JOIN localisation l ON i.id_localisation = l.id
-        JOIN ville v ON l.code_insee = v.code_insee
-        JOIN departement d ON v.id = d.id
-        JOIN region r ON d.id_region = r.id
-        WHERE r.Reg_nom = :region AND i.An_installation = :annee
-        GROUP BY r.Reg_nom, i.An_installation
-        ORDER BY r.Reg_nom, i.An_installation
-    ");
-    return $stmt->execute([':region' => $region, ':annee' => $annee]);
 
-}
 
-// 4. Nombre d’installateurs
-function getNbInstallateurs($db){
-    $stmt = $db->query("SELECT COUNT(*) AS nombre_installateurs FROM installateur");
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
 
-// 5. Nombre de marques d’onduleurs (marque_onduleur.Onduleur_marque)
-function getNbMarquesOnduleurs($db){
-    $stmt = $db->query("SELECT COUNT(DISTINCT Onduleur_marque) AS nombre_marques_onduleurs FROM marque_onduleur");
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-// 6. Nombre de marques de panneaux (marque_panneau.Panneaux_marque)
-function getNbMarquesPanneaux($db){
-    $stmt = $db->query("SELECT COUNT(DISTINCT Panneaux_marque) AS nombre_marques_panneaux FROM marque_panneau");
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
 
-// 7. Installations par marque d’onduleur
-function getInstallationsParMarqueOnduleur($db){
-    $stmt = $db->query("
-        SELECT mo.Onduleur_marque AS marque_onduleur, COUNT(i.id) AS nombre_installations
-        FROM installation i
-        JOIN onduleur o ON i.id_onduleur = o.id
-        JOIN marque_onduleur mo ON o.id_marque_onduleur = mo.id
-        GROUP BY mo.Onduleur_marque
-    ");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 
-// 8. Installations par marque de panneau
-function getInstallationsParMarquePanneau($db){
-    $stmt = $db->query("
-        SELECT mp.Panneaux_marque AS marque_panneau, COUNT(i.id) AS nombre_installations
-        FROM installation i
-        JOIN panneau p ON i.id_panneau = p.id
-        JOIN marque_panneau mp ON p.id_marque_panneau = mp.id
-        GROUP BY mp.Panneaux_marque
-    ");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 
-// 9. Installations par département (filtrable)
-function getInstallationsParDepartement($db) {
-    if (!empty($_GET['departement'])) {
-        $departement = $_GET['departement'];
-        $stmt = $db->prepare("
-            SELECT d.Dep_nom AS departement, COUNT(i.id) AS nombre_installations
-            FROM installation i
-            JOIN localisation l ON i.id_localisation = l.id
-            JOIN ville v ON l.code_insee = v.code_insee
-            JOIN departement d ON v.id = d.id
-            WHERE d.Dep_nom = :departement
-            GROUP BY d.Dep_nom
-        ");
-        $stmt->execute([':departement' => $departement]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-}
 
-// 10. Dates d’installation triées (pas de champ 'date', on peut concat Mois_installation et An_installation ?)
-// Sinon on affiche juste année et mois
-function getDatesInstallations($db){
-    $stmt = $db->query("SELECT id, An_installation AS annee, Mois_installation AS mois FROM installation ORDER BY annee, mois");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 
-// 11. Nombre total de panneaux installés
-function getNbTotalPanneauxInstalles($db){
-    $stmt = $db->query("SELECT SUM(Nb_panneaux) AS total_panneaux FROM installation");
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
 
-// 12. Surface des panneaux par installation (Surface)
-function getSurfacePanneauxParInstallation($db){
-    $stmt = $db->query("SELECT id, Surface FROM installation ORDER BY Surface");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 
-// 13. Puissance crête par installation (Puissance_crete)
-function getPuissanceCreteParInstallation($db){
-    $stmt = $db->query("SELECT id, Puissance_crete FROM installation ORDER BY Puissance_crete");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 
-// 14. Localisation des installations (Lat, Lon)
-function getLocalisationInstallations($db){
-    $stmt = $db->query("
-        SELECT i.id AS id_installation, l.Lat AS latitude, l.Lon AS longitude
-        FROM installation i
-        JOIN localisation l ON i.id_localisation = l.id
-    ");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 
-// 15. Liste des années disponibles (pour fillSelect)
-function getAnneesDisponibles($db){
-    $stmt = $db->query("
-        SELECT DISTINCT An_installation AS annee
-        FROM installation
-        ORDER BY annee
-    ");
-    return $stmt->fetchAll(PDO::FETCH_COLUMN);
-}
-
-// 16. Liste des régions disponibles (pour fillSelect)
-function getRegionsDisponibles($db){
-    $stmt = $db->query("
-        SELECT DISTINCT r.Reg_nom AS region
-        FROM region r
-        JOIN departement d ON r.id = d.id_region
-        JOIN ville v ON d.id = v.id
-        JOIN localisation l ON v.code_insee = l.code_insee
-        JOIN installation i ON i.id_localisation = l.id
-        ORDER BY r.Reg_nom
-    ");
-    return $stmt->fetchAll(PDO::FETCH_COLUMN);
-}
-
-//information d'une installation sans filtre
-function getInformationInstallation($db){
-    $stmt = $db->query("
-        SELECT * FROM installation;
-    ");
-    return $stmt->fetchAll(PDO::FETCH_COLUMN);
-}
 
 echo json_encode($response);

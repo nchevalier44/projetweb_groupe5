@@ -1,5 +1,4 @@
 <?php
-
 function connectDB()
 {
     $host = 'localhost';
