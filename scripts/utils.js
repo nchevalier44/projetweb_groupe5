@@ -1,5 +1,4 @@
 //Fill a select element with options fetched from an API endpoint
-
 export async function fillSelect(id) {
   let select = document.getElementById(id);
   let path = "/api/solar_manager/";
@@ -63,4 +62,46 @@ export async function fillSelect(id) {
   for (let data of datas) {
     select.innerHTML += `<option value="${data.id}">${data.name}</option>`;
   }
+}
+
+
+//Get localisation information by id
+export async function getLocalisation(id){
+    let response = await fetch(`/api/solar_manager/localisation/${id}`);
+    if (!response.ok) {
+        console.error("Erreur lors de la récupération des informations de localisation : " + response.statusText);
+        return;
+    }
+    return await response.json();
+}
+
+//Get panel information by id
+export async function getPanneau(id){
+    let response = await fetch(`/api/solar_manager/panneau/${id}`);
+    if (!response.ok) {
+        console.error("Erreur lors de la récupération des informations de panneau : " + response.statusText);
+        return;
+    }
+    return await response.json();
+}
+
+//Get onduleur information by id
+export async function getOnduleur(id){
+    let response = await fetch(`/api/solar_manager/onduleur/${id}`);
+    if (!response.ok) {
+        console.error("Erreur lors de la récupération des informations d'onduleur : " + response.statusText);
+        return;
+    }
+    return await response.json();
+}
+
+
+//Get installator information by id
+export async function getInstallateur(id){
+    let response = await fetch(`/api/solar_manager/installateur/${id}`);
+    if (!response.ok) {
+        console.error("Erreur lors de la récupération des informations d'installateur : " + response.statusText);
+        return;
+    }
+    return await response.json();
 }

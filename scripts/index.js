@@ -45,7 +45,7 @@ function updateTextNbInstallation() {
   }
 
   if(select_annee.value == "" && select_region.value == ""){
-    paragraphe.innerText = "Nombre total d'installations";
+    paragraphe.innerText = "Nombre d'installations totales";
   }
 }
 
