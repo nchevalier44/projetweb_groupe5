@@ -10,7 +10,7 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 var marker = L.marker([47.274972, -1.505077]).addTo(map);
 
-marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+marker.bindPopup("<div class='text-center'><b>Carquefou - Puissance 5kW</b><br><a href='../details.php?id=1'>Voir plus de détails</a></div>").openPopup();
 
 document.addEventListener("DOMContentLoaded", () => {
   fillSelect("annee-installation-select");
