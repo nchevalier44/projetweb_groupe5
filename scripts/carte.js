@@ -1,5 +1,13 @@
 import { fillSelect } from "./utils.js";
 
+//Set the icon for the solar panels
+var solarIcon = L.icon({
+  iconUrl: "../images/panneau-solaire-icone.png",
+  iconSize: [38, 38], 
+  iconAnchor: [19, 38],
+  popupAnchor: [0, -38], 
+});
+
 var map = L.map("map").setView([47.811399, 1.950145], 6);
 
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -24,9 +32,9 @@ async function getRandomInstallationsAndAddPin() {
   for (let i = 0; i < 50; i++) {
     let randomId = Math.floor(Math.random() * installations.length);
     let installation = installations[randomId];
-    var marker = L.marker([installation["Lat"], installation["Lon"]]).addTo(
-      map
-    );
+    var marker = L.marker([installation["Lat"], installation["Lon"]], {
+      icon: solarIcon,
+    }).addTo(map);
     marker.bindPopup(
       `<div class='text-center'><b>${installation["Nom_standard"]}</b><br><a href='details.php?id=${installation["id"]}'>Voir plus de détails</a></div>`
     );
@@ -82,10 +90,9 @@ async function updateCarte() {
 
   // Add markers for each installation
   installations.forEach((installation) => {
-    var marker = L.marker([installation["Lat"], installation["Lon"]]).addTo(
-      map
-    );
-    console.log(installation);
+    var marker = L.marker([installation["Lat"], installation["Lon"]], {
+      icon: solarIcon,
+    }).addTo(map);
     marker.bindPopup(
       `<div class='text-center'><b>${installation["Nom_standard"]}</b><br><a href='details.php?id=${installation["id"]}'>Voir plus de détails</a></div>`
     );

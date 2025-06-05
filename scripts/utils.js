@@ -91,7 +91,7 @@ export async function fillSelect(id, limit=-1) {
 
 //Get localisation information by id
 export async function getLocalisation(id){
-    let response = await fetch(`/api/solar_manager/localisation/${id}`);
+    let response = await fetch(`../api/solar_manager/localisations/?id=${id}`);
     if (!response.ok) {
         console.error("Erreur lors de la récupération des informations de localisation : " + response.statusText);
         return;
@@ -101,7 +101,7 @@ export async function getLocalisation(id){
 
 //Get panel information by id
 export async function getPanneau(id){
-    let response = await fetch(`/api/solar_manager/panneau/${id}`);
+    let response = await fetch(`../api/solar_manager/panneaux/?id=${id}`);
     if (!response.ok) {
         console.error("Erreur lors de la récupération des informations de panneau : " + response.statusText);
         return;
@@ -111,7 +111,7 @@ export async function getPanneau(id){
 
 //Get onduleur information by id
 export async function getOnduleur(id){
-    let response = await fetch(`/api/solar_manager/onduleur/${id}`);
+    let response = await fetch(`../api/solar_manager/onduleurs/?id=${id}`);
     if (!response.ok) {
         console.error("Erreur lors de la récupération des informations d'onduleur : " + response.statusText);
         return;
@@ -122,7 +122,7 @@ export async function getOnduleur(id){
 
 //Get installator information by id
 export async function getInstallateur(id){
-    let response = await fetch(`/api/solar_manager/installateur/${id}`);
+    let response = await fetch(`../api/solar_manager/installateurs/?id=${id}`);
     if (!response.ok) {
         console.error("Erreur lors de la récupération des informations d'installateur : " + response.statusText);
         return;

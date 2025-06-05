@@ -11,11 +11,25 @@ function getNbInstallation($db){
 }
 
 function getInformationInstallationParId($db, $id){
-    $stmt = $db->prepare("SELECT * FROM installation WHERE id = :id");
+    $query = "
+        SELECT *, i.id as id, region.id as id_region, departement.id as id_departement, v.id as id_ville, v.nom_standard AS nom_ville, l.Lat AS latitude, l.Lon AS longitude 
+        FROM installation i
+        JOIN onduleur o ON i.id_onduleur = o.id
+        JOIN panneau p ON i.id_panneau = p.id
+        JOIN localisation l ON i.id_localisation = l.id
+        JOIN ville v ON l.code_insee = v.code_insee
+        JOIN departement ON v.id = departement.id
+        JOIN region On departement.id_region = region.id
+        WHERE i.id = :id";
+
+    $stmt = $db->prepare($query);
     $stmt->bindParam(':id', $id);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt->fetch(PDO::FETCH_ASSOC); // fetch() au lieu de fetchAll() car on veut une seule installation
+
 }
+
+
 
 // 1. Nombre d’installations par année (utiliser An_installation)
 function getNbInstallationParAn($db){

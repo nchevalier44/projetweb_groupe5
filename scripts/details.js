@@ -1,5 +1,12 @@
 import { getLocalisation, getInstallateur, getPanneau, getOnduleur } from "./utils.js";
 
+//Create the icon for the solar panels
+var solarIcon = L.icon({
+  iconUrl: "../images/panneau-solaire-icone.png",
+  iconSize: [38, 38], 
+  iconAnchor: [19, 38], 
+  popupAnchor: [0, -38], 
+});
 
 async function fillDetails(){
     let id = document.getElementById("installation-id").value;
@@ -10,7 +17,6 @@ async function fillDetails(){
 
 
     let response = await fetch(`../api/solar_manager/installations/?id=${id}`);
-    console.log(response);
     if (!response.ok) {
         console.error("Erreur lors de la récupération des informations de l'installation : " + response.statusText);
         return;
@@ -21,7 +27,13 @@ async function fillDetails(){
     let panneau = await getPanneau(installation.id_panneau);
     let onduleur = await getOnduleur(installation.id_onduleur);
     let installateur = await getInstallateur(installation.id_installateur);
-    console.log(installation, location, panneau, onduleur, installateur);
+
+    //Take the ['0'] element of each
+    location = location[0];
+    panneau = panneau[0];
+    onduleur = onduleur[0];
+    installateur = installateur[0];
+
 
 
     //Clear existing content
@@ -30,6 +42,15 @@ async function fillDetails(){
     onduleur_infos.innerHTML = "";
     location_info.innerHTML = "";
 
+    //Vérify if pente_optimum and orientation_optimum are not null, if set them to "Non renseigné"
+    if (installation.Pente_optimum === null) {
+        installation.Pente_optimum = "Non renseigné";
+    }
+    if (installation.Orientation_opti === null) {
+        installation.Orientation_opti = "Non renseigné";
+    }
+
+    //Fill the HTML elements with the installation information
     installation_info.innerHTML = `
         <li><b>Id Doc</b> : ${installation.Iddoc}</li>
         <li><b>Date d'installation</b> : ${installation.Mois_installation}/${installation.An_installation}</li>
@@ -48,11 +69,11 @@ async function fillDetails(){
     location_info.innerHTML = `
         <li><b>Latitude</b> : ${location.Lat}</li>
         <li><b>Longitude</b> : ${location.Lon}</li>
-        <li><b>Commune</b> : ${location.Nom_standard}</li>
-        <li><b>Code Postal</b> : ${location.Code_postal}</li>
-        <li><b>Département</b> : ${location.Dep_nom}</li>
-        <li><b>Région</b> : ${location.Reg_nom}</li>
-        <li><b>Pays</b> : ${location.Country}</li>
+        <li><b>Commune</b> : ${installation.Nom_standard}</li>
+        <li><b>Code Postal</b> : ${installation.Code_postal}</li>
+        <li><b>Département</b> : ${installation.Dep_nom}</li>
+        <li><b>Région</b> : ${installation.Reg_nom}</li>
+        <li><b>Pays</b> : France</li>
 
     `;
 
@@ -69,24 +90,27 @@ async function fillDetails(){
 
 async function createMap() {
     let id = document.getElementById("installation-id").value;
-    /*let response = await fetch(`/api/solar_manager/installation/${id}`);
+    let response = await fetch(`../api/solar_manager/installations/?id=${id}`);
     if (!response.ok) {
         console.error("Erreur lors de la récupération des informations de l'installation : " + response.statusText);
         return;
     }
 
-    let installation = await response.json();*/
-    let installation = {lat: 48.8566, lon: 2.3522}; // Example coordinates for Paris
+    let installation = await response.json();
+    console.log(installation);
 
-    var map = L.map("map").setView([installation.lat, installation.lon], 13);
+    var map = L.map("map").setView([installation.Lat, installation.Lon], 13);
 
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
 
-    var marker = L.marker([installation.lat, installation.lon]).addTo(map);
+    var marker = L.marker([installation.Lat, installation.Lon], {
+      icon: solarIcon,
+    }).addTo(map);
     marker.bindPopup("<b>Installation n°" + id + "</b>").openPopup();
+    console.log(marker);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
