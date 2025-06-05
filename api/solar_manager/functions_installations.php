@@ -89,6 +89,7 @@ function getInstallationsFilters($db, $filters){
         $end_query .= " OFFSET :offset";
         unset($filters['offset']);
     }
+        
 
     //Add conditions based on filters
     foreach ($filters as $key => $values) {
@@ -103,6 +104,7 @@ function getInstallationsFilters($db, $filters){
         }
         $query .= ")";
     }
+
 
     //Prepare the query
     $query .= $end_query;

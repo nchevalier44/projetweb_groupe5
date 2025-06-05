@@ -10,9 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-document.getElementById("departements-select").addEventListener("change", searchInstallation);
-document.getElementById("marques-onduleurs-select").addEventListener("change", searchInstallation);
-document.getElementById("marques-panneaux-select").addEventListener("change", searchInstallation);
+document.getElementById("departements-select").addEventListener("change", () => searchInstallation(99, 0));
+document.getElementById("marques-onduleurs-select").addEventListener("change", () => searchInstallation(99, 0));
+document.getElementById("marques-panneaux-select").addEventListener("change", () => searchInstallation(99, 0));
 document.getElementById("previous-page").addEventListener("click", () => changePage(-1));
 document.getElementById("next-page").addEventListener("click", () => changePage(1));
 
@@ -25,7 +25,6 @@ async function searchInstallation(limit=99, offset=0) {
   let path = `../api/solar_manager/installations/?id-departement=${departements_id}&id-marque-onduleur=${marques_onduleurs_id}&id-marque-panneau=${marques_panneaux_id}`;
   path += `&limit=${limit}`;
   path += `&offset=${offset}`;
-  console.log("Fetching installations from: " + path);
   let response = await fetch(path);
   if(!response.ok){
         console.error("Erreur lors de la récupération des installations : " + response.statusText);
@@ -64,11 +63,14 @@ function displayResults(installations) {
 }
 
 
-function changePage(page){
+async function changePage(page){
   let current_page = document.getElementById("current-page");
   if(current_page.innerText + page > 0){
     current_page.innerText = parseInt(current_page.innerText) + page;
-    searchInstallation(INSTALLATIONS_LIMIT_PER_PAGE, parseInt(current_page.innerText) * INSTALLATIONS_LIMIT_PER_PAGE);
+    await searchInstallation(INSTALLATIONS_LIMIT_PER_PAGE, parseInt(current_page.innerText) * INSTALLATIONS_LIMIT_PER_PAGE);
+    if(document.getElementById("installations-list").children.length == 0){
+      current_page.innerText = parseInt(current_page.innerText) - page; // Revert page change if no results
+    }
   }
   
 }
