@@ -30,3 +30,30 @@ function getNbTotalPanneauxInstalles($db){
     $stmt = $db->query("SELECT SUM(Nb_panneaux) AS total_panneaux FROM installation");
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+//////////////////////Marque Panneau/////////////////////////////////
+function getMarquePanneauParId($db, $id) {
+    $stmt = $db->prepare("SELECT * FROM marque_panneau WHERE id = :id");
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getMarquesPanneaux($db) {
+    $stmt = $db->query("SELECT * FROM marque_panneau");
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+//////////////////////Modele Panneau/////////////////////////////////
+function getModelePanneauParId($db, $id) {
+    $stmt = $db->prepare("SELECT * FROM modele_panneau WHERE id = :id");
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getModelesPanneaux($db) {
+    $stmt = $db->query("SELECT * FROM modele_panneau");
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

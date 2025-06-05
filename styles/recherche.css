@@ -27,6 +27,7 @@ footer {
     background-color: #0077B6 !important;
     border: solid 3px #000000;
     color: white;
+    width: 30% !important;
 }
 
 #installations-list {

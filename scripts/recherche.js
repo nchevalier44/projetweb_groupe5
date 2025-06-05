@@ -14,11 +14,14 @@ document.getElementById("marques-panneaux-select").addEventListener("change", se
 
 
 async function searchInstallation(){
-  let departement_id = document.getElementById("departements-select").value;
-  let marque_onduleur_id = document.getElementById("marques-onduleurs-select").value;
-  let marque_panneau_id = document.getElementById("marques-panneaux-select").value;
+  let departements_id = Array.from(document.getElementById("departements-select").selectedOptions).map(opt => opt.value);
 
-  let response = await fetch(`../api/solar_manager/installations?id-departement=${departement_id}&id-marque-onduleur=${marque_onduleur_id}&id-marque-panneau=${marque_panneau_id}`);
+  let marques_onduleurs_id = document.getElementById("marques-onduleurs-select").value;
+  let marques_panneaux_id = document.getElementById("marques-panneaux-select").value;
+
+  console.log(departements_id);
+
+  let response = await fetch(`../api/solar_manager/installations/?id-departement=${departements_id}&id-marque-onduleur=${marques_onduleurs_id}&id-marque-panneau=${marques_panneaux_id}`);
   if(!response.ok){
         console.error(error_message + response.statusText);
         return;
@@ -29,7 +32,7 @@ async function searchInstallation(){
 }
 
 function displayResults(installations) {
-  let container = document.getElementById("installation-list");
+  let container = document.getElementById("installations-list");
   container.innerHTML = ""; // Clear previous results
   
   for(let installation of installations){

@@ -36,7 +36,7 @@ export async function fillSelect(id, limit) {
       text = "Onduleur_marque";
       break;
     case "marques-panneaux-select":
-      path += "panneauxx/marques/";
+      path += "panneaux/marques/";
       error_message = "Erreur lors de la récupération des marques de panneaux : ";
       default_option_message = "Choisissez une marque de panneau";
       value = "id";
@@ -59,10 +59,8 @@ export async function fillSelect(id, limit) {
   select.innerHTML += `<option value="">${default_option_message}</option>`;
 
   for(let i = 0; i<20; i++){
-    
-  }
-  for (let data of datas) {
-    select.innerHTML += `<option value="${data[value]}">${data[text]}</option>`;
+    let randomInt = Math.floor(Math.random() * (datas.length-1));
+    select.innerHTML += `<option value="${datas[randomInt][value]}">${datas[randomInt][text]}</option>`;
   }
 }
 
