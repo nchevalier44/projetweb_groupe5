@@ -9,7 +9,8 @@ async function fillDetails(){
     let onduleur_infos = document.getElementById("onduleur-info");
 
 
-    /*let response = await fetch(`/api/solar_manager/installation/${id}`);
+    let response = await fetch(`../api/solar_manager/installations/?id=${id}`);
+    console.log(response);
     if (!response.ok) {
         console.error("Erreur lors de la récupération des informations de l'installation : " + response.statusText);
         return;
@@ -19,12 +20,9 @@ async function fillDetails(){
     let location = await getLocalisation(installation.id_localisation);
     let panneau = await getPanneau(installation.id_panneau);
     let onduleur = await getOnduleur(installation.id_onduleur);
-    let installateur = await getInstallateur(installation.id_installateur);*/
-    let installation = {id: 1, Iddoc: "12345", Mois_installation: '05', An_installation: "2023", Nb_panneaux: 10, Nb_onduleurs: 2, Puissance_crete: 5000, Pente: 30, Pente_optimum: 35, Orientation: "Sud", Orientation_opti: "Sud-Est", Surface: 50, Production_pvgis: 6000, id_localisation: 1, id_panneau: 1, id_onduleur: 1, id_installateur: 1};
-    let location = {Lat: 48.8566, Lon: 2.3522, Nom_standard: "Paris", Code_postal: "75000", Dep_nom: "Paris", Reg_nom: "Île-de-France", Country: "France"};
-    let panneau = {Panneaux_marque: "Marque A", Panneaux_modele: "Modèle A"};
-    let onduleur = {Onduleur_marque: "Marque B", Onduleur_modele: "Modèle B"};
-    let installateur = {Installateur: "Installateur C"};
+    let installateur = await getInstallateur(installation.id_installateur);
+    console.log(installation, location, panneau, onduleur, installateur);
+
 
     //Clear existing content
     installation_info.innerHTML = "";

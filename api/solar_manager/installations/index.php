@@ -8,8 +8,8 @@
     //GET METHOD
     if($_SERVER['REQUEST_METHOD'] == "GET"){
         $parameters = array();
-        if(isset($_GET['id'])){
-            $parameters['i.id'] = $_GET['id'];
+        if(isset($_GET['id']) && !empty($_GET['id'])){
+            $parameters['id'] = $_GET['id'];
         } 
         if(isset($_GET['id-marque-onduleur']) && !empty($_GET['id-marque-onduleur'])){
             $parameters['id_marque_onduleur'] = explode(',', $_GET['id-marque-onduleur']);
