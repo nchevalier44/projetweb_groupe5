@@ -1,7 +1,7 @@
 <?php
 
 function getInstallateurs($db) {
-    $stmt = $db->query("SELECT * FROM installateur");
+    $stmt = $db->query("SELECT * FROM installateur ORDER BY installateur");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
