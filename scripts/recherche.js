@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fillSelect("departements-select", 20);
   fillSelect("marques-onduleurs-select", 20);
   fillSelect("marques-panneaux-select", 20);
+  searchInstallation();
 
 });
 
