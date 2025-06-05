@@ -42,16 +42,14 @@ function displayResults(installations) {
     }
 
     container.innerHTML += `
-    <div class='rounded-pill container w-25 mb-5 pb-3 pt-3 ps-5 pe-5 container-installation'>
-      <a href="details.php?id=${installation.id}" class="link-details">
-        <h3 class='text-center'>${installation.nom_ville} | ${mois}/${installation.An_installation}</h3>
-        <ul>
-          <li>Latitude : ${installation.latitude} | Longitude : ${installation.longitude}</li>
-          <li>Nombres de panneaux : ${installation.Nb_panneaux}</li>
-          <li>Surface : ${installation.Surface}m²</li>
-          <li>Puissance crête : ${installation.Puissance_crete}</li>
-        </ul>
-      </a>
+    <div class='rounded-pill container w-25 mb-5 pb-3 pt-3 ps-5 pe-5 container-installation' onclick="window.location.href='details.php?id=${installation.id}'">
+      <h3 class='text-center'>${installation.nom_ville} | ${mois}/${installation.An_installation}</h3>
+      <ul>
+        <li>Latitude : ${installation.latitude} | Longitude : ${installation.longitude}</li>
+        <li>Nombres de panneaux : ${installation.Nb_panneaux}</li>
+        <li>Surface : ${installation.Surface}m²</li>
+        <li>Puissance crête : ${installation.Puissance_crete}</li>
+      </ul>
     </div>
     `;
   }
