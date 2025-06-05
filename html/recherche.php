@@ -47,6 +47,12 @@
 
     <div id="addbutton" class="d-flex justify-content-center mb-4"></div>
 
+    <div class="container text-center">
+        <button id="previous-page" class="btn btn-primary me-2">Précédent</button>
+        <button id="current-page" class="btn btn-secondary me-2">0</button>
+        <button id="next-page" class="btn btn-primary">Suivant</button>
+    </div>
+
     <!-- Include Footer -->
     <?php
     include_once "footer.html";

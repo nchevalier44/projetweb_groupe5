@@ -75,14 +75,13 @@ export async function fillSelect(id, limit=-1) {
   for (let i = 0; i < real_limit; i++) {
     //We do the random only if limit is there is a valid limit defined
     if(limit != -1 && limit < datas.length){
-      console.log("limit is inferior than datas length, randomizing");
       randomInt = Math.floor(Math.random() * datas.length);
       while(random_values.includes(randomInt)) {
         randomInt = Math.floor(Math.random() * datas.length);
       }
       random_values.push(randomInt);
     } else{
-      console.log("no limit");
+      //No random
       randomInt = i;
     }
     select.innerHTML += `<option value="${datas[randomInt][value]}">${datas[randomInt][text]}</option>`;

@@ -28,6 +28,12 @@
         if(isset($_GET['annee']) && !empty($_GET['annee'])){
             $parameters['An_installation'] = explode(',', $_GET['annee']);
         }
+        if(isset($_GET['limit']) && !empty($_GET['limit'])){
+            $parameters['limit'] = $_GET['limit'];
+        }
+        if(isset($_GET['offset']) && !empty($_GET['offset'])){
+            $parameters['offset'] = $_GET['offset'];
+        }
 
         echo json_encode(getInstallationsFilters($db, $parameters));
         return;
