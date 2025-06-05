@@ -1,17 +1,15 @@
 import { fillSelect } from "./utils.js";
 
-
-let data = [];
 document.addEventListener("DOMContentLoaded", () => {
   fillSelect("region-select");
   fillSelect("annee-installation-select");
-  getNbInstallation();
+  
+  document.getElementById("value-select").innerText = document.getElementById("nbinstal").textContent;
 });
 
 
-async function  updateTextNbInstallation() {
+async function updateTextNbInstallation() {
   let paragraphe = document.getElementById("nb-installation-annee-region");
-  let value = document.getElementById("value-select").innerHTML;
 
   let select_annee = document.getElementById("annee-installation-select");
   let select_region = document.getElementById("region-select");
@@ -22,26 +20,20 @@ async function  updateTextNbInstallation() {
   paragraphe.innerText = "Nombre d'installations";
   if(select_annee.value != ""){
     paragraphe.innerText += " en " + annee;
-    let response = await fetch("../api/solar_manager/onduleurs/");
-    if (!response.ok) {
-      console.error(error_message + response.statusText);
-      return;
-    }
+    
   }
-  if(select_region != ""){
+  if(select_region.value != ""){
     paragraphe.innerText += " en " + region;
   }
 
-  if(select_annee.value == "" && select_region.value == ""){
-    paragraphe.innerText = "Nombre d'installations totales";
-    getNbInstallation();
+  let response = await fetch(`../api/solar_manager/installations/?annee=${select_annee.value}&id-region=${select_region.value}`);
+  if(!response.ok){
+    console.error("Erreur lors de la récupération des installations : " + response.statusText);
+    return;
   }
+  let installations = await response.json();
+  document.getElementById("value-select").innerText = installations.length;
 }
 
 document.getElementById("annee-installation-select").addEventListener("change", updateTextNbInstallation);
 document.getElementById("region-select").addEventListener("change", updateTextNbInstallation);
-
-function getNbInstallation(){
-  let nbInstallaiton = document.getElementById("nbinstal").innerHTML;
-  document.getElementById("value-select").innerHTML = nbInstallaiton;
-}

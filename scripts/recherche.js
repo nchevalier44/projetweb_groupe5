@@ -1,9 +1,9 @@
 import { fillSelect } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  fillSelect("departements-select");
-  fillSelect("marques-onduleurs-select");
-  fillSelect("marques-panneaux-select");
+  fillSelect("departements-select", 20);
+  fillSelect("marques-onduleurs-select", 20);
+  fillSelect("marques-panneaux-select", 20);
 
 });
 
@@ -33,9 +33,15 @@ function displayResults(installations) {
   container.innerHTML = ""; // Clear previous results
   
   for(let installation of installations){
+    //If month is 6 (June), we write 06
+    let mois = installation.Mois_installation;
+    if(installation.Mois_installation / 10 < 1) {
+      mois = "0" + installation.Mois_installation
+    }
+
     container.innerHTML += `
     <div class='rounded-pill container w-25 mb-5 pb-3 pt-3 ps-5 pe-5 container-installation'>
-      <h3 class='text-center'>${installation.nom_ville} - ${installation.Mois_installation}/${installation.An_installation}</h3>
+      <h3 class='text-center'>${installation.nom_ville} - ${mois}/${installation.An_installation}</h3>
       <ul>
         <li>Latitude : ${installation.latitude} | Longitude : ${installation.longitude}</li>
         <li>Nombres de panneaux : ${installation.Nb_panneaux}</li>

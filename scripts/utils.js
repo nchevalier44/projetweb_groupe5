@@ -1,5 +1,5 @@
 //Fill a select element with options fetched from an API endpoint
-export async function fillSelect(id) {
+export async function fillSelect(id, limit=-1) {
   let select = document.getElementById(id);
   let path = "../api/solar_manager/";
   let error_message = "";
@@ -65,8 +65,17 @@ export async function fillSelect(id) {
   //Add default option
   select.innerHTML += `<option value="">${default_option_message}</option>`;
 
-  for(let i = 0; i<20; i++){
-    let randomInt = Math.floor(Math.random() * (datas.length-1));
+  if (limit == -1 || limit > datas.length) {
+    limit = datas.length;
+  }
+
+  let random_values = [];
+  for (let i = 0; i < limit; i++) {
+    let randomInt = Math.floor(Math.random() * datas.length);
+    while(random_values.includes(randomInt)) {
+      randomInt = Math.floor(Math.random() * datas.length);
+    }
+    random_values.push(randomInt);
     select.innerHTML += `<option value="${datas[randomInt][value]}">${datas[randomInt][text]}</option>`;
   }
 }
