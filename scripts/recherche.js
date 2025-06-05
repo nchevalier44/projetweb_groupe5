@@ -1,5 +1,7 @@
 import { fillSelect } from "./utils.js";
 
+const INSTALLATIONS_LIMIT_PER_PAGE = 99;
+
 document.addEventListener("DOMContentLoaded", () => {
   fillSelect("departements-select", 20);
   fillSelect("marques-onduleurs-select", 20);
@@ -11,21 +13,27 @@ document.addEventListener("DOMContentLoaded", () => {
 document.getElementById("departements-select").addEventListener("change", searchInstallation);
 document.getElementById("marques-onduleurs-select").addEventListener("change", searchInstallation);
 document.getElementById("marques-panneaux-select").addEventListener("change", searchInstallation);
+document.getElementById("previous-page").addEventListener("click", () => changePage(-1));
+document.getElementById("next-page").addEventListener("click", () => changePage(1));
 
 
-
-async function searchInstallation(){
+async function searchInstallation(limit=99, offset=0) {
   let departements_id = Array.from(document.getElementById("departements-select").selectedOptions).map(opt => opt.value);
   let marques_onduleurs_id = Array.from(document.getElementById("marques-onduleurs-select").selectedOptions).map(opt => opt.value);
   let marques_panneaux_id = Array.from(document.getElementById("marques-panneaux-select").selectedOptions).map(opt => opt.value);
-
-  let response = await fetch(`../api/solar_manager/installations/?id-departement=${departements_id}&id-marque-onduleur=${marques_onduleurs_id}&id-marque-panneau=${marques_panneaux_id}`);
+  
+  let path = `../api/solar_manager/installations/?id-departement=${departements_id}&id-marque-onduleur=${marques_onduleurs_id}&id-marque-panneau=${marques_panneaux_id}`;
+  path += `&limit=${limit}`;
+  path += `&offset=${offset}`;
+  console.log("Fetching installations from: " + path);
+  let response = await fetch(path);
   if(!response.ok){
-        console.error(error_message + response.statusText);
+        console.error("Erreur lors de la récupération des installations : " + response.statusText);
         return;
   }
     
   let installations = await response.json();
+  console.log
   displayResults(installations);
 }
 
@@ -33,8 +41,7 @@ function displayResults(installations) {
   let container = document.getElementById("installations-list");
   container.innerHTML = ""; // Clear previous results
 
-  let limit = installations.length > 99 ? 99 : installations.length; // Limit to 99 installations
-  for(let i = 0; i < limit; i++){
+  for(let i = 0; i < installations.length; i++){
     let installation = installations[i];
     //If month is 6 (June), we write 06
     let mois = installation.Mois_installation;
@@ -54,4 +61,14 @@ function displayResults(installations) {
     </div>
     `;
   }
+}
+
+
+function changePage(page){
+  let current_page = document.getElementById("current-page");
+  if(current_page.innerText + page > 0){
+    current_page.innerText = parseInt(current_page.innerText) + page;
+    searchInstallation(INSTALLATIONS_LIMIT_PER_PAGE, parseInt(current_page.innerText) * INSTALLATIONS_LIMIT_PER_PAGE);
+  }
+  
 }

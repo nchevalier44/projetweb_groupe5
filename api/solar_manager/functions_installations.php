@@ -75,6 +75,21 @@ function getInstallationsFilters($db, $filters){
 
         WHERE 1=1"; //'Add WHERE 1=1' to return all installations if no filters are applied
 
+    //Create end of query with order, limit and offset
+    $end_query = " ORDER BY v.nom_standard";
+    $limit = 0;
+    $offset = 0;
+    if(isset($filters['limit'])){
+        $limit = $filters['limit'];
+        $end_query .= " LIMIT :limit";
+        unset($filters['limit']);
+    }
+    if(isset($filters['offset'])){
+        $offset = $filters['offset'];
+        $end_query .= " OFFSET :offset";
+        unset($filters['offset']);
+    }
+
     //Add conditions based on filters
     foreach ($filters as $key => $values) {
         $query .= " AND (";
@@ -90,6 +105,7 @@ function getInstallationsFilters($db, $filters){
     }
 
     //Prepare the query
+    $query .= $end_query;
     $stmt = $db->prepare($query);
 
     //Bind parameters for each filter
@@ -98,6 +114,10 @@ function getInstallationsFilters($db, $filters){
             $stmt->bindParam(':' . str_replace('.', '_', $key) . "_" . $i, $values[$i]);
         }
     }
+
+    if($limit != 0) $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    if($offset != 0) $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    
 
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

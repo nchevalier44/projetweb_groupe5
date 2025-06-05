@@ -9,7 +9,7 @@
     if($_SERVER['REQUEST_METHOD'] == "GET"){
         $parameters = array();
         if(isset($_GET['id'])){
-            $parameters['id'] = $_GET['id'];
+            $parameters['i.id'] = $_GET['id'];
         } 
         if(isset($_GET['id-marque-onduleur']) && !empty($_GET['id-marque-onduleur'])){
             $parameters['id_marque_onduleur'] = explode(',', $_GET['id-marque-onduleur']);
@@ -25,6 +25,12 @@
         }
         if(isset($_GET['annee']) && !empty($_GET['annee'])){
             $parameters['An_installation'] = explode(',', $_GET['annee']);
+        }
+        if(isset($_GET['limit']) && !empty($_GET['limit'])){
+            $parameters['limit'] = $_GET['limit'];
+        }
+        if(isset($_GET['offset']) && !empty($_GET['offset'])){
+            $parameters['offset'] = $_GET['offset'];
         }
 
         echo json_encode(getInstallationsFilters($db, $parameters));
