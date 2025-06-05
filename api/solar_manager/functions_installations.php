@@ -5,6 +5,11 @@ function getInformationsInstallations($db){
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getNbInstallation($db){
+    $stmt = $db->query("SELECT COUNT(*) AS nombre_installation FROM installation;");
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 function getInformationInstallationParId($db, $id){
     $stmt = $db->prepare("SELECT * FROM installation WHERE id = :id");
     $stmt->bindParam(':id', $id);
@@ -40,9 +45,7 @@ function getNbInstallationsParRegion($db){
 }
 
 // 3. Nombre d’installations par année et région (par défaut 2025 / Pays de la Loire si aucun filtre)
-function getNbInstallationsParRegionAnnee($db){
-    $region = $_GET['region'] ?? 'Pays de la Loire';
-    $annee = $_GET['annee'] ?? 2025;
+function getNbInstallationsParRegionAnnee($db,$region,$annee){
 
     $stmt = $db->prepare("
         SELECT r.Reg_nom AS region, i.An_installation AS annee, COUNT(*) AS nombre_installations

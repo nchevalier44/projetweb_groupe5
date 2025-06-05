@@ -13,11 +13,16 @@ export async function fillSelect(id, limit) {
       path += "annees/";
       error_message = "Erreur lors de la récupération des années";
       default_option_message = "Sélectionner une année";
+      text = "annee";
+      value= "annee";
       break;
     case "region-select":
-      path += "region/";
+      path += "regions/";
       error_message = "Erreur lors de la récupération des regions";
       default_option_message = "Sélectionner une region";
+      text = "Reg_nom";
+      value = "id";
+
       break;
 
     //Recherche page

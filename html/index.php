@@ -1,3 +1,14 @@
+<?php
+require_once '../api/solar_manager/database.php';
+require_once '../api/solar_manager/functions_installations.php';
+require_once '../api/solar_manager/functions_onduleurs.php';
+require_once '../api/solar_manager/functions_panneaux.php';
+require_once '../api/solar_manager/functions_installateurs.php';
+
+$db = connectDB();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,25 +54,26 @@
       <div class="col-12 col-sm-6 col-md-3">
         <div class="stat-card h-100 d-flex flex-column justify-content-center">
           <div class="fw-semibold">Nombre d’installations total</div>
-          <div class="stat-value" id="nbinstal"></div>
+          <div class="stat-value" id="nbinstal"><?php echo (getNbInstallation($db)['nombre_installation']); ?>
+          </div>
         </div>
       </div>
       <div class="col-12 col-sm-6 col-md-3">
         <div class="stat-card h-100 d-flex flex-column justify-content-center">
           <div class="fw-semibold">Nombre de marques <br>de panneaux solaires</div>
-          <div class="stat-value" id="nbpanneau"></div>
+          <div class="stat-value" id="nbpanneau"><?php echo (getNbMarquesPanneaux($db)['nombre_marques_panneaux']); ?></div>
         </div>
       </div>
       <div class="col-12 col-sm-6 col-md-3">
         <div class="stat-card h-100 d-flex flex-column justify-content-center">
           <div class="fw-semibold">Nombre de marques d’onduleurs</div>
-          <div class="stat-value" id="nbonduleur"></div>
+          <div class="stat-value" id="nbonduleur"><?php echo (getNbMarquesOnduleurs($db)['nombre_marques_onduleurs']); ?></div>
         </div>
       </div>
       <div class="col-12 col-sm-6 col-md-3">
         <div class="stat-card h-100 d-flex flex-column justify-content-center">
           <div class="fw-semibold">Nombre d’installateurs</div>
-          <div class="stat-value" id="nbinstallateur"></div>
+          <div class="stat-value" id="nbinstallateur"><?php echo (getNbInstallateurs($db)['nombre_installateurs']); ?></div>
         </div>
       </div>
     </div>
@@ -79,8 +91,9 @@
       </div>
     </div>
     <p class="fw-semibold mt-3" id="nb-installation-annee-region">Nombre d’installations totales</p>
-    <p class="stat-value">3500</p>
+    <p class="stat-value" id="value-select"></p>
   </section>
+
 
 
   <?php
