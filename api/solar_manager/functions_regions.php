@@ -2,7 +2,7 @@
 
 function getRegions($db)
 {
-    $stmt = $db->query("SELECT * FROM region");
+    $stmt = $db->query("SELECT * FROM region ORDER BY Reg_nom");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

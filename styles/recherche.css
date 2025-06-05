@@ -30,6 +30,11 @@ footer {
     width: 30% !important;
 }
 
+.container-installation:hover{
+    cursor: pointer;
+    background-color: #1c92d2 !important;
+}
+
 #installations-list {
     gap: 2%;
 }
