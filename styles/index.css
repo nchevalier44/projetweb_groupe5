@@ -38,6 +38,23 @@ header {
     border-radius: 12px;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.intro-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.15);
+    border-color: #f8a500;
+    background-color: #fbefbb;
+}
+
+.intro-box p {
+    transition: color 0.3s ease;
+}
+
+.intro-box:hover p {
+    color: #8b5a00;
 }
 
 .stat-card {
@@ -63,3 +80,37 @@ section {
     font-size: 110%;
     text-align: justify;
 }
+
+
+.stat-card {
+    background: #ffffff;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border-color: #007bff;
+  }
+  
+  .stat-card .fw-semibold {
+    color: #6c757d;
+    transition: color 0.2s ease;
+  }
+  
+  .stat-card:hover .fw-semibold {
+    color: #007bff;
+  }
+  
+  .stat-card .stat-value {
+    color: #212529;
+    transition: color 0.2s ease;
+  }
+  
+  .stat-card:hover .stat-value {
+    color: #007bff;
+  }
