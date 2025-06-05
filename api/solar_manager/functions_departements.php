@@ -1,7 +1,7 @@
 <?php
 
 function getDepartements($db) {
-    $stmt = $db->query("SELECT * FROM departement ODER BY Dep_nom");
+    $stmt = $db->query("SELECT * FROM departement ORDER BY Dep_nom");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
