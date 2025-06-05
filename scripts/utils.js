@@ -1,57 +1,56 @@
 //Fill a select element with options fetched from an API endpoint
-export async function fillSelect(id) {
+export async function fillSelect(id, limit) {
   let select = document.getElementById(id);
-  let path = "/api/solar_manager/";
+  let path = "../api/solar_manager/";
   let error_message = "";
   let default_option_message = "";
+  let value = "";
+  let text = "";
 
   switch (id) {
     //Index page
     case "annee-installation-select":
-      path += "annees";
+      path += "annees/";
       error_message = "Erreur lors de la récupération des années";
       default_option_message = "Sélectionner une année";
       break;
     case "region-select":
-      path += "region";
+      path += "region/";
       error_message = "Erreur lors de la récupération des regions";
       default_option_message = "Sélectionner une region";
       break;
 
     //Recherche page
     case "departements-select":
-      path += "departements";
+      path += "departements/";
       error_message = "Erreur lors de la récupération des départements : ";
       default_option_message = "Choisissez un département";
+      value = "id";
+      text = "Dep_nom";
       break;
     case "marques-onduleurs-select":
-      path += "marques_onduleurs";
-      error_message =
-        "Erreur lors de la récupération des marques d'onduleurs : ";
+      path += "onduleurs/marques/";
+      error_message = "Erreur lors de la récupération des marques d'onduleurs : ";
       default_option_message = "Choisissez une marque d'onduleur";
+      value = "id";
+      text = "Onduleur_marque";
       break;
     case "marques-panneaux-select":
-      path += "marques_panneaux";
-      error_message =
-        "Erreur lors de la récupération des marques de panneaux : ";
+      path += "panneauxx/marques/";
+      error_message = "Erreur lors de la récupération des marques de panneaux : ";
       default_option_message = "Choisissez une marque de panneau";
+      value = "id";
+      text = "Panneaux_marque";
       break;
   }
 
-  /*
   let response = await fetch(path);
   if(!response.ok){
-        console.error(error_message + response.statusText);
-        return;
-    }
+      console.error(error_message + response.statusText);
+      return;
+  }
     
-    let datas = await response.json();*/
-
-  let datas = [
-    { id: 1, name: "Data 1" },
-    { id: 2, name: "Data 2" },
-    { id: 3, name: "Data 3" },
-  ];
+  let datas = await response.json();
 
   //Clear existing options
   select.innerHTML = "";
@@ -59,8 +58,11 @@ export async function fillSelect(id) {
   //Add default option
   select.innerHTML += `<option value="">${default_option_message}</option>`;
 
+  for(let i = 0; i<20; i++){
+    
+  }
   for (let data of datas) {
-    select.innerHTML += `<option value="${data.id}">${data.name}</option>`;
+    select.innerHTML += `<option value="${data[value]}">${data[text]}</option>`;
   }
 }
 

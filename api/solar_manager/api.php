@@ -4,178 +4,275 @@ header('Content-Type: application/json');
 
 $db = connectDB();
 
-// 1. Nombre d’installations par année (utiliser An_installation)
-function getNbInstallationParAn($db){
-    $stmt = $db->query("
-        SELECT An_installation AS annee, COUNT(*) AS nombre_installations
-        FROM installation
-        GROUP BY annee
-        ORDER BY annee
-    ");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
 
 
-// 2. Nombre d’installations par région (region.Reg_nom)
-function getNbInstallationsParRegion($db){
-    $stmt = $db->query("
-        SELECT r.Reg_nom AS nom, COUNT(*) AS nombre_installations
-        FROM installation i
-        JOIN localisation l ON i.id_localisation = l.id
-        JOIN ville v ON l.code_insee = v.code_insee
-        JOIN departement d ON v.id = d.id
-        JOIN region r ON d.id_region = r.id
-        GROUP BY r.Reg_nom
-        ORDER BY r.Reg_nom
-    ");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+function insertInstallation(PDO $db, array $data)
+{
+    // Champs obligatoires
+    $requiredFields = [
+        'Iddoc', 'Nb_panneaux', 'Nb_onduleurs', 'Puissance_crete', 'Pente', 'Orientation',
+        'Surface', 'Production_pvgis', 'Pente_optimum', 'Orientation_opti', 'Mois_installation',
+        'An_installation', 'id_installateur', 'id_onduleur', 'id_panneau', 'id_localisation',
+        'Country', 'Reg_nom', 'Reg_code', 'id_pays',
+        'Dep_nom', 'Dep_code', 'id_region',
+        'code_insee', 'Nom_standard', 'Population', 'Code_postal', 'id',
+        'Lat', 'Lon',
+        'Installeur',
+        'Panneaux_marque', 'Paneeaux_modele', 'id_marque_panneau', 'id_modele_panneau',
+        'Onduleur_marque', 'Onduleur_modele', 'id_marque_onduleur', 'id_modele_onduleu'
+    ];
 
+    // Vérification des champs obligatoires
+    foreach ($requiredFields as $field) {
+        if (!isset($data[$field])) {
+            return ['error' => "Le champ '$field' est obligatoire."];
+        }
+    }
 
-// 3. Nombre d’installations par année et région (par défaut 2025 / Pays de la Loire si aucun filtre)
-function getNbInstallationsParRegionAnnee($db){
-    $region = $_GET['region'] ?? 'Pays de la Loire';
-    $annee = $_GET['annee'] ?? 2025;
+    try {
+        // Pré-insertions
+        $db->exec("
+            INSERT INTO public.pays (Country) VALUES (:Country) ON CONFLICT DO NOTHING;
 
-    $stmt = $db->prepare("
-        SELECT r.Reg_nom AS region, i.An_installation AS annee, COUNT(*) AS nombre_installations
-        FROM installation i
-        JOIN localisation l ON i.id_localisation = l.id
-        JOIN ville v ON l.code_insee = v.code_insee
-        JOIN departement d ON v.id = d.id
-        JOIN region r ON d.id_region = r.id
-        WHERE r.Reg_nom = :region AND i.An_installation = :annee
-        GROUP BY r.Reg_nom, i.An_installation
-        ORDER BY r.Reg_nom, i.An_installation
-    ");
-    return $stmt->execute([':region' => $region, ':annee' => $annee]);
+            INSERT INTO public.region (Reg_nom, Reg_code, id_pays) VALUES
+            (:Reg_nom, :Reg_code, :id_pays)
+            ON CONFLICT DO NOTHING;
 
-}
+            INSERT INTO public.departement (Dep_nom, Dep_code, id_region) VALUES
+            (:Dep_nom, :Dep_code, :id_region)
+            ON CONFLICT DO NOTHING;
 
-// 4. Nombre d’installateurs
-function getNbInstallateurs($db){
-    $stmt = $db->query("SELECT COUNT(*) AS nombre_installateurs FROM installateur");
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
+            INSERT INTO public.ville (code_insee, Nom_standard, Population, Code_postal, id) VALUES
+            (:code_insee, :Nom_standard, :Population, :Code_postal, :id)
+            ON CONFLICT DO NOTHING;
 
-// 5. Nombre de marques d’onduleurs (marque_onduleur.Onduleur_marque)
-function getNbMarquesOnduleurs($db){
-    $stmt = $db->query("SELECT COUNT(DISTINCT Onduleur_marque) AS nombre_marques_onduleurs FROM marque_onduleur");
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-// 6. Nombre de marques de panneaux (marque_panneau.Panneaux_marque)
-function getNbMarquesPanneaux($db){
-    $stmt = $db->query("SELECT COUNT(DISTINCT Panneaux_marque) AS nombre_marques_panneaux FROM marque_panneau");
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
+            INSERT INTO public.localisation (Lat, Lon, code_insee) VALUES
+            (:Lat, :Lon, :code_insee)
+            ON CONFLICT DO NOTHING;
 
-// 7. Installations par marque d’onduleur
-function getInstallationsParMarqueOnduleur($db){
-    $stmt = $db->query("
-        SELECT mo.Onduleur_marque AS marque_onduleur, COUNT(i.id) AS nombre_installations
-        FROM installation i
-        JOIN onduleur o ON i.id_onduleur = o.id
-        JOIN marque_onduleur mo ON o.id_marque_onduleur = mo.id
-        GROUP BY mo.Onduleur_marque
-    ");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+            INSERT INTO public.installateur (Installateur) VALUES
+            (:Installeur)
+            ON CONFLICT DO NOTHING;
 
-// 8. Installations par marque de panneau
-function getInstallationsParMarquePanneau($db){
-    $stmt = $db->query("
-        SELECT mp.Panneaux_marque AS marque_panneau, COUNT(i.id) AS nombre_installations
-        FROM installation i
-        JOIN panneau p ON i.id_panneau = p.id
-        JOIN marque_panneau mp ON p.id_marque_panneau = mp.id
-        GROUP BY mp.Panneaux_marque
-    ");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+            INSERT INTO public.marque_panneau (Panneaux_marque) VALUES
+            (:Panneaux_marque)
+            ON CONFLICT DO NOTHING;
 
-// 9. Installations par département (filtrable)
-function getInstallationsParDepartement($db) {
-    if (!empty($_GET['departement'])) {
-        $departement = $_GET['departement'];
-        $stmt = $db->prepare("
-            SELECT d.Dep_nom AS departement, COUNT(i.id) AS nombre_installations
-            FROM installation i
-            JOIN localisation l ON i.id_localisation = l.id
-            JOIN ville v ON l.code_insee = v.code_insee
-            JOIN departement d ON v.id = d.id
-            WHERE d.Dep_nom = :departement
-            GROUP BY d.Dep_nom
+            INSERT INTO public.modele_panneau (Panneaux_modele) VALUES
+            (:Paneeaux_modele)
+            ON CONFLICT DO NOTHING;
+
+            INSERT INTO public.panneau (id_marque_panneau, id_modele_panneau) VALUES
+            (:id_marque_panneau, :id_modele_panneau)
+            ON CONFLICT DO NOTHING;
+
+            INSERT INTO public.marque_onduleur (Onduleur_marque) VALUES
+            (:Onduleur_marque)
+            ON CONFLICT DO NOTHING;
+
+            INSERT INTO public.modele_onduleur (Onduleur_modele) VALUES
+            (:Onduleur_modele)
+            ON CONFLICT DO NOTHING;
+
+            INSERT INTO public.onduleur (id_marque_onduleur, id_modele_onduleur) VALUES
+            (:id_marque_onduleur, :id_modele_onduleu)
+            ON CONFLICT DO NOTHING;
         ");
-        $stmt->execute([':departement' => $departement]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Insertion principale
+        $sql = "INSERT INTO installation (
+                    Iddoc, Nb_panneaux, Nb_onduleurs, Puissance_crete, Pente, Orientation, Surface, Production_pvgis,
+                    Pente_optimum, Orientation_opti, Mois_installation, An_installation, id_installateur,
+                    id_onduleur, id_panneau, id_localisation
+                ) VALUES (
+                    :Iddoc, :Nb_panneaux, :Nb_onduleurs, :Puissance_crete, :Pente, :Orientation, :Surface, :Production_pvgis,
+                    :Pente_optimum, :Orientation_opti, :Mois_installation, :An_installation, :id_installateur,
+                    :id_onduleur, :id_panneau, :id_localisation
+                )";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->execute([
+            ':Iddoc'               => $data['Iddoc'],
+            ':Nb_panneaux'         => $data['Nb_panneaux'],
+            ':Nb_onduleurs'        => $data['Nb_onduleurs'],
+            ':Puissance_crete'     => $data['Puissance_crete'],
+            ':Pente'               => $data['Pente'],
+            ':Orientation'         => $data['Orientation'],
+            ':Surface'             => $data['Surface'],
+            ':Production_pvgis'    => $data['Production_pvgis'],
+            ':Pente_optimum'       => $data['Pente_optimum'],
+            ':Orientation_opti'    => $data['Orientation_opti'],
+            ':Mois_installation'   => $data['Mois_installation'],
+            ':An_installation'     => $data['An_installation'],
+            ':id_installateur'     => $data['id_installateur'],
+            ':id_onduleur'         => $data['id_onduleur'],
+            ':id_panneau'          => $data['id_panneau'],
+            ':id_localisation'     => $data['id_localisation'],
+        ]);
+
+        return ['success' => 'Installation ajoutée avec succès'];
+
+    } catch (PDOException $e) {
+        return ['error' => 'Erreur base de données: ' . $e->getMessage()];
     }
 }
 
-// 10. Dates d’installation triées (pas de champ 'date', on peut concat Mois_installation et An_installation ?)
-// Sinon on affiche juste année et mois
-function getDatesInstallations($db){
-    $stmt = $db->query("SELECT id, An_installation AS annee, Mois_installation AS mois FROM installation ORDER BY annee, mois");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+function updateData(PDO $db, array $data){
+    $sql = "
+        UPDATE installateur
+        SET Installateur = :installateur_value
+        WHERE id = :installateur_id;
 
-// 11. Nombre total de panneaux installés
-function getNbTotalPanneauxInstalles($db){
-    $stmt = $db->query("SELECT SUM(Nb_panneaux) AS total_panneaux FROM installation");
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
+        UPDATE panneau
+        SET id_marque_panneau = :id_marque,
+            id_modele_panneau = :id_modele
+        WHERE id = :panneau_id;
 
-// 12. Surface des panneaux par installation (Surface)
-function getSurfacePanneauxParInstallation($db){
-    $stmt = $db->query("SELECT id, Surface FROM installation ORDER BY Surface");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        UPDATE onduleur
+        SET id_marque_onduleur = :id_marque_onduleur,
+            id_modele_onduleur = :id_modele_onduleur
+        WHERE id = :onduleur_id;
 
-// 13. Puissance crête par installation (Puissance_crete)
-function getPuissanceCreteParInstallation($db){
-    $stmt = $db->query("SELECT id, Puissance_crete FROM installation ORDER BY Puissance_crete");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        UPDATE modele_onduleur
+        SET Onduleur_modele = :modele_onduleur_name
+        WHERE id = :modele_onduleur_id;
 
-// 14. Localisation des installations (Lat, Lon)
-function getLocalisationInstallations($db){
-    $stmt = $db->query("
-        SELECT i.id AS id_installation, l.Lat AS latitude, l.Lon AS longitude
-        FROM installation i
-        JOIN localisation l ON i.id_localisation = l.id
-    ");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        UPDATE modele_panneau
+        SET Panneaux_modele = :modele_panneau_name
+        WHERE id = :modele_panneau_id;
 
-// 15. Liste des années disponibles (pour fillSelect)
-function getAnneesDisponibles($db){
-    $stmt = $db->query("
-        SELECT DISTINCT An_installation AS annee
-        FROM installation
-        ORDER BY annee
-    ");
-    return $stmt->fetchAll(PDO::FETCH_COLUMN);
-}
+        UPDATE marque_onduleur
+        SET Onduleur_marque = :marque_onduleur_name
+        WHERE id = :marque_onduleur_id;
 
-// 16. Liste des régions disponibles (pour fillSelect)
-function getRegionsDisponibles($db){
-    $stmt = $db->query("
-        SELECT DISTINCT r.Reg_nom AS region
-        FROM region r
-        JOIN departement d ON r.id = d.id_region
-        JOIN ville v ON d.id = v.id
-        JOIN localisation l ON v.code_insee = l.code_insee
-        JOIN installation i ON i.id_localisation = l.id
-        ORDER BY r.Reg_nom
-    ");
-    return $stmt->fetchAll(PDO::FETCH_COLUMN);
-}
+        UPDATE marque_panneau
+        SET Panneaux_marque = :marque_panneau_name
+        WHERE id = :marque_panneau_id;
 
-//information d'une installation sans filtre
-function getInformationInstallation($db){
-    $stmt = $db->query("
-        SELECT * FROM installation;
-    ");
-    return $stmt->fetchAll(PDO::FETCH_COLUMN);
-}
+        UPDATE pays
+        SET Country = :country_name
+        WHERE id = :pays_id;
 
-echo json_encode($response);
+        UPDATE region
+        SET Reg_code = :reg_code,
+            Reg_nom = :reg_nom,
+            id_pays = :id_pays
+        WHERE id = :region_id;
+
+        UPDATE departement
+        SET Dep_code = :dep_code,
+            Dep_nom = :dep_nom,
+            id_region = :id_region
+        WHERE id = :departement_id;
+
+        UPDATE ville
+        SET Nom_standard = :nom_standard,
+            Population = :population,
+            Code_postal = :code_postal,
+            id = :departement_id
+        WHERE code_insee = :code_insee;
+
+        UPDATE localisation
+        SET Lat = :lat,
+            Lon = :lon,
+            code_insee = :code_insee
+        WHERE id = :localisation_id;
+
+        UPDATE installation
+        SET Iddoc = :iddoc,
+            Nb_panneaux = :nb_panneaux,
+            Nb_onduleurs = :nb_onduleurs,
+            Puissance_crete = :puissance_crete,
+            Pente = :pente,
+            Orientation = :orientation,
+            Surface = :surface,
+            Production_pvgis = :production_pvgis,
+            Pente_optimum = :pente_optimum,
+            Orientation_opti = :orientation_opti,
+            Mois_installation = :mois_installation,
+            An_installation = :an_installation,
+            id_installateur = :id_installateur,
+            id_onduleur = :id_onduleur,
+            id_panneau = :id_panneau,
+            id_localisation = :id_localisation
+        WHERE id = :installation_id;
+    ";
+
+    try {
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':installateur_value', $data['installateur_value']);
+        $stmt->bindValue(':installateur_id', $data['installateur_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':id_marque', $data['id_marque'], PDO::PARAM_INT);
+        $stmt->bindValue(':id_modele', $data['id_modele'], PDO::PARAM_INT);
+        $stmt->bindValue(':panneau_id', $data['panneau_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':id_marque_onduleur', $data['id_marque_onduleur'], PDO::PARAM_INT);
+        $stmt->bindValue(':id_modele_onduleur', $data['id_modele_onduleur'], PDO::PARAM_INT);
+        $stmt->bindValue(':onduleur_id', $data['onduleur_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':modele_onduleur_name', $data['modele_onduleur_name']);
+        $stmt->bindValue(':modele_onduleur_id', $data['modele_onduleur_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':modele_panneau_name', $data['modele_panneau_name']);
+        $stmt->bindValue(':modele_panneau_id', $data['modele_panneau_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':marque_onduleur_name', $data['marque_onduleur_name']);
+        $stmt->bindValue(':marque_onduleur_id', $data['marque_onduleur_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':marque_panneau_name', $data['marque_panneau_name']);
+        $stmt->bindValue(':marque_panneau_id', $data['marque_panneau_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':country_name', $data['country_name']);
+        $stmt->bindValue(':pays_id', $data['pays_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':reg_code', $data['reg_code']);
+        $stmt->bindValue(':reg_nom', $data['reg_nom']);
+        $stmt->bindValue(':id_pays', $data['id_pays'], PDO::PARAM_INT);
+        $stmt->bindValue(':region_id', $data['region_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':dep_code', $data['dep_code']);
+        $stmt->bindValue(':dep_nom', $data['dep_nom']);
+        $stmt->bindValue(':id_region', $data['id_region'], PDO::PARAM_INT);
+        $stmt->bindValue(':departement_id', $data['departement_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':nom_standard', $data['nom_standard']);
+        $stmt->bindValue(':population', $data['population'], PDO::PARAM_INT);
+        $stmt->bindValue(':code_postal', $data['code_postal']);
+        $stmt->bindValue(':departement_id', $data['departement_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':code_insee', $data['code_insee']);
+
+        $stmt->bindValue(':lat', $data['lat']);
+        $stmt->bindValue(':lon', $data['lon']);
+        $stmt->bindValue(':code_insee', $data['code_insee']);
+        $stmt->bindValue(':localisation_id', $data['localisation_id'], PDO::PARAM_INT);
+
+        $stmt->bindValue(':iddoc', $data['iddoc']);
+        $stmt->bindValue(':nb_panneaux', $data['nb_panneaux'], PDO::PARAM_INT);
+        $stmt->bindValue(':nb_onduleurs', $data['nb_onduleurs'], PDO::PARAM_INT);
+        $stmt->bindValue(':puissance_crete', $data['puissance_crete']);
+        $stmt->bindValue(':pente', $data['pente']);
+        $stmt->bindValue(':orientation', $data['orientation']);
+        $stmt->bindValue(':surface', $data['surface']);
+        $stmt->bindValue(':production_pvgis', $data['production_pvgis']);
+        $stmt->bindValue(':pente_optimum', $data['pente_optimum']);
+        $stmt->bindValue(':orientation_opti', $data['orientation_opti']);
+        $stmt->bindValue(':mois_installation', $data['mois_installation'], PDO::PARAM_INT);
+        $stmt->bindValue(':an_installation', $data['an_installation'], PDO::PARAM_INT);
+        $stmt->bindValue(':id_installateur', $data['id_installateur'], PDO::PARAM_INT);
+        $stmt->bindValue(':id_onduleur', $data['id_onduleur'], PDO::PARAM_INT);
+        $stmt->bindValue(':id_panneau', $data['id_panneau'], PDO::PARAM_INT);
+        $stmt->bindValue(':id_localisation', $data['id_localisation'], PDO::PARAM_INT);
+        $stmt->bindValue(':installation_id', $data['installation_id'], PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        echo json_encode(['success' => true]);
+
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['error' => $e->getMessage()]);
+    }
+}
