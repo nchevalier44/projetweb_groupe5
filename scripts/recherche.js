@@ -15,11 +15,8 @@ document.getElementById("marques-panneaux-select").addEventListener("change", se
 
 async function searchInstallation(){
   let departements_id = Array.from(document.getElementById("departements-select").selectedOptions).map(opt => opt.value);
-
-  let marques_onduleurs_id = document.getElementById("marques-onduleurs-select").value;
-  let marques_panneaux_id = document.getElementById("marques-panneaux-select").value;
-
-  console.log(departements_id);
+  let marques_onduleurs_id = Array.from(document.getElementById("marques-onduleurs-select").selectedOptions).map(opt => opt.value);
+  let marques_panneaux_id = Array.from(document.getElementById("marques-panneaux-select").selectedOptions).map(opt => opt.value);
 
   let response = await fetch(`../api/solar_manager/installations/?id-departement=${departements_id}&id-marque-onduleur=${marques_onduleurs_id}&id-marque-panneau=${marques_panneaux_id}`);
   if(!response.ok){
