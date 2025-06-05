@@ -32,7 +32,9 @@ function displayResults(installations) {
   let container = document.getElementById("installations-list");
   container.innerHTML = ""; // Clear previous results
   
-  for(let installation of installations){
+
+  for(let i = 0; i<100; i++){
+    let installation = installations[i];
     //If month is 6 (June), we write 06
     let mois = installation.Mois_installation;
     if(installation.Mois_installation / 10 < 1) {
