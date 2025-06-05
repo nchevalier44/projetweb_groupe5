@@ -33,3 +33,8 @@ footer {
 #installations-list {
     gap: 2%;
 }
+
+.link-details, .link-details *{
+    text-decoration: none;
+    color: inherit;
+}

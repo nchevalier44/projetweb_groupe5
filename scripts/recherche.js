@@ -31,9 +31,9 @@ async function searchInstallation(){
 function displayResults(installations) {
   let container = document.getElementById("installations-list");
   container.innerHTML = ""; // Clear previous results
-  
 
-  for(let i = 0; i<99; i++){
+  let limit = installations.length > 99 ? 99 : installations.length; // Limit to 99 installations
+  for(let i = 0; i < limit; i++){
     let installation = installations[i];
     //If month is 6 (June), we write 06
     let mois = installation.Mois_installation;
@@ -43,13 +43,15 @@ function displayResults(installations) {
 
     container.innerHTML += `
     <div class='rounded-pill container w-25 mb-5 pb-3 pt-3 ps-5 pe-5 container-installation'>
-      <h3 class='text-center'>${installation.nom_ville} - ${mois}/${installation.An_installation}</h3>
-      <ul>
-        <li>Latitude : ${installation.latitude} | Longitude : ${installation.longitude}</li>
-        <li>Nombres de panneaux : ${installation.Nb_panneaux}</li>
-        <li>Surface : ${installation.Surface}m²</li>
-        <li>Puissance crête : ${installation.Puissance_crete}</li>
-      </ul>
+      <a href="details.php?id=${installation.id}" class="link-details">
+        <h3 class='text-center'>${installation.nom_ville} | ${mois}/${installation.An_installation}</h3>
+        <ul>
+          <li>Latitude : ${installation.latitude} | Longitude : ${installation.longitude}</li>
+          <li>Nombres de panneaux : ${installation.Nb_panneaux}</li>
+          <li>Surface : ${installation.Surface}m²</li>
+          <li>Puissance crête : ${installation.Puissance_crete}</li>
+        </ul>
+      </a>
     </div>
     `;
   }
