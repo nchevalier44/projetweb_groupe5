@@ -8,9 +8,11 @@
     //GET METHOD
     if($_SERVER['REQUEST_METHOD'] == "GET"){
         if(isset($_GET['id'])){
-            return getInstallateurParId($db, $_GET['id']);
+            echo json_encode(getInstallateurParId($db, $_GET['id']));
+            return;
         } else{
-            return getInstallateurs($db);
+            echo json_encode(getInstallateurs($db));
+            return;
         }
 
     //POST METHOD

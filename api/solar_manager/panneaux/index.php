@@ -9,9 +9,11 @@
     //GET METHOD
     if($_SERVER['REQUEST_METHOD'] == "GET"){
         if(isset($_GET['id'])){
-            return getPanneauParId($db, $_GET['id']);
+            echo json_encode(getPanneauParId($db, $_GET['id']));
+            return;
         } else{
-            return getPanneaux($db);
+            echo json_encode(getPanneaux($db));
+            return;
         }
 
     //POST METHOD

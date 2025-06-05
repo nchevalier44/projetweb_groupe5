@@ -2,11 +2,11 @@
 function connectDB()
 {
     $host = 'localhost';
-    $db = 'projectweb';
-    $user = 'groupe5';
-    $pass = 'groupe5';
-    $dsn = "pgsql:host=$host;dbname=$db";
-
+    $db = 'solar_manager';
+    $user = 'user';
+    $pass = 'Isen44';
+    $dsn = "mysql:host=$host;dbname=$db;";
+    
     try {
         return new PDO($dsn, $user, $pass);
     } catch (PDOException $e) {

@@ -21,9 +21,8 @@
             $parameters['departement.id'] = $_GET['id-departement'];
         }
 
-        return getInstallationsFilters($db, $parameters);
-
-
+        echo json_encode(getInstallationsFilters($db, $parameters));
+        return;
 
 
     //POST METHOD

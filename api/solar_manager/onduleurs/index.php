@@ -8,9 +8,11 @@
     //GET METHOD
     if($_SERVER['REQUEST_METHOD'] == "GET"){
         if(isset($_GET['id'])){
-            return getOnduleurParId($db, $_GET['id']);
+            echo json_encode(getOnduleurParId($db, $_GET['id']));
+            return;
         } else{
-            return getOnduleurs($db);
+            echo json_encode(getOnduleurs($db));
+            return;
         }
 
     //POST METHOD

@@ -1,12 +1,18 @@
 <?php
 
 function getPanneaux($db) {
-    $stmt = $db->query("SELECT * FROM panneau");
+    $stmt = $db->query("SELECT * FROM panneau p
+    JOIN marque_panneau marque ON p.id_marque_panneau = marque.id
+    JOIN modele_panneau modele ON p.id_modele_panneau = modele.id
+    ORDER BY Panneaux_marque, Panneaux_modele");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getPanneauParId($db, $id) {
-    $stmt = $db->prepare("SELECT * FROM panneau WHERE id = :id");
+    $stmt = $db->prepare("SELECT * FROM panneau p
+    JOIN marque_panneau marque ON p.id_marque_panneau = marque.id
+    JOIN modele_panneau modele ON p.id_modele_panneau = modele.id
+    WHERE p.id = :id");
     $stmt->bindParam(':id', $id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
