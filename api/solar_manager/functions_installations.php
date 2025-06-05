@@ -63,7 +63,7 @@ function getNbInstallationsParRegionAnnee($db,$region,$annee){
 
 function getInstallationsFilters($db, $filters){
     $query = "
-        SELECT *, v.nom_standard AS nom_ville, l.Lat AS latitude, l.Lon AS longitude FROM installation i
+        SELECT *,i.id as id,region.id as id_region, departement.id as id_departement, v.id as id_ville, v.nom_standard AS nom_ville, l.Lat AS latitude, l.Lon AS longitude FROM installation i
         JOIN onduleur o ON i.id_onduleur = o.id
         
         JOIN panneau p ON i.id_panneau = p.id
