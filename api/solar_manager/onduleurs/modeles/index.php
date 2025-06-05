@@ -1,6 +1,6 @@
 <?php
-    require_once '../database.php';
-    require_once '../functions_onduleurs.php';
+    require_once '../../database.php';
+    require_once '../../functions_onduleurs.php';
     $db = connectDB();
     header('Content-Type: application/json');
     

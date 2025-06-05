@@ -11,16 +11,15 @@
         if(isset($_GET['id'])){
             $parameters['id'] = $_GET['id'];
         } 
-        else if(isset($_GET['id-marque-onduleur'])){
+        if(isset($_GET['id-marque-onduleur']) && !empty($_GET['id-marque-onduleur'])){
             $parameters['id_marque_onduleur'] = $_GET['id-marque-onduleur'];
         } 
-        else if(isset($_GET['id-marque-panneau'])){
+        if(isset($_GET['id-marque-panneau']) && !empty($_GET['id-marque-panneau'])){
             $parameters['id_marque_panneau'] = $_GET['id-marque-panneau'];
         } 
-        else if(isset($_GET['id-departement'])){
+        if(isset($_GET['id-departement']) && !empty($_GET['id-departement'])){
             $parameters['departement.id'] = $_GET['id-departement'];
         }
-
         echo json_encode(getInstallationsFilters($db, $parameters));
         return;
 
