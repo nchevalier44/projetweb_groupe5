@@ -52,7 +52,7 @@
         <button id="current-page" class="btn btn-secondary me-2">0</button>
         <button id="next-page" class="btn btn-primary">Suivant</button>
     </div>
-
+    <br>
     <!-- Include Footer -->
     <?php
     include_once "footer.html";
