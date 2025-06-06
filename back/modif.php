@@ -7,7 +7,7 @@
     <title>Modification d'une installation</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../styles/ajout.css">
+    <link rel="stylesheet" href="../styles/modif.css">
 </head>
 
 <body>
@@ -15,105 +15,81 @@
     <?php
     include_once "../html/navbar.html";
     ?>
+    <input type="hidden" id="installation-id" value="<?php echo htmlspecialchars($_GET['id']); ?>">
 
     <h1 class="text-center mt-5">Modifier l'installation </h1>
 
     <div class="container my-5">
-        <form id="searchForm" class="p-4 rounded-4" style="background-color: #48BFFF; border: 2px solid #333;">
+        <form id="searchForm" class="p-4 rounded-4">
 
-            <div class="row row-cols-1 row-cols-md-4 g-3">
+            <label class="form-label mt-2" for="date-installation">Date d’installation</label>
+            <input type="month" class="form-control" id="date-installation" required>
 
-                <!-- Colonne 1 -->
-                <div class="col">
-                    <label class="form-label">Date d’installation</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="nb-panneaux">Nombre de panneaux</label>
+            <input type="number" class="form-control" id="nb-panneaux" required>
 
-                    <label class="form-label mt-3">Nombre de panneaux</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="modele-panneaux">Modèle des panneaux</label>
+            <input type="text" class="form-control" id="modele-panneaux" required>
 
-                    <label class="form-label mt-3">Modèle des panneaux</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="marque-panneaux">Marque des panneaux photovoltaïque</label>
+            <input type="text" class="form-control" id="marque-panneaux" required>
 
-                    <label class="form-label mt-3">Marque des panneaux photovoltaïque</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="nb-onduleurs">Nombre d’onduleurs</label>
+            <input type="number" class="form-control" id="nb-onduleurs" required>
 
-                    <label class="form-label mt-3">Nombre d’onduleurs</label>
-                    <input type="text" class="form-control">
-                </div>
+            <label class="form-label mt-3" for="modele-onduleurs">Modèle des onduleurs</label>
+            <input type="text" class="form-control" id="modele-onduleurs" required>
 
-                <!-- Colonne 2 -->
-                <div class="col">
-                    <label class="form-label">Modèle des onduleurs</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="marque-onduleurs">Marque des onduleurs</label>
+            <input type="text" class="form-control" id="marque-onduleurs" required>
 
-                    <label class="form-label mt-3">Marque des onduleurs</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="puissance-cretes">Puissance crête</label>
+            <input type="number" class="form-control" id="puissance-cretes" required>
 
-                    <label class="form-label mt-3">Puissance crête</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="surface">Surface m²</label>
+            <input type="number" class="form-control" id="surface" required>
 
-                    <label class="form-label mt-3">Surface</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="pente">Pente</label>
+            <input type="number" class="form-control" id="pente" required>
 
-                    <label class="form-label mt-3">Pente</label>
-                    <input type="text" class="form-control">
-                </div>
+            <label class="form-label mt-3" for="pente-optimum">Pente optimum</label>
+            <input type="number" class="form-control" id="pente-optimum">
 
-                <!-- Colonne 3 -->
-                <div class="col">
-                    <label class="form-label">Pente optimum</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="orientation">Orientation</label>
+            <input type="text" class="form-control" id="orientation" required>
 
-                    <label class="form-label mt-3">Orientation</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="orientation-optimum">Orientation optimum</label>
+            <input type="text" class="form-control" id="orientation-optimum">
 
-                    <label class="form-label mt-3">Orientation optimum</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="installateur">Installateur</label>
+            <input type="text" class="form-control" id="installateur" required>
 
-                    <label class="form-label mt-3">Installateur</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="production-pvgis">Production PVGIS</label>
+            <input type="number" class="form-control" id="production-pvgis" required>
 
-                    <label class="form-label mt-3">Production PVGIS</label>
-                    <input type="text" class="form-control">
-                </div>
+            <label class="form-label mt-3" for="latitude">Latitude</label>
+            <input type="number" class="form-control" id="latitude" required>
 
-                <!-- Colonne 4 -->
-                <div class="col">
-                    <label class="form-label">Latitude</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="longitude">Longitude</label>
+            <input type="number" class="form-control" id="longitude" required>
 
-                    <label class="form-label mt-3">Longitude</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="ville">Ville</label>
+            <input type="text" class="form-control" id="ville" required>
 
-                    <label class="form-label mt-3">Ville</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="departement">Département</label>
+            <input type="text" class="form-control" id="departement" required>
 
-                    <label class="form-label mt-3">Département</label>
-                    <input type="text" class="form-control">
+            <label class="form-label mt-3" for="region">Région</label>
+            <input type="text" class="form-control" id="region" required>
 
-                    <label class="form-label mt-3">Région</label>
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-
-            <!-- Ligne centrée pour Code Postal et Pays -->
-            <div class="row justify-content-center mt-4">
-                <div class="col-md-3">
-                    <label class="form-label">Code Postal</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Pays</label>
-                    <input type="text" class="form-control">
-                </div>
-            </div>
+            <label class="form-label mt-3" for="pays">Pays</label>
+            <input type="text" class="form-control" id="pays">
 
             <div class="row mt-4">
                 <div class="col d-flex justify-content-center">
                     <button type="submit" class="btn btn-success px-5">Envoyer</button>
                 </div>
             </div>
-
         </form>
     </div>
 
@@ -121,6 +97,7 @@
     include_once "../html/footer.html";
     ?>
     <script src="../scripts/back.js"></script>
+    <script src="../scripts/modif.js" type="module"></script>
 </body>
 
 </html>
