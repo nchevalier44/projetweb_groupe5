@@ -143,3 +143,66 @@ export function displayErrorMessage(message){
         console.error(message);
     }
 }
+
+
+
+export async function fillCityDepReg() {
+  let responsevilles = await fetch(`../api/solar_manager/villes`);
+  if (!response.ok) {
+    console.error(
+      "Erreur lors de la récupération des informations des villes : " +
+        response.statusText
+    );
+    return;
+  }
+
+  let villes = await responsevilles.json();
+
+  let responsedep = await fetch(`../api/solar_manager/departements`);
+  if (!response.ok) {
+    console.error(
+      "Erreur lors de la récupération des informations de départements : " +
+        response.statusText
+    );
+    return;
+  }
+
+  let departements = await responsedep.json();
+
+  let responsereg = await fetch(`../api/solar_manager/regions`);
+  if (!response.ok) {
+    console.error(
+      "Erreur lors de la récupération des informations des regions : " +
+        response.statusText
+    );
+    return;
+  }
+
+  let regions = await responsereg.json();
+
+  let selectVille = document.getElementById("villes");
+  villes.forEach((ville) => {
+    selectVille.innerHTML +=
+      `<option value="` +
+      ville.Nom_standard +
+      `">` +
+      ville.code_insee +
+      `</option>`;
+  });
+
+  let selectDep = document.getElementById("departements");
+  departements.forEach((departement) => {
+    selectDep.innerHTML +=
+      `<option value="` +
+      departement.Dep_nom +
+      `">` +
+      departement.id +
+      `</option>`;
+  });
+
+  let selectReg = document.getElementById("regions");
+  regions.forEach((region) => {
+    selectReg.innerHTML +=
+      `<option value="` + region.Reg_nom + `">` + region.id + `</option>`;
+  });
+}

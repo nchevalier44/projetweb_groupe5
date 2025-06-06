@@ -15,7 +15,7 @@
     <?php
 
     session_start();
-    if(!isset($_SESSION['username']) || !isset($_SESSION['password'])) {
+    if (!isset($_SESSION['username']) || !isset($_SESSION['password'])) {
         header('Location: ../html/index.php');
         exit();
     }
@@ -81,16 +81,16 @@
             <input type="number" class="form-control" id="longitude" required>
 
             <label class="form-label mt-3" for="ville">Ville</label>
-            <input type="text" class="form-control" id="ville" required>
+            <input list="villes" class="form-control" id="ville" required>
+            <datalist id="villes"></datalist>
 
             <label class="form-label mt-3" for="departement">Département</label>
-            <input type="text" class="form-control" id="departement" required>
+            <input list="departements" class=" form-control" id="departement" required>
+            <datalist id="departements"></datalist>
 
             <label class="form-label mt-3" for="region">Région</label>
-            <input type="text" class="form-control" id="region" required>
-
-            <label class="form-label mt-3" for="pays">Pays</label>
-            <input type="text" class="form-control" id="pays">
+            <input list="regions" class=" form-control" id="region" required>
+            <datalist id="regions"></datalist>
 
             <div class="row mt-4">
                 <div class="col d-flex justify-content-center">
