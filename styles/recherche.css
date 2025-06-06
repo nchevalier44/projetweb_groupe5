@@ -28,13 +28,54 @@ footer {
     border: solid 3px #000000;
     color: white;
     width: 30% !important;
+    transition: all 0.3s ease;
 }
 
 .container-installation:hover{
     cursor: pointer;
     background-color: #1c92d2 !important;
+    transform: translateY(-3px);
+    box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.15);
+    border-color: #044f78;
 }
-
+    
 #installations-list {
     gap: 2%;
+}
+
+#container-form select.form-select {
+    border-radius: 2rem 0 0 2rem;
+    border: 2px solid #4e9cff;
+    background: #f8fbff;
+    color: #222;
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem; /* réduit le padding horizontal */
+    box-shadow: 0 2px 8px rgba(78, 156, 255, 0.08);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    /* Pour éviter que la scrollbar ne déborde */
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+/* Scrollbar personnalisée pour Webkit (Chrome, Edge, Safari) */
+#container-form select.form-select::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 8px;
+    background: #e0e7ef;
+}
+
+#container-form select.form-select::-webkit-scrollbar-thumb {
+    background: #b3d4fc;
+    border-radius: 8px;
+}
+
+#container-form select.form-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(78, 156, 255, 0.15);
+    background: #eef6ff;
+}
+
+#container-form select.form-select:hover {
+    border-color: #2563eb;
 }

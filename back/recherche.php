@@ -9,3 +9,4 @@ if(!isset($_SESSION['username']) || !isset($_SESSION['password'])) {
 include_once "../html/recherche.php";
 ?>
 <script src="../scripts/rechercheback.js"></script>
+<script src="../scripts/back.js"></script>

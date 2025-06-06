@@ -6,3 +6,7 @@ if(!isset($_SESSION['username']) || !isset($_SESSION['password'])) {
 }
 
 include_once "../html/index.php";
+
+?>
+
+<script src = "../scripts/back.js"></script>

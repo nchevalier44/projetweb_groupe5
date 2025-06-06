@@ -30,7 +30,7 @@
           </div>
         </li>
         <li class="nav-item flex-fill text-center">
-          <div>
+          <div class="log">
             <button
               class="user-icon-btn"
               data-bs-toggle="modal"

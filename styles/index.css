@@ -94,7 +94,7 @@ section {
   .stat-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    border-color: #007bff;
+    border : 2px solid #a6e576;
   }
   
   .stat-card .fw-semibold {
@@ -103,7 +103,7 @@ section {
   }
   
   .stat-card:hover .fw-semibold {
-    color: #007bff;
+    color: #90BE6D;
   }
   
   .stat-card .stat-value {
@@ -112,5 +112,5 @@ section {
   }
   
   .stat-card:hover .stat-value {
-    color: #007bff;
+    color: #90BE6D;
   }

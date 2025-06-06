@@ -127,7 +127,7 @@
     <?php
     include_once "../html/footer.html";
     ?>
-
+    <script src="../scripts/back.js"></script>
 </body>
 
 </html>
