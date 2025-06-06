@@ -1,3 +1,5 @@
+import { displayErrorMessage } from "./utils";
+
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -51,7 +53,7 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
     })
         .then(resp => resp.json())
         .then(data => console.log('Réponse API:', data))
-        .catch(err => console.error('Erreur API:', err));
+        .catch(err => displayErrorMessage("Erreur lors de l'envoi des données : " + err.message));
 });
 
 function getMois(dateStr) {

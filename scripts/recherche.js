@@ -1,4 +1,4 @@
-import { fillSelect } from "./utils.js";
+import { displayErrorMessage, fillSelect } from "./utils.js";
 
 const INSTALLATIONS_LIMIT_PER_PAGE = 99;
 
@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
   fillSelect("marques-onduleurs-select", 20);
   fillSelect("marques-panneaux-select", 20);
   searchInstallation();
-
 });
 
 document.getElementById("departements-select").addEventListener("change", () => searchInstallation(99, 0));
@@ -27,18 +26,23 @@ async function searchInstallation(limit=99, offset=0) {
   path += `&offset=${offset}`;
   let response = await fetch(path);
   if(!response.ok){
-        console.error("Erreur lors de la récupération des installations : " + response.statusText);
-        return;
+    displayErrorMessage("Erreur lors de la récupération des installations");
+    return;
   }
     
   let installations = await response.json();
-  console.log
   displayResults(installations);
 }
 
 function displayResults(installations) {
   let container = document.getElementById("installations-list");
   container.innerHTML = ""; // Clear previous results
+
+  if(installations.length === 0) {
+    container.innerHTML = "<p class='text-center'>Aucune installation trouvée.</p>";
+    return;
+  }
+  
 
   for(let i = 0; i < installations.length; i++){
     let installation = installations[i];
@@ -60,6 +64,7 @@ function displayResults(installations) {
     </div>
     `;
   }
+
 }
 
 

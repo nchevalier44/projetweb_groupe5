@@ -53,6 +53,7 @@
         <button id="next-page" class="btn btn-primary">Suivant</button>
     </div>
     <br>
+    
     <!-- Include Footer -->
     <?php
     include_once "footer.html";

@@ -1,4 +1,4 @@
-import { fillSelect } from "./utils.js";
+import { displayErrorMessage, fillSelect } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   fillSelect("region-select");
@@ -28,7 +28,7 @@ async function updateTextNbInstallation() {
 
   let response = await fetch(`../api/solar_manager/installations/?annee=${select_annee.value}&id-region=${select_region.value}`);
   if(!response.ok){
-    console.error("Erreur lors de la récupération des installations : " + response.statusText);
+    displayErrorMessage("Erreur lors de la récupération des installations");
     return;
   }
   let installations = await response.json();

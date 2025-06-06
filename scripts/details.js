@@ -1,4 +1,4 @@
-import { getLocalisation, getInstallateur, getPanneau, getOnduleur } from "./utils.js";
+import { getLocalisation, getInstallateur, getPanneau, getOnduleur, displayErrorMessage } from "./utils.js";
 
 //Create the icon for the solar panels
 var solarIcon = L.icon({
@@ -18,7 +18,7 @@ async function fillDetails(){
 
     let response = await fetch(`../api/solar_manager/installations/?id=${id}`);
     if (!response.ok) {
-        console.error("Erreur lors de la récupération des informations de l'installation : " + response.statusText);
+        displayErrorMessage("Erreur lors de la récupération des informations de l'installation n°" + id);
         return;
     }
 
@@ -92,7 +92,7 @@ async function createMap() {
     let id = document.getElementById("installation-id").value;
     let response = await fetch(`../api/solar_manager/installations/?id=${id}`);
     if (!response.ok) {
-        console.error("Erreur lors de la récupération des informations de l'installation : " + response.statusText);
+        displayErrorMessage("Erreur lors de la récupération des informations de l'installation n°" + id);
         return;
     }
 
