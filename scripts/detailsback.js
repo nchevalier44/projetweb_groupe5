@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.className = "btn btn-primary mb-4";
     btn.textContent = "Modifier une installation";
     btn.onclick = () => {
-      window.location.href = "../back/modif.php";
+      window.location.href = "../back/modif.php?id=" + document.getElementById("installation-id").value;
     };
     addButtonDiv.appendChild(btn);
   }
