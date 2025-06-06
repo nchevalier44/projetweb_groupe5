@@ -3,6 +3,7 @@ import {
   getInstallateur,
   getPanneau,
   getOnduleur,
+  fillCityDepReg
 } from "./utils.js";
 
 async function fillDetails() {
@@ -47,12 +48,12 @@ async function fillDetails() {
   document.getElementById("production-pvgis").value =installation.Production_pvgis || "";
   document.getElementById("latitude").value = installation.Lat || "";
   document.getElementById("longitude").value = installation.Lon || "";
-  document.getElementById("ville").value = installation.Nom_standard || "";
-  document.getElementById("departement").value = installation.Dep_nom || "";
-  document.getElementById("region").value = installation.Reg_nom || "";
-  document.getElementById("pays").value =  "France";
+
+  fillCityDepReg();
+
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   fillDetails();
 });
+

@@ -52,6 +52,7 @@
     </div>
 
     <div id="modifbutton" class="d-flex justify-content-center mb-4"></div>
+    <div id="deletebutton" class="d-flex justify-content-center mb-4"></div>
 
     <div class="d-flex justify-content-center mb-4">
         <button type="button" class="btn btn-secondary" onclick="window.history.back()">Retour</button>
