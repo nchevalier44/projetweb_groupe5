@@ -14,7 +14,7 @@
 
     <!-- Include Navbar -->
     <?php
-    include_once "navbar.html";
+    include_once "navbar.php";
     ?>
 
     <!-- Title -->

@@ -1,6 +1,14 @@
 <?php
-include_once "../html/navbar.html";
+
+session_start();
+if(!isset($_SESSION['username']) || !isset($_SESSION['password'])) {
+    header('Location: ../html/index.php');
+    exit();
+}
+
+include_once "../html/navbar.php";
 require_once '../api/solar_manage/database.php';
+
 $db = connectDB();
 ?>
 <!DOCTYPE html>

@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <?php include_once "navbar.html"; ?>
+    <?php include_once "navbar.php"; ?>
 
     <!-- Title -->
     <h1 class="text-center mt-5">Détails de l'installation n°<?php echo htmlspecialchars($_GET['id']); ?></h1>

@@ -13,7 +13,14 @@
 <body>
 
     <?php
-    include_once "../html/navbar.html";
+
+    session_start();
+    if(!isset($_SESSION['username']) || !isset($_SESSION['password'])) {
+        header('Location: ../html/index.php');
+        exit();
+    }
+
+    include_once "../html/navbar.php";
     ?>
 
     <h1 class="text-center mt-5">Modifier l'installation </h1>
