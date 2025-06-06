@@ -11,20 +11,4 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
         echo json_encode(getAnnees($db));
         return;
     } 
-
-    //POST METHOD
-} else if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
-
-    //PUT METHOD
-} else if ($_SERVER['REQUEST_METHOD'] == "PUT") {
-
-
-
-
-
-
-
-    //DELETE METHOD
-} else if ($_SERVER['REQUEST_METHOD'] == "DELETE") {
 }

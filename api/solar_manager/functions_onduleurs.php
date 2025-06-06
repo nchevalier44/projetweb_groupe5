@@ -25,6 +25,28 @@ function getNbMarquesOnduleurs($db){
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+function createOnduleur($db, $id_marque, $id_modele) {
+    // Check if the onduleur already exists
+    if(!getIdOnduleurParIds($db, $id_marque, $id_modele)){
+        $stmt = $db->prepare("INSERT INTO onduleur (id_marque_onduleur, id_modele_onduleur) VALUES (:id_marque, :id_modele)");
+        $stmt->bindParam(':id_marque', $id_marque);
+        $stmt->bindParam(':id_modele', $id_modele);
+        if ($stmt->execute()) {
+            return $db->lastInsertId();
+        } else {
+            return false;
+        }
+    }
+}
+
+function getIdOnduleurParIds($db, $id_marque, $id_modele) {
+    $stmt = $db->prepare("SELECT id FROM onduleur WHERE id_marque_onduleur = :id_marque AND id_modele_onduleur = :id_modele");
+    $stmt->bindParam(':id_marque', $id_marque, PDO::PARAM_INT);
+    $stmt->bindParam(':id_modele', $id_modele, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 
 //////////////////////Marque Onduleur/////////////////////////////////
 function getMarqueOnduleurParId($db, $id) {
@@ -39,6 +61,40 @@ function getMarquesOnduleurs($db) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function createMarqueOnduleur($db, $marque) {
+    if(!getIdMarqueOnduleurParMarque($db, $marque)){
+        $stmt = $db->prepare("INSERT INTO marque_onduleur (Onduleur_marque) VALUES (:marque)");
+        $stmt->bindParam(':marque', $marque);
+        if ($stmt->execute()) {
+            return $db->lastInsertId();
+        }
+        return false;
+    }
+}
+
+function getIdMarqueOnduleurParMarque($db, $marque){
+    $stmt = $db->prepare("SELECT id FROM marque_onduleur WHERE Onduleur_marque = :marque");
+    $stmt->bindParam(':marque', $marque);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function updateMarqueOnduleur($db, $id, $marque) {
+    $stmt = $db->prepare("UPDATE marque_onduleur SET Onduleur_marque = :marque WHERE id = :id");
+    $stmt->bindParam(':marque', $marque);
+    $stmt->bindParam(':id', $id);
+    if ($stmt->execute()) {
+        return getMarqueOnduleurParId($db, $id);
+    }
+    return false;
+}
+
+function deleteMarqueOnduleur($db, $id) {
+    $stmt = $db->prepare("DELETE FROM marque_onduleur WHERE id = :id");
+    $stmt->bindParam(':id', $id);
+    return $stmt->execute();
+}
+
 
 //////////////////////Modele Onduleur/////////////////////////////////
 function getModeleOnduleurParId($db, $id) {
@@ -51,4 +107,37 @@ function getModeleOnduleurParId($db, $id) {
 function getModelesOnduleurs($db) {
     $stmt = $db->query("SELECT * FROM modele_onduleur");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function createModeleOnduleur($db, $modele) {
+    if(!getIdModeleOnduleurParModele($db, $modele)){
+        $stmt = $db->prepare("INSERT INTO modele_onduleur (Onduleur_modele) VALUES (:modele)");
+        $stmt->bindParam(':modele', $modele);
+        if ($stmt->execute()) {
+            return $db->lastInsertId();
+        }
+        return false;
+    }
+}
+
+function getIdModeleOnduleurParModele($db, $modele) {
+    $stmt = $db->prepare("SELECT id FROM modele_onduleur WHERE Onduleur_modele = :modele");
+    $stmt->bindParam(':modele', $modele);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+function updateModeleOnduleur($db, $id, $modele) {
+    $stmt = $db->prepare("UPDATE modele_onduleur SET Onduleur_modele = :modele WHERE id = :id");
+    $stmt->bindParam(':modele', $modele);
+    $stmt->bindParam(':id', $id);
+    if ($stmt->execute()) {
+        return getModeleOnduleurParId($db, $id);
+    }
+    return false;
+}
+
+function deleteModeleOnduleur($db, $id) {
+    $stmt = $db->prepare("DELETE FROM modele_onduleur WHERE id = :id");
+    $stmt->bindParam(':id', $id);
+    return $stmt->execute();
 }
