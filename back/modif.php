@@ -29,13 +29,16 @@
     <div class="container my-5">
         <form id="searchForm" class="p-4 rounded-4">
 
+            <label class="form-label mt-2" for="iddoc">Iddoc</label>
+            <input type="number" class="form-control" id="iddoc" required>
+
             <label class="form-label mt-2" for="date-installation">Date d’installation</label>
             <input type="month" class="form-control" id="date-installation" required>
 
             <label class="form-label mt-3" for="nb-panneaux">Nombre de panneaux</label>
             <input type="number" class="form-control" id="nb-panneaux" required>
 
-            <label class="form-label mt-3" for="modele-panneaux">Modèle des panneaux</label>
+            <label class="form-label mt-3" for="modele-panneaux">Modèle des panneaux photovoltaïque</label>
             <input type="text" class="form-control" id="modele-panneaux" required>
 
             <label class="form-label mt-3" for="marque-panneaux">Marque des panneaux photovoltaïque</label>
@@ -84,17 +87,9 @@
             <input list="villes" class="form-control" id="ville" required>
             <datalist id="villes"></datalist>
 
-            <label class="form-label mt-3" for="departement">Département</label>
-            <input list="departements" class=" form-control" id="departement" required>
-            <datalist id="departements"></datalist>
-
-            <label class="form-label mt-3" for="region">Région</label>
-            <input list="regions" class=" form-control" id="region" required>
-            <datalist id="regions"></datalist>
-
             <div class="row mt-4">
                 <div class="col d-flex justify-content-center">
-                    <button type="submit" class="btn btn-success px-5">Envoyer</button>
+                    <button type="submit" class="btn btn-primary px-5 submit">Envoyer</button>
                 </div>
             </div>
         </form>

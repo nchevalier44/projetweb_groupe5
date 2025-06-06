@@ -3,10 +3,14 @@ import {
   getInstallateur,
   getPanneau,
   getOnduleur,
-  fillCityDepReg,
   setupVilleAutocomplete,
 } from "./utils.js";
 
+//Add event listener to the submit button
+document.getElementsByClassName("submit")[0].addEventListener("click", function (e) {
+  e.preventDefault();
+  updateInstallation();
+});
 
 async function fillDetails() {
   let id = document.getElementById("installation-id").value;
@@ -33,6 +37,7 @@ async function fillDetails() {
   installateur = installateur[0];
 
     //Prefill the form fields
+  document.getElementById("iddoc").value = installation.Iddoc || "";
   document.getElementById("date-installation").value = installation.An_installation +"-" + String(installation.Mois_installation).padStart(2, "0");
   document.getElementById("nb-panneaux").value = installation.Nb_panneaux || "";
   document.getElementById("modele-panneaux").value = panneau.Panneaux_modele || "";
@@ -51,12 +56,9 @@ async function fillDetails() {
   document.getElementById("latitude").value = installation.Lat || "";
   document.getElementById("longitude").value = installation.Lon || "";
 
-  fillCityDepReg();
   setupVilleAutocomplete();
 
   document.getElementById("ville").value = installation.Nom_standard|| "";
-  document.getElementById("region").value = installation.Reg_nom || "";
-  document.getElementById("departement").value = installation.Dep_nom || "";
 
 }
 
@@ -64,3 +66,38 @@ document.addEventListener("DOMContentLoaded", function () {
   fillDetails();
 });
 
+
+
+function updateInstallation(){
+  let id = document.getElementById("installation-id").value;
+
+  let dataToSend = {
+    Iddoc: document.getElementById("iddoc").value,
+    Nb_panneaux: document.getElementById("nb-panneaux").value,
+    Nb_onduleurs: document.getElementById("nb-onduleurs").value,
+    Puissance_crete: document.getElementById("puissance-cretes").value,
+    Pente: document.getElementById("pente").value,
+    Orientation: document.getElementById("orientation").value,
+    Surface: document.getElementById("surface").value,
+    Production_pvgis: document.getElementById("production-pvgis").value,
+    Pente_optimum: document.getElementById("pente-optimum").value,
+    Orientation_opti: document.getElementById("orientation-optimum").value,
+    Mois_installation: document
+      .getElementById("date-installation")
+      .value.split("-")[1],
+    An_installation: document
+      .getElementById("date-installation")
+      .value.split("-")[0],
+    installateur: document.getElementById("installateur").value,
+    modele_panneau: document.getElementById("modele-panneaux").value,
+    marque_panneau: document.getElementById("marque-panneaux").value,
+    modele_onduleur: document.getElementById("modele-onduleurs").value,
+    marque_onduleur: document.getElementById("marque-onduleurs").value,
+    Lat: document.getElementById("latitude").value,
+    Lon: document.getElementById("longitude").value,
+  };
+  console.log("Data to send:", dataToSend);
+
+  //TODO bind paramatre iddoc, nb_panneaux, nb_onduleurs, puissance_crete, pente, orientation, surface, production_pvgis, pente_optimum, orientation_opti, mois_installation, an_installation,nom_standard,lat, lon;
+  
+}
