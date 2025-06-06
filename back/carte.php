@@ -8,4 +8,6 @@ if(!isset($_SESSION['username']) || !isset($_SESSION['password'])) {
 
 include_once "../html/carte.php";
 
+?>
+
 <script src = "../scripts/back.js"></script>
