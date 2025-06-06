@@ -3,8 +3,10 @@ import {
   getInstallateur,
   getPanneau,
   getOnduleur,
-  fillCityDepReg
+  fillCityDepReg,
+  setupVilleAutocomplete,
 } from "./utils.js";
+
 
 async function fillDetails() {
   let id = document.getElementById("installation-id").value;
@@ -50,6 +52,11 @@ async function fillDetails() {
   document.getElementById("longitude").value = installation.Lon || "";
 
   fillCityDepReg();
+  setupVilleAutocomplete();
+
+  document.getElementById("ville").value = installation.Nom_standard|| "";
+  document.getElementById("region").value = installation.Reg_nom || "";
+  document.getElementById("departement").value = installation.Dep_nom || "";
 
 }
 

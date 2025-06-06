@@ -21,7 +21,7 @@ export async function fillSelect(id, limit=-1) {
       error_message = "Erreur lors de la récupération des regions";
       default_option_message = "Sélectionner une region";
       text = "Reg_nom";
-      value = "id";
+      value = "Reg_code";
 
       break;
 
@@ -30,7 +30,7 @@ export async function fillSelect(id, limit=-1) {
       path += "departements/";
       error_message = "Erreur lors de la récupération des départements : ";
       default_option_message = "Choisissez un département";
-      value = "id";
+      value = "Dep_code";
       text = "Dep_nom";
       break;
     case "marques-onduleurs-select":
@@ -147,20 +147,12 @@ export function displayErrorMessage(message){
 
 
 export async function fillCityDepReg() {
-  let responsevilles = await fetch(`../api/solar_manager/villes`);
-  if (!response.ok) {
-    console.error(
-      "Erreur lors de la récupération des informations des villes : " +
-        response.statusText
-    );
-    return;
-  }
+  //Fill the select elements for departments and regions
 
-  let villes = await responsevilles.json();
-
+  // Fetch departments and regions from the API
   let responsedep = await fetch(`../api/solar_manager/departements`);
-  if (!response.ok) {
-    console.error(
+  if (!responsedep.ok) {
+    responsedep.error(
       "Erreur lors de la récupération des informations de départements : " +
         response.statusText
     );
@@ -170,39 +162,61 @@ export async function fillCityDepReg() {
   let departements = await responsedep.json();
 
   let responsereg = await fetch(`../api/solar_manager/regions`);
-  if (!response.ok) {
+  if (!responsereg.ok) {
     console.error(
       "Erreur lors de la récupération des informations des regions : " +
-        response.statusText
+        responsereg.statusText
     );
     return;
   }
 
-  let regions = await responsereg.json();
-
-  let selectVille = document.getElementById("villes");
-  villes.forEach((ville) => {
-    selectVille.innerHTML +=
-      `<option value="` +
-      ville.Nom_standard +
-      `">` +
-      ville.code_insee +
-      `</option>`;
-  });
-
+  let regions = await responsereg.json();  
+// Fill the select elements with the fetched data
   let selectDep = document.getElementById("departements");
   departements.forEach((departement) => {
     selectDep.innerHTML +=
       `<option value="` +
       departement.Dep_nom +
       `">` +
-      departement.id +
+      departement.Dep_code +
       `</option>`;
   });
 
   let selectReg = document.getElementById("regions");
   regions.forEach((region) => {
     selectReg.innerHTML +=
-      `<option value="` + region.Reg_nom + `">` + region.id + `</option>`;
+      `<option value="` + region.Reg_nom + `">` + region.Reg_code + `</option>`;
+  });
+}
+
+
+export async function setupVilleAutocomplete() {
+  //As there is too many cities, we will use a datalist to autocomplete the city input and limit the results to 50
+  let villes = [];
+
+  try {
+    let response = await fetch(`../api/solar_manager/villes`);
+    villes = await response.json();
+  } catch (error) {
+    console.error("Erreur chargement villes:", error);
+    return;
+  }
+
+  let inputVille = document.getElementById("ville");
+  let datalistVille = document.getElementById("villes");
+
+  inputVille.addEventListener("input", function () {
+    let query = this.value.toLowerCase();
+    datalistVille.innerHTML = "";
+
+    if (query.length < 2) return; // At least 2 characters to trigger search
+
+    let filtered = villes
+      .filter((ville) => ville.Nom_standard.toLowerCase().includes(query))
+      .slice(0, 50); // Limit to 50 results
+
+    filtered.forEach((ville) => {
+      datalistVille.innerHTML += `<option value="${ville.Nom_standard}">${ville.code_insee}</option>`;
+    });
   });
 }
