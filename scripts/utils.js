@@ -53,7 +53,7 @@ export async function fillSelect(id, limit=-1) {
 
   let response = await fetch(path);
   if(!response.ok){
-      console.error(error_message + response.statusText);
+      displayErrorMessage(error_message + response.statusText);
       return;
   }
 
@@ -92,7 +92,7 @@ export async function fillSelect(id, limit=-1) {
 export async function getLocalisation(id){
     let response = await fetch(`../api/solar_manager/localisations/?id=${id}`);
     if (!response.ok) {
-        console.error("Erreur lors de la récupération des informations de localisation : " + response.statusText);
+        displayErrorMessage("Erreur lors de la récupération des informations de localisation n°" + id + " : " + response.statusText);
         return;
     }
     return await response.json();
@@ -102,7 +102,7 @@ export async function getLocalisation(id){
 export async function getPanneau(id){
     let response = await fetch(`../api/solar_manager/panneaux/?id=${id}`);
     if (!response.ok) {
-        console.error("Erreur lors de la récupération des informations de panneau : " + response.statusText);
+        displayErrorMessage("Erreur lors de la récupération des informations de panneau n°" + id + " : " + response.statusText);
         return;
     }
     return await response.json();
@@ -112,7 +112,7 @@ export async function getPanneau(id){
 export async function getOnduleur(id){
     let response = await fetch(`../api/solar_manager/onduleurs/?id=${id}`);
     if (!response.ok) {
-        console.error("Erreur lors de la récupération des informations d'onduleur : " + response.statusText);
+        displayErrorMessage("Erreur lors de la récupération des informations d'onduleur n°" + id + " : " + response.statusText);
         return;
     }
     return await response.json();
@@ -123,8 +123,23 @@ export async function getOnduleur(id){
 export async function getInstallateur(id){
     let response = await fetch(`../api/solar_manager/installateurs/?id=${id}`);
     if (!response.ok) {
-        console.error("Erreur lors de la récupération des informations d'installateur : " + response.statusText);
+        displayErrorMessage("Erreur lors de la récupération des informations d'installateur n°" + id + " : " + response.statusText);
         return;
     }
     return await response.json();
+}
+
+export function displayErrorMessage(message){
+    let errorDiv = document.getElementById("error-message");
+    let errorMessage = document.getElementById("error-message-text");
+    
+    //Hide error message if one is displayed
+    if (errorDiv) errorDiv.classList.add("d-none");
+
+    if (errorMessage) {
+        errorMessage.textContent = message;
+        errorDiv.classList.remove("d-none");
+    } else {
+        console.error(message);
+    }
 }

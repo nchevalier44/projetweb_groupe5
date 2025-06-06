@@ -1,4 +1,4 @@
-import { fillSelect } from "./utils.js";
+import { displayErrorMessage, fillSelect } from "./utils.js";
 
 //Set the icon for the solar panels
 var solarIcon = L.icon({
@@ -24,7 +24,7 @@ async function getRandomInstallationsAndAddPin() {
 
   let response = await fetch("../api/solar_manager/installations");
   if (!response.ok) {
-    console.error(error_message + response.statusText);
+    displayErrorMessage("Erreur lors de la récupération des installations");
     return;
   }
   let installations = await response.json();
@@ -58,10 +58,8 @@ async function updateCarte() {
   let select_annee = document.getElementById("annee-installation-select");
   let select_departement = document.getElementById("departements-select");
   let annee = select_annee.options[select_annee.selectedIndex].value;
-  let departement =
-    select_departement.options[select_departement.selectedIndex].value;
-  let departementText =
-    select_departement.options[select_departement.selectedIndex].text;
+  let departement = select_departement.options[select_departement.selectedIndex].value;
+  let departementText = select_departement.options[select_departement.selectedIndex].text;
   let nbInstal = 0;
 
   if (annee === "" && departement === "") {
@@ -78,11 +76,9 @@ async function updateCarte() {
   });
 
   // Fetch installations based on selected year and department
-  let response = await fetch(
-    `../api/solar_manager/installations/?annee=${annee}&id-departement=${departement}`
-  );
+  let response = await fetch(`../api/solar_manager/installations/?annee=${annee}&id-departement=${departement}`);
   if (!response.ok) {
-    console.error(error_message + response.statusText);
+    displayErrorMessage("Erreur lors de la récupération des installations");
     return;
   }
 

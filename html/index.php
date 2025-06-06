@@ -28,7 +28,7 @@ $db = connectDB();
 <body>
 
   <?php
-  include_once "navbar.html";
+  include_once "navbar.php";
   ?>
 
   <header class="d-flex align-items-center mb-4">
