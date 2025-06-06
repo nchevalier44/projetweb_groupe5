@@ -59,7 +59,7 @@ container.innerHTML = `
     }
 
     container.innerHTML += `
-    <div class='rounded-pill container w-25 mb-5 pb-3 pt-3 ps-5 pe-5 container-installation' onclick="window.location.href='details.php?id=${installation.id}'">
+    <div class='rounded-5 container w-25 mb-5 pb-3 pt-3 ps-5 pe-5 container-installation' onclick="window.location.href='details.php?id=${installation.id}'">
       <h3 class='text-center'>${installation.nom_ville} | ${mois}/${installation.An_installation}</h3>
       <ul>
         <li>Latitude : ${installation.latitude} | Longitude : ${installation.longitude}</li>

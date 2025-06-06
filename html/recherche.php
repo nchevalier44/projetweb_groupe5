@@ -21,9 +21,9 @@
     <h1 class="text-center mt-5">Recherche d'installation</h1>
 
     <!-- Search Form -->
-    <div class="mx-auto mt-5 mb-5 pe-5 ps-5 w-75 rounded-pill container" id="container-form">
+    <div class="mx-auto mt-5 mb-5 pe-5 ps-5 w-75 rounded-5 container" id="container-form">
 
-        <form id="searchForm" class="row text-center">
+        <form id="searchForm" class="row text-center align-items-center">
             <div class="col m-4">
                 <label for="departement" class="form-label">Département</label>
                 <select multiple class="form-select" name="departement" id="departements-select"></select>

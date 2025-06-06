@@ -31,7 +31,7 @@
         </div>
     </header>
 
-    <div class="mx-auto mt-5 mb-5 pe-5 ps-5 w-50 rounded-pill container" id="container-form">
+    <div class="mx-auto mt-5 mb-5 pe-5 ps-5 w-50 rounded-5 container" id="container-form">
 
         <form id="searchForm" class="row text-center">
             <div class="col m-4">
@@ -50,6 +50,7 @@
 
         <div id="map"></div>
     </div>
+    
     <?php
     include_once "footer.html";
     ?>
