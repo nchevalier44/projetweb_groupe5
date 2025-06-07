@@ -3,26 +3,23 @@ require_once 'database.php';
 header('Content-Type: application/json');
 
 $db = connectDB();
+$data = json_decode(file_get_contents('php://input'), true);
 
-
+if (!$data) {
+    echo json_encode(['error' => 'Aucune donnée reçue']);
+    exit;
+}
 
 function insertInstallation(PDO $db, array $data)
 {
-    // Champs obligatoires
     $requiredFields = [
         'Iddoc', 'Nb_panneaux', 'Nb_onduleurs', 'Puissance_crete', 'Pente', 'Orientation',
         'Surface', 'Production_pvgis', 'Pente_optimum', 'Orientation_opti', 'Mois_installation',
-        'An_installation', 'id_installateur', 'id_onduleur', 'id_panneau', 'id_localisation',
-        'Country', 'Reg_nom', 'Reg_code', 'id_pays',
-        'Dep_nom', 'Dep_code', 'id_region',
-        'code_insee', 'Nom_standard', 'Population', 'Code_postal', 'id',
-        'Lat', 'Lon',
-        'Installeur',
-        'Panneaux_marque', 'Paneeaux_modele', 'id_marque_panneau', 'id_modele_panneau',
-        'Onduleur_marque', 'Onduleur_modele', 'id_marque_onduleur', 'id_modele_onduleu'
+        'An_installation','Code_insee', 'Lat', 'Lon', 'Installeur',
+        'Panneaux_marque', 'Panneaux_modele', 'id_marque_panneau', 'id_modele_panneau',
+        'Onduleur_marque', 'Onduleur_modele', 'id_marque_onduleur', 'id_modele_onduleur'
     ];
 
-    // Vérification des champs obligatoires
     foreach ($requiredFields as $field) {
         if (!isset($data[$field])) {
             return ['error' => "Le champ '$field' est obligatoire."];
@@ -30,93 +27,102 @@ function insertInstallation(PDO $db, array $data)
     }
 
     try {
-        // Pré-insertions
-        $db->exec("
-            INSERT INTO public.pays (Country) VALUES (:Country) ON CONFLICT DO NOTHING;
 
-            INSERT INTO public.region (Reg_nom, Reg_code, id_pays) VALUES
-            (:Reg_nom, :Reg_code, :id_pays)
-            ON CONFLICT DO NOTHING;
+        //localisaiton
+        $stmt = $db->prepare("INSERT INTO localisation (lat, lon, code_insee) VALUES (:Lat, :Lon, :code_insee)");
+        $stmt->execute([
+            ':Lat' => $data['Lat'],
+            ':Lon' => $data['Lon'],
+            ':code_insee' => $data['Code_insee']
+        ]);
 
-            INSERT INTO public.departement (Dep_nom, Dep_code, id_region) VALUES
-            (:Dep_nom, :Dep_code, :id_region)
-            ON CONFLICT DO NOTHING;
 
-            INSERT INTO public.ville (code_insee, Nom_standard, Population, Code_postal, id) VALUES
-            (:code_insee, :Nom_standard, :Population, :Code_postal, :id)
-            ON CONFLICT DO NOTHING;
+        $stmt = $db->prepare("SELECT id FROM localisation WHERE Lat = :Lat AND Lon = :Lon");
+        $stmt->execute([
+            ':Lat' => $data['Lat'],
+            ':Lon' => $data['Lon']
+        ]);
+        $id_localisation = $stmt->fetchColumn();
 
-            INSERT INTO public.localisation (Lat, Lon, code_insee) VALUES
-            (:Lat, :Lon, :code_insee)
-            ON CONFLICT DO NOTHING;
+        // Installateur
+        $stmt = $db->prepare("INSERT INTO installateur (Installateur) VALUES (:nom) ");
+        $stmt->execute([':nom' => $data['Installeur']]);
+        $stmt = $db->prepare("SELECT id FROM installateur WHERE installateur = :nom");//change le car erreur
+        $stmt->execute([':nom' => $data['Installeur']]);
+        $id_installateur = $stmt->fetchColumn();
 
-            INSERT INTO public.installateur (Installateur) VALUES
-            (:Installeur)
-            ON CONFLICT DO NOTHING;
+        // Marque et modèle panneau
+        $stmt = $db->prepare("INSERT INTO marque_panneau (panneaux_marque) VALUES (:nom) ");
+        $stmt->execute([':nom' => $data['Panneaux_marque']]);
+        $stmt = $db->prepare("INSERT INTO modele_panneau (panneaux_modele) VALUES (:nom) ");
+        $stmt->execute([':nom' => $data['Panneaux_modele']]);
+        $stmt = $db->prepare("INSERT INTO panneau (id_marque_panneau, id_modele_panneau) VALUES (:id_marque, :id_modele) ");
+        $stmt->execute([
+            ':id_marque' => $data['id_marque_panneau'],
+            ':id_modele' => $data['id_modele_panneau']
+        ]);
+        $stmt = $db->prepare("SELECT id FROM panneau WHERE id_marque_panneau = :id_marque AND id_modele_panneau = :id_modele");
+        $stmt->execute([
+            ':id_marque' => $data['id_marque_panneau'],
+            ':id_modele' => $data['id_modele_panneau']
+        ]);
+        $id_panneau = $stmt->fetchColumn();
 
-            INSERT INTO public.marque_panneau (Panneaux_marque) VALUES
-            (:Panneaux_marque)
-            ON CONFLICT DO NOTHING;
+        // Marque et modèle onduleur
+        $stmt = $db->prepare("INSERT INTO marque_onduleur (onduleur_marque) VALUES (:nom) ");
+        $stmt->execute([':nom' => $data['Onduleur_marque']]);
+        $stmt = $db->prepare("INSERT INTO modele_onduleur (onduleur_modele) VALUES (:nom) ");
+        $stmt->execute([':nom' => $data['Onduleur_modele']]);
+        $stmt = $db->prepare("INSERT INTO onduleur (id_marque_onduleur, id_modele_onduleur) VALUES (:id_marque, :id_modele) ");
+        $stmt->execute([
+            ':id_marque' => $data['id_marque_onduleur'],
+            ':id_modele' => $data['id_modele_onduleur']
+        ]);
+        $stmt = $db->prepare("SELECT id FROM onduleur WHERE id_marque_onduleur = :id_marque AND id_modele_onduleur = :id_modele");
+        $stmt->execute([
+            ':id_marque' => $data['id_marque_onduleur'],
+            ':id_modele' => $data['id_modele_onduleur']
+        ]);
+        $id_onduleur = $stmt->fetchColumn();
 
-            INSERT INTO public.modele_panneau (Panneaux_modele) VALUES
-            (:Paneeaux_modele)
-            ON CONFLICT DO NOTHING;
-
-            INSERT INTO public.panneau (id_marque_panneau, id_modele_panneau) VALUES
-            (:id_marque_panneau, :id_modele_panneau)
-            ON CONFLICT DO NOTHING;
-
-            INSERT INTO public.marque_onduleur (Onduleur_marque) VALUES
-            (:Onduleur_marque)
-            ON CONFLICT DO NOTHING;
-
-            INSERT INTO public.modele_onduleur (Onduleur_modele) VALUES
-            (:Onduleur_modele)
-            ON CONFLICT DO NOTHING;
-
-            INSERT INTO public.onduleur (id_marque_onduleur, id_modele_onduleur) VALUES
-            (:id_marque_onduleur, :id_modele_onduleu)
-            ON CONFLICT DO NOTHING;
-        ");
-
-        // Insertion principale
-        $sql = "INSERT INTO installation (
-                    Iddoc, Nb_panneaux, Nb_onduleurs, Puissance_crete, Pente, Orientation, Surface, Production_pvgis,
-                    Pente_optimum, Orientation_opti, Mois_installation, An_installation, id_installateur,
-                    id_onduleur, id_panneau, id_localisation
-                ) VALUES (
-                    :Iddoc, :Nb_panneaux, :Nb_onduleurs, :Puissance_crete, :Pente, :Orientation, :Surface, :Production_pvgis,
-                    :Pente_optimum, :Orientation_opti, :Mois_installation, :An_installation, :id_installateur,
-                    :id_onduleur, :id_panneau, :id_localisation
-                )";
-
-        $stmt = $db->prepare($sql);
+        // Insertion finale dans installation
+        $stmt = $db->prepare("INSERT INTO installation (
+            Iddoc, nb_panneaux, nb_onduleurs, puissance_crete, pente, orientation, surface,
+            production_pvgis, pente_optimum, orientation_opti, mois_installation, an_installation,
+            id_installateur, id_onduleur, id_panneau, id_localisation
+        ) VALUES (
+            :Iddoc, :Nb_panneaux, :Nb_onduleurs, :Puissance_crete, :Pente, :Orientation, :Surface,
+            :Production_pvgis, :Pente_optimum, :Orientation_opti, :Mois_installation, :An_installation,
+            :id_installateur, :id_onduleur, :id_panneau, :id_localisation
+        )");
 
         $stmt->execute([
-            ':Iddoc'               => $data['Iddoc'],
-            ':Nb_panneaux'         => $data['Nb_panneaux'],
-            ':Nb_onduleurs'        => $data['Nb_onduleurs'],
-            ':Puissance_crete'     => $data['Puissance_crete'],
-            ':Pente'               => $data['Pente'],
-            ':Orientation'         => $data['Orientation'],
-            ':Surface'             => $data['Surface'],
-            ':Production_pvgis'    => $data['Production_pvgis'],
-            ':Pente_optimum'       => $data['Pente_optimum'],
-            ':Orientation_opti'    => $data['Orientation_opti'],
-            ':Mois_installation'   => $data['Mois_installation'],
-            ':An_installation'     => $data['An_installation'],
-            ':id_installateur'     => $data['id_installateur'],
-            ':id_onduleur'         => $data['id_onduleur'],
-            ':id_panneau'          => $data['id_panneau'],
-            ':id_localisation'     => $data['id_localisation'],
+            ':Iddoc'             => $data['Iddoc'],
+            ':Nb_panneaux'       => $data['Nb_panneaux'],
+            ':Nb_onduleurs'      => $data['Nb_onduleurs'],
+            ':Puissance_crete'   => $data['Puissance_crete'],
+            ':Pente'             => $data['Pente'],
+            ':Orientation'       => $data['Orientation'],
+            ':Surface'           => $data['Surface'],
+            ':Production_pvgis'  => $data['Production_pvgis'],
+            ':Pente_optimum'     => $data['Pente_optimum'],
+            ':Orientation_opti'  => $data['Orientation_opti'],
+            ':Mois_installation' => $data['Mois_installation'],
+            ':An_installation'   => $data['An_installation'],
+            ':id_installateur'   => $id_installateur,
+            ':id_onduleur'       => $id_onduleur,
+            ':id_panneau'        => $id_panneau,
+            ':id_localisation'   => $id_localisation
         ]);
 
         return ['success' => 'Installation ajoutée avec succès'];
 
     } catch (PDOException $e) {
-        return ['error' => 'Erreur base de données: ' . $e->getMessage()];
+        return ['error' => 'Erreur base de données : ' . $e->getMessage()];
     }
 }
+
+echo json_encode(insertInstallation($db, $data));
 
 function updateData(PDO $db, array $data){
     $sql = "
