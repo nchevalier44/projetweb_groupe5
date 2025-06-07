@@ -39,6 +39,52 @@ function createOnduleur($db, $id_marque, $id_modele) {
     }
 }
 
+function updateOnduleur($db, $id, $id_marque, $id_modele) {
+    $fields = [];
+    $params = [':id' => $id];
+
+    if ($id_marque != null) {
+        $fields[] = 'id_marque_onduleur = :id_marque';
+        $params[':id_marque'] = $id_marque;
+    }
+    if ($id_modele != null) {
+        $fields[] = 'id_modele_onduleur = :id_modele';
+        $params[':id_modele'] = $id_modele;
+    }
+
+    //Don't update if no fields are provided
+    if (empty($fields)) {
+        return false;
+    }
+
+    $query = "UPDATE onduleur SET " . implode(', ', $fields) . " WHERE id = :id";
+    $stmt = $db->prepare($query);
+
+    //Binding params
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+    }
+
+    if ($stmt->execute()) {
+        return getOnduleurParId($db, $id);
+    }
+    return false;
+}
+
+function deleteOnduleur($db, $id) {
+    try{
+        $stmt = $db->prepare("DELETE FROM onduleur WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }  catch (\Exception $e) {
+        return false;
+}
+}
+
+
 function getIdOnduleurParIds($db, $id_marque, $id_modele) {
     $stmt = $db->prepare("SELECT id FROM onduleur WHERE id_marque_onduleur = :id_marque AND id_modele_onduleur = :id_modele");
     $stmt->bindParam(':id_marque', $id_marque, PDO::PARAM_INT);
@@ -90,9 +136,16 @@ function updateMarqueOnduleur($db, $id, $marque) {
 }
 
 function deleteMarqueOnduleur($db, $id) {
-    $stmt = $db->prepare("DELETE FROM marque_onduleur WHERE id = :id");
-    $stmt->bindParam(':id', $id);
-    return $stmt->execute();
+    try{
+        $stmt = $db->prepare("DELETE FROM marque_onduleur WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return true;
+    } catch (\Exception $e) {
+        return false;
+    } catch (PDOException $e) {
+        return false;
+    }
 }
 
 
@@ -137,7 +190,15 @@ function updateModeleOnduleur($db, $id, $modele) {
 }
 
 function deleteModeleOnduleur($db, $id) {
-    $stmt = $db->prepare("DELETE FROM modele_onduleur WHERE id = :id");
-    $stmt->bindParam(':id', $id);
-    return $stmt->execute();
+    try{
+        $stmt = $db->prepare("DELETE FROM modele_onduleur WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return true;
+    } catch (\Exception $e) {
+        return false;
+    } catch (PDOException $e) {
+        return false;
+    }
+
 }
