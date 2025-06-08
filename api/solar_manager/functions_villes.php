@@ -13,3 +13,10 @@ function getVilleParId($db, $id)
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getVilleParNom($db, $nom){
+    $stmt = $db->prepare("SELECT * FROM ville WHERE Nom_standard = :nom");
+    $stmt->bindParam(':nom',$nom);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

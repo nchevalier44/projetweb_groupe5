@@ -11,7 +11,19 @@
         if(isset($_GET['id'])){
             echo json_encode(getPanneauParId($db, $_GET['id']));
             return;
-        } else{
+        }else if(isset($_GET['id_modele_panneau']) && isset($_GET['id_marque_panneau'])){
+            $id_modele = htmlspecialchars($_GET['id_modele_panneau']);
+            $id_marque = htmlspecialchars($_GET['id_marque_panneau']);
+            $panneau = getPanneauParIdModeleEtMarque($db, $id_modele, $id_marque);
+            if($panneau){
+                echo json_encode($panneau);
+                return;
+            } else {
+                http_response_code(404);
+                echo json_encode(['error' => 'Panneau not found']);
+                return;
+            }
+        }else{
             echo json_encode(getPanneaux($db));
             return;
         }
@@ -22,10 +34,10 @@
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
 
-        if((isset($data['id-modele-panneau']) || isset($_POST['id-modele-panneau'])) && (isset($data['id-marque-panneau']) || isset($_POST['id-marque-panneau']))){
+        if((isset($data['id_modele_panneau']) || isset($_POST['id_modele_panneau'])) && (isset($data['id_marque_panneau']) || isset($_POST['id_marque_panneau']))){
 
-            $id_marque = isset($data['id-marque-panneau']) ? htmlspecialchars($data['id-marque-panneau']) : htmlspecialchars($_POST['id-marque-panneau']);
-            $id_modele = isset($data['id-modele-panneau']) ? htmlspecialchars($data['id-modele-panneau']) : htmlspecialchars($_POST['id-modele-panneau']);
+            $id_marque = isset($data['id_marque_panneau']) ? htmlspecialchars($data['id_marque_panneau']) : htmlspecialchars($_POST['id_marque_panneau']);
+            $id_modele = isset($data['id_modele_panneau']) ? htmlspecialchars($data['id_modele_panneau']) : htmlspecialchars($_POST['id_modele_panneau']);
 
             $response = createPanneau($db, $id_marque, $id_modele);
 

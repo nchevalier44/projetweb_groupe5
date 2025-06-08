@@ -18,6 +18,17 @@ function getPanneauParId($db, $id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getPanneauParIdModeleEtMarque($db, $id_modele, $id_marque) {
+    $stmt = $db->prepare("SELECT * FROM panneau p
+    JOIN marque_panneau marque ON p.id_marque_panneau = marque.id
+    JOIN modele_panneau modele ON p.id_modele_panneau = modele.id
+    WHERE p.id_modele_panneau = :id_modele AND p.id_marque_panneau = :id_marque");
+    $stmt->bindParam(':id_modele', $id_modele);
+    $stmt->bindParam(':id_marque', $id_marque);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 
 // 6. Nombre de marques de panneaux (marque_panneau.Panneaux_marque)
 function getNbMarquesPanneaux($db){

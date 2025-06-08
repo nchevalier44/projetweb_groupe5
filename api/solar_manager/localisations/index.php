@@ -10,7 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     if (isset($_GET['id'])) {
         echo json_encode(getLocalisationParId($db, $_GET['id']));
         return;
-    } else {
+    }else if (isset($_GET['Lat']) && isset($_GET['Lon'])) {
+        $lat = $_GET['Lat'];
+        $lon = $_GET['Lon'];
+        echo json_encode(getLocalisationParLatLon($db, $lat, $lon));
+        return;
+    }else {
         echo json_encode(getLocalisations($db));
         return;
     }

@@ -19,6 +19,13 @@ function getInstallateurParId($db, $id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getIdInstallateurParInstallateur($db, $installateur) {
+    $stmt = $db->prepare("SELECT id FROM installateur WHERE Installateur = :installateur");
+    $stmt->bindParam(':installateur', $installateur);
+    $stmt->execute();
+    return $stmt->fetchColumn();
+}
+
 //POST method to create a new installateur
 function createInstallateur($db, $data) {
     if (installateurExists($db, $data['Installateur'])) {

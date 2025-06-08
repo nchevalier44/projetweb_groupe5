@@ -23,6 +23,7 @@
     include_once "../html/navbar.php";
     ?>
     <input type="hidden" id="installation-id" value="<?php echo htmlspecialchars($_GET['id']); ?>">
+    <input type="hidden" id="location-id" value="">
 
     <h1 class="text-center mt-5">Modifier l'installation </h1>
 

@@ -10,7 +10,21 @@
         if(isset($_GET['id'])){
             echo json_encode(getOnduleurParId($db, $_GET['id']));
             return;
-        } else{
+        }
+        else if (isset($_GET['id_modele_onduleur']) && !empty($_GET['id_modele_onduleur']) && isset($_GET['id_marque_onduleur']) && !empty($_GET['id_marque_onduleur'])){
+            $id_modele = htmlspecialchars($_GET['id_modele_onduleur']);
+            $id_marque = htmlspecialchars($_GET['id_marque_onduleur']);
+            $idOnduleur = getIdOnduleurParIds($db, $id_marque, $id_modele);
+            if($idOnduleur){
+                echo json_encode(['id' => $idOnduleur]);
+                return;
+            } else {
+                http_response_code(404);
+                echo json_encode(['error' => 'Onduleur not found']);
+                return;
+            }
+        }
+        else{
             echo json_encode(getOnduleurs($db));
             return;
         }
@@ -20,10 +34,10 @@
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
 
-        if((isset($data['id-modele-onduleur']) || isset($_POST['id-modele-onduleur'])) && (isset($data['id-marque-onduleur']) || isset($_POST['id-marque-onduleur']))){
+        if((isset($data['id_modele_onduleur']) || isset($_POST['id_modele_onduleur'])) && (isset($data['id_marque_onduleur']) || isset($_POST['id_marque_onduleur']))){
 
-            $id_marque = isset($data['id-marque-onduleur']) ? htmlspecialchars($data['id-marque-onduleur']) : htmlspecialchars($_POST['id-marque-onduleur']);
-            $id_modele = isset($data['id-modele-onduleur']) ? htmlspecialchars($data['id-modele-onduleur']) : htmlspecialchars($_POST['id-modele-onduleur']);
+            $id_marque = isset($data['id_marque_onduleur']) ? htmlspecialchars($data['id_marque_onduleur']) : htmlspecialchars($_POST['id_marque_onduleur']);
+            $id_modele = isset($data['id_modele_onduleur']) ? htmlspecialchars($data['id_modele_onduleur']) : htmlspecialchars($_POST['id_modele_onduleur']);
 
             $response = createOnduleur($db, $id_marque, $id_modele);
 

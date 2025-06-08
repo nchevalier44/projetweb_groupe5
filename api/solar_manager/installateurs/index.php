@@ -10,7 +10,19 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     if (isset($_GET['id'])) {
         echo json_encode(getInstallateurParId($db, $_GET['id']));
         return;
-    } else {
+    }else if (isset($_GET['Installateur']) && !empty($_GET['Installateur'])) {
+        $installateur = htmlspecialchars($_GET['Installateur']);
+        $idInstallateur = getIdInstallateurParInstallateur($db, $installateur);
+        if ($idInstallateur) {
+            echo json_encode(['id' => $idInstallateur]);
+            return;
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Installateur not found']);
+            return;
+        }
+    } 
+    else {
         echo json_encode(getInstallateurs($db));
         return;
     }

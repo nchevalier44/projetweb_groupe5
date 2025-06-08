@@ -16,6 +16,17 @@
                 echo json_encode(['error' => 'Modele not found']);
             }
             return;
+        } else if (isset($_GET['Modele_onduleur']) && !empty($_GET['Modele_onduleur'])){
+            $modele = htmlspecialchars($_GET['Modele_onduleur']);
+            $idModele = getIdModeleOnduleurParModele($db, $modele);
+            if($idModele){
+                echo json_encode($idModele);
+                return;
+            } else {
+                http_response_code(404);
+                echo json_encode(['error' => 'Modele not found']);
+                return;
+            }
         } else{
             echo json_encode(getModelesOnduleurs($db));
             return;
@@ -26,8 +37,8 @@
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
 
-        if(isset($data['modele-onduleur']) || isset($_POST['modele-onduleur'])){
-            $modele = isset($data['modele-onduleur']) ? htmlspecialchars($data['modele-onduleur']) : htmlspecialchars($_POST['modele-onduleur']);
+        if(isset($data['modele_onduleur']) || isset($_POST['modele_onduleur'])){
+            $modele = isset($data['modele_onduleur']) ? htmlspecialchars($data['modele_onduleur']) : htmlspecialchars($_POST['modele_onduleur']);
             $response = createModeleOnduleur($db, $modele);
             if($response){
                 echo json_encode(['id' => $response]);

@@ -16,7 +16,19 @@
                 echo json_encode(['error' => 'Marque not found']);
             }
             return;
-        } else{
+        } 
+        else if (isset($_GET['Marque_panneau']) && !empty($_GET['Marque_panneau'])){
+            $marque = htmlspecialchars($_GET['Marque_panneau']);
+            $idMarque = getIdMarquePanneauParMarque($db, $marque);
+            if($idMarque){
+                echo json_encode($idMarque);
+                return;
+            } else {
+                http_response_code(404);
+                echo json_encode(['error' => 'Marque not found']);
+                return;
+            }
+        }else{
             echo json_encode(getMarquesPanneaux($db));
             return;
         }
@@ -26,8 +38,8 @@
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
 
-        if(isset($data['marque-panneau']) || isset($_POST['marque-panneau'])){
-            $marque = isset($data['marque-panneau']) ? htmlspecialchars($data['marque-panneau']) : htmlspecialchars($_POST['marque-panneau']);
+        if(isset($data['marque_panneau']) || isset($_POST['marque_panneau'])){
+            $marque = isset($data['marque_panneau']) ? htmlspecialchars($data['marque_panneau']) : htmlspecialchars($_POST['marque-panneau']);
             $response = createMarquePanneau($db, $marque);
             if($response){
                 echo json_encode(['id' => $response]);

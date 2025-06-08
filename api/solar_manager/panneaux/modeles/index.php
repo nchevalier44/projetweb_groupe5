@@ -16,6 +16,18 @@
                 echo json_encode(['error' => 'Modele not found']);
             }
             return;
+        }
+        else if (isset($_GET['Modele_panneau']) && !empty($_GET['Modele_panneau'])){
+            $modele = htmlspecialchars($_GET['Modele_panneau']);
+            $idModele = getIdModelePanneauParModele($db, $modele);
+            if($idModele){
+                echo json_encode($idModele);
+                return;
+            } else {
+                http_response_code(404);
+                echo json_encode(['error' => 'Modele not found']);
+                return;
+            }
         } else{
             echo json_encode(getModelesPanneaux($db));
             return;
@@ -26,8 +38,8 @@
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
 
-        if(isset($data['modele-panneau']) || isset($_POST['modele-panneau'])){
-            $modele = isset($data['modele-panneau']) ? htmlspecialchars($data['modele-panneau']) : htmlspecialchars($_POST['modele-panneau']);
+        if(isset($data['modele_panneau']) || isset($_POST['modele_panneau'])){
+            $modele = isset($data['modele_panneau']) ? htmlspecialchars($data['modele_panneau']) : htmlspecialchars($_POST['modele-panneau']);
             $response = createModelePanneau($db, $modele);
             if($response){
                 echo json_encode(['id' => $response]);

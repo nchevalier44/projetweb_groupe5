@@ -25,9 +25,19 @@ function getLocalisationParId($db, $id)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getLocalisationParLatLon($db, $lat, $lon)
+{
+    $stmt = $db->prepare("SELECT * FROM localisation WHERE ABS(Lat - :lat) < 0.001 AND ABS(Lon - :lon) < 0.001");
+    $stmt->bindParam(':lat', $lat);
+    $stmt->bindParam(':lon', $lon);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 function createLocalisation($db, $data)
 {
+    echo "creating localisaiton with data: " . json_encode($data) . "\n";
     if(localisationExists($db, $data['Lat'], $data['Lon'])) {
         //return the ID of the existing localisation
         $stmt = $db->prepare("SELECT id FROM localisation WHERE ABS(Lat - :lat) < 0.001 AND ABS(Lon - :lon) < 0.001");

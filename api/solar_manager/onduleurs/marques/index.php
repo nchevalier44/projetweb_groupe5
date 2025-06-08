@@ -16,6 +16,17 @@
                 echo json_encode(['error' => 'Marque not found']);
             }
             return;
+        } else if (isset($_GET['Marque_onduleur']) && !empty($_GET['Marque_onduleur'])){
+            $marque = htmlspecialchars($_GET['Marque_onduleur']);
+            $idMarque = getIdMarqueOnduleurParMarque($db, $marque);
+            if($idMarque){
+                echo json_encode($idMarque);
+                return;
+            } else {
+                http_response_code(404);
+                echo json_encode(['error' => 'Marque not found']);
+                return;
+            }
         } else{
             echo json_encode(getMarquesOnduleurs($db));
             return;
@@ -26,8 +37,8 @@
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
 
-        if(isset($data['marque-onduleur']) || isset($_POST['marque-onduleur'])){
-            $marque = isset($data['marque-onduleur']) ? htmlspecialchars($data['marque-onduleur']) : htmlspecialchars($_POST['marque-onduleur']);
+        if(isset($data['marque_onduleur']) || isset($_POST['marque_onduleur'])){
+            $marque = isset($data['marque_onduleur']) ? htmlspecialchars($data['marque_onduleur']) : htmlspecialchars($_POST['marque_onduleur']);
             $response = createMarqueOnduleur($db, $marque);
             if($response){
                 echo json_encode(['id' => $response]);
