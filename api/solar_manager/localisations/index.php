@@ -43,12 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
     // Handle DELETE requests to remove a localisation
 } else if ($_SERVER['REQUEST_METHOD'] == "DELETE") {
-    if (isset($_GET['id'])) {
-        echo json_encode(deleteLocalisation($db, $_GET['id']));
-        return;
-    } else {
+        // Check if 'id' is provided
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+            $response = deleteLocalisation($db, $id);
+            // If deletion is successful, return success message
+            if($response){
+                echo json_encode(['message' => 'Localisation deleted successfully']);
+                return;
+            }
+        }
+        // If 'id' is missing or deletion failed, return bad request error
         http_response_code(400);
-        echo json_encode(["error" => "ID is required for deletion."]);
+        echo json_encode(['error' => 'Bad request']);
         return;
-    }
 }

@@ -11,10 +11,16 @@
         $parameters = [];
         // Get installation by ID if only 'id' is provided
         if(isset($_GET['id']) && count($_GET) == 1){
-            
-            echo json_encode(getInformationInstallationParId($db, $_GET['id']));
+
+            $response = getInformationInstallationParId($db, $_GET['id']);
+            if($response){
+                echo json_encode($response);
+            } else {
+                http_response_code(404);
+                echo json_encode(['error' => 'Installation not found']);
+            }
             return;
-        } 
+        }
         // Add filters if present in query parameters
         if(isset($_GET['id-marque-onduleur']) && !empty($_GET['id-marque-onduleur'])){
             $parameters['id_marque_onduleur'] = explode(',', $_GET['id-marque-onduleur']);
@@ -76,12 +82,20 @@
 
 
 
-
-
-
-
     // Handle DELETE requests (not implemented)
     } else if ($_SERVER['REQUEST_METHOD'] == "DELETE"){
-
+        // Check if 'id' is provided
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+            $response = deleteInstallation($db, $id);
+            // If deletion is successful, return success message
+            if($response){
+                echo json_encode(['message' => 'Installation deleted successfully']);
+                return;
+            }
+        }
+        // If 'id' is missing or deletion failed, return bad request error
+        http_response_code(400);
+        echo json_encode(['error' => 'Bad request']);
+        return;
     }
-

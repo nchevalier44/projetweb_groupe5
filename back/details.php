@@ -11,5 +11,5 @@ include_once "../html/details.php";
 ?>
 
 <!-- Include back office JS logic for details and general back office -->
-<script src="../scripts/detailsback.js"></script>
+<script src="../scripts/detailsback.js" type="module"></script>
 <script src="../scripts/back.js"></script>

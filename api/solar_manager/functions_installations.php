@@ -265,3 +265,17 @@ function updateInstallation($db, $data)
         return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
     }
 }
+
+function deleteInstallation($db, $id)
+{
+    try{
+        $stmt = $db->prepare("DELETE FROM installation WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    } catch (\Exception $e) {
+        return false;
+    }
+}

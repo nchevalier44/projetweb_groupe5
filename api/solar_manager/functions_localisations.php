@@ -91,18 +91,15 @@ function updateLocalisation($db, $data)
 // Delete a localisation by its ID
 function deleteLocalisation($db, $id)
 {
-    $stmt = $db->prepare("DELETE FROM localisation WHERE id = :id");
-    $stmt->bindParam(':id', $id);
-
     try {
-        if ($stmt->execute()) {
-            return ['status' => 'success', 'id' => $db->lastInsertId()];
-        } else {
-            $errorInfo = $stmt->errorInfo();
-            return ['status' => 'error', 'message' => 'SQL Error: ' . $errorInfo[2]];
-        }
+        $stmt = $db->prepare("DELETE FROM localisation WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return true;
     } catch (PDOException $e) {
-        return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
+        return false;
+    } catch (\Exception $e) {
+        return false;
     }
 }
 
