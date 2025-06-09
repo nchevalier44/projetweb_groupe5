@@ -31,9 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
           displayErrorMessage("Erreur lors de la récupération de la localisation. Veuillez réessayer.");
           return;
         }
-        let a = await response_loc.json();
-        console.log(a);
-        let localisationsId = a.id_localisation;
+        let json = await response_loc.json();
+        let localisationsId = json.id_localisation;
 
         //Delete the isntallation
         let response = await fetch(`../api/solar_manager/installations/?id=${installationId}`, {
@@ -47,9 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
           let response = await fetch(`../api/solar_manager/localisations/?id=${localisationsId}`, {
             method: "DELETE",
           });
-          let d = await response.json();
-          console.log(localisationsId);
-          console.log(d.message);
           //window.location.href = "../back/index.php";
         }
       }
