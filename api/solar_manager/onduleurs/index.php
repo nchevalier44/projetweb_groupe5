@@ -12,8 +12,8 @@
             return;
         }
         else if (isset($_GET['id_modele_onduleur']) && !empty($_GET['id_modele_onduleur']) && isset($_GET['id_marque_onduleur']) && !empty($_GET['id_marque_onduleur'])){
-            $id_modele = htmlspecialchars($_GET['id_modele_onduleur']);
-            $id_marque = htmlspecialchars($_GET['id_marque_onduleur']);
+            $id_modele = $_GET['id_modele_onduleur'];
+            $id_marque = $_GET['id_marque_onduleur'];
             $idOnduleur = getIdOnduleurParIds($db, $id_marque, $id_modele);
             if($idOnduleur){
                 echo json_encode($idOnduleur);
@@ -36,8 +36,8 @@
 
         if((isset($data['id_modele_onduleur']) || isset($_POST['id_modele_onduleur'])) && (isset($data['id_marque_onduleur']) || isset($_POST['id_marque_onduleur']))){
 
-            $id_marque = isset($data['id_marque_onduleur']) ? htmlspecialchars($data['id_marque_onduleur']) : htmlspecialchars($_POST['id_marque_onduleur']);
-            $id_modele = isset($data['id_modele_onduleur']) ? htmlspecialchars($data['id_modele_onduleur']) : htmlspecialchars($_POST['id_modele_onduleur']);
+            $id_marque = isset($data['id_marque_onduleur']) ? $data['id_marque_onduleur'] : $_POST['id_marque_onduleur'];
+            $id_modele = isset($data['id_modele_onduleur']) ? $data['id_modele_onduleur'] : $_POST['id_modele_onduleur'];
 
             $response = createOnduleur($db, $id_marque, $id_modele);
 
@@ -61,9 +61,9 @@
         $input = file_get_contents("php://input");
         $data = json_decode($input, true);
         if(isset($_GET['id']) && (isset($data['id-marque-onduleur']) || isset($data['id-modele-onduleur']))){
-            $id = htmlspecialchars($_GET['id']);
-            $id_marque = isset($data['id-marque-onduleur']) ? htmlspecialchars($data['id-marque-onduleur']) : null;
-            $id_modele = isset($data['id-modele-onduleur']) ? htmlspecialchars($data['id-modele-onduleur']) : null;
+            $id = $_GET['id'];
+            $id_marque = isset($data['id-marque-onduleur']) ? $data['id-marque-onduleur'] : null;
+            $id_modele = isset($data['id-modele-onduleur']) ? $data['id-modele-onduleur'] : null;
             $response = updateOnduleur($db, $id, $id_marque, $id_modele);
             if($response){
                 echo json_encode($response);
@@ -78,7 +78,7 @@
     //DELETE METHOD
     } else if ($_SERVER['REQUEST_METHOD'] == "DELETE"){
         if(isset($_GET['id'])){
-            $id = htmlspecialchars($_GET['id']);
+            $id = $_GET['id'];
             $response = deleteOnduleur($db, $id);
             if($response){
                 echo json_encode(['message' => 'Onduleur deleted successfully']);

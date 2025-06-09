@@ -1,5 +1,6 @@
 <?php
 
+// Get all onduleurs with their brand and model info
 function getOnduleurs($db) {
     $stmt = $db->query("SELECT * FROM onduleur o
     JOIN marque_onduleur marque ON o.id_marque_onduleur = marque.id
@@ -8,6 +9,7 @@ function getOnduleurs($db) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Get an onduleur by its ID
 function getOnduleurParId($db, $id) {
     $stmt = $db->prepare("SELECT * FROM onduleur o 
     JOIN marque_onduleur marque ON o.id_marque_onduleur = marque.id
@@ -19,12 +21,13 @@ function getOnduleurParId($db, $id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// 5. Nombre de marques d’onduleurs (marque_onduleur.Onduleur_marque)
+// Get the number of unique onduleur brands
 function getNbMarquesOnduleurs($db){
     $stmt = $db->query("SELECT COUNT(DISTINCT Onduleur_marque) AS nombre_marques_onduleurs FROM marque_onduleur");
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+// Create a new onduleur if it doesn't already exist
 function createOnduleur($db, $id_marque, $id_modele) {
     // Check if the onduleur already exists
     if(!getIdOnduleurParIds($db, $id_marque, $id_modele)){
@@ -39,6 +42,7 @@ function createOnduleur($db, $id_marque, $id_modele) {
     }
 }
 
+// Update an onduleur's brand and/or model
 function updateOnduleur($db, $id, $id_marque, $id_modele) {
     $fields = [];
     $params = [':id' => $id];
@@ -71,6 +75,7 @@ function updateOnduleur($db, $id, $id_marque, $id_modele) {
     return false;
 }
 
+// Delete an onduleur by its ID
 function deleteOnduleur($db, $id) {
     try{
         $stmt = $db->prepare("DELETE FROM onduleur WHERE id = :id");
@@ -84,7 +89,7 @@ function deleteOnduleur($db, $id) {
 }
 }
 
-
+// Get an onduleur by brand and model IDs
 function getIdOnduleurParIds($db, $id_marque, $id_modele) {
     $stmt = $db->prepare("SELECT * FROM onduleur WHERE id_marque_onduleur = :id_marque AND id_modele_onduleur = :id_modele");
     $stmt->bindParam(':id_marque', $id_marque, PDO::PARAM_INT);
@@ -93,8 +98,9 @@ function getIdOnduleurParIds($db, $id_marque, $id_modele) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-
 //////////////////////Marque Onduleur/////////////////////////////////
+
+// Get an onduleur brand by its ID
 function getMarqueOnduleurParId($db, $id) {
     $stmt = $db->prepare("SELECT * FROM marque_onduleur WHERE id = :id");
     $stmt->bindParam(':id', $id);
@@ -102,11 +108,13 @@ function getMarqueOnduleurParId($db, $id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+// Get all onduleur brands
 function getMarquesOnduleurs($db) {
     $stmt = $db->query("SELECT * FROM marque_onduleur");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Create a new onduleur brand if it doesn't already exist
 function createMarqueOnduleur($db, $marque) {
     if(!getIdMarqueOnduleurParMarque($db, $marque)){
         $stmt = $db->prepare("INSERT INTO marque_onduleur (Onduleur_marque) VALUES (:marque)");
@@ -118,6 +126,7 @@ function createMarqueOnduleur($db, $marque) {
     }
 }
 
+// Get a brand ID by its name
 function getIdMarqueOnduleurParMarque($db, $marque){
     $stmt = $db->prepare("SELECT id FROM marque_onduleur WHERE Onduleur_marque = :marque");
     $stmt->bindParam(':marque', $marque);
@@ -125,6 +134,7 @@ function getIdMarqueOnduleurParMarque($db, $marque){
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+// Update an onduleur brand's name
 function updateMarqueOnduleur($db, $id, $marque) {
     $stmt = $db->prepare("UPDATE marque_onduleur SET Onduleur_marque = :marque WHERE id = :id");
     $stmt->bindParam(':marque', $marque);
@@ -135,6 +145,7 @@ function updateMarqueOnduleur($db, $id, $marque) {
     return false;
 }
 
+// Delete an onduleur brand by its ID
 function deleteMarqueOnduleur($db, $id) {
     try{
         $stmt = $db->prepare("DELETE FROM marque_onduleur WHERE id = :id");
@@ -148,8 +159,9 @@ function deleteMarqueOnduleur($db, $id) {
     }
 }
 
-
 //////////////////////Modele Onduleur/////////////////////////////////
+
+// Get an onduleur model by its ID
 function getModeleOnduleurParId($db, $id) {
     $stmt = $db->prepare("SELECT * FROM modele_onduleur WHERE id = :id");
     $stmt->bindParam(':id', $id);
@@ -157,11 +169,13 @@ function getModeleOnduleurParId($db, $id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+// Get all onduleur models
 function getModelesOnduleurs($db) {
     $stmt = $db->query("SELECT * FROM modele_onduleur");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Create a new onduleur model if it doesn't already exist
 function createModeleOnduleur($db, $modele) {
     if(!getIdModeleOnduleurParModele($db, $modele)){
         $stmt = $db->prepare("INSERT INTO modele_onduleur (Onduleur_modele) VALUES (:modele)");
@@ -173,12 +187,15 @@ function createModeleOnduleur($db, $modele) {
     }
 }
 
+// Get a model ID by its name
 function getIdModeleOnduleurParModele($db, $modele) {
     $stmt = $db->prepare("SELECT id FROM modele_onduleur WHERE Onduleur_modele = :modele");
     $stmt->bindParam(':modele', $modele);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+// Update an onduleur model's name
 function updateModeleOnduleur($db, $id, $modele) {
     $stmt = $db->prepare("UPDATE modele_onduleur SET Onduleur_modele = :modele WHERE id = :id");
     $stmt->bindParam(':modele', $modele);
@@ -189,6 +206,7 @@ function updateModeleOnduleur($db, $id, $modele) {
     return false;
 }
 
+// Delete an onduleur model by its ID
 function deleteModeleOnduleur($db, $id) {
     try{
         $stmt = $db->prepare("DELETE FROM modele_onduleur WHERE id = :id");

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modification d'une installation</title>
+    <!-- Bootstrap and custom CSS includes -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../styles/modif.css">
@@ -13,20 +14,24 @@
 <body>
 
     <?php
-
+    // Start session and check authentication
     session_start();
     if (!isset($_SESSION['username']) || !isset($_SESSION['password'])) {
         header('Location: ../html/index.php');
         exit();
     }
 
+    // Include the navigation bar
     include_once "../html/navbar.php";
     ?>
+    <!-- Hidden fields for installation and location IDs -->
     <input type="hidden" id="installation-id" value="<?php echo htmlspecialchars($_GET['id']); ?>">
     <input type="hidden" id="location-id" value="">
 
+    <!-- Page title -->
     <h1 class="text-center mt-5">Modifier l'installation </h1>
 
+    <!-- Installation modification form -->
     <div class="container my-5">
         <form id="searchForm" class="p-4 rounded-4">
 
@@ -96,9 +101,11 @@
         </form>
     </div>
 
+    <!-- Include the footer -->
     <?php
     include_once "../html/footer.html";
     ?>
+    <!-- Back office and modification JS logic -->
     <script src="../scripts/back.js"></script>
     <script src="../scripts/modif.js" type="module"></script>
 </body>

@@ -109,7 +109,6 @@ async function createMap() {
     }
 
     let installation = await response.json();
-    console.log(installation);
 
     var map = L.map("map").setView([installation.Lat, installation.Lon], 13);
 
@@ -122,7 +121,6 @@ async function createMap() {
       icon: solarIcon,
     }).addTo(map);
     marker.bindPopup("<b>Installation n°" + id + "</b>").openPopup();
-    console.log(marker);
 }
 
 

@@ -1,15 +1,18 @@
 <?php
 
+// Get all installation information
 function getInformationsInstallations($db){
     $stmt = $db->query("SELECT * FROM installation");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Get the total number of installations
 function getNbInstallation($db){
     $stmt = $db->query("SELECT COUNT(*) AS nombre_installation FROM installation;");
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+// Get detailed information for a single installation by its ID
 function getInformationInstallationParId($db, $id){
     $query = "
         SELECT *, i.id as id, region.id as id_region, departement.id as id_departement, v.id as id_ville, v.nom_standard AS nom_ville, l.Lat AS latitude, l.Lon AS longitude 
@@ -29,9 +32,7 @@ function getInformationInstallationParId($db, $id){
 
 }
 
-
-
-// 1. Nombre d’installations par année (utiliser An_installation)
+// Get the number of installations per year
 function getNbInstallationParAn($db){
     $stmt = $db->query("
         SELECT An_installation AS annee, COUNT(*) AS nombre_installations
@@ -42,8 +43,7 @@ function getNbInstallationParAn($db){
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-
-// 2. Nombre d’installations par région (region.Reg_nom)
+// Get the number of installations per region
 function getNbInstallationsParRegion($db){
     $stmt = $db->query("
         SELECT r.Reg_nom AS nom, COUNT(*) AS nombre_installations
@@ -58,7 +58,7 @@ function getNbInstallationsParRegion($db){
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// 3. Nombre d’installations par année et région (par défaut 2025 / Pays de la Loire si aucun filtre)
+// Get the number of installations per region and year
 function getNbInstallationsParRegionAnnee($db,$region,$annee){
 
     $stmt = $db->prepare("
@@ -75,6 +75,7 @@ function getNbInstallationsParRegionAnnee($db,$region,$annee){
     return $stmt->execute([':region' => $region, ':annee' => $annee]);
 }
 
+// Get installations with dynamic filters (limit, offset, and other fields)
 function getInstallationsFilters($db, $filters){
     $query = "
         SELECT *,i.id as id,region.id as id_region, departement.id as id_departement, v.id as id_ville, v.nom_standard AS nom_ville, l.Lat AS latitude, l.Lon AS longitude FROM installation i
@@ -139,14 +140,13 @@ function getInstallationsFilters($db, $filters){
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// 10. Dates d’installation triées (pas de champ 'date', on peut concat Mois_installation et An_installation ?)
-// Sinon on affiche juste année et mois
+// Get sorted installation dates (year and month)
 function getDatesInstallations($db){
     $stmt = $db->query("SELECT id, An_installation AS annee, Mois_installation AS mois FROM installation ORDER BY annee, mois");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// 15. Liste des années disponibles (pour fillSelect)
+// Get all available years for installations
 function getAnneesDisponibles($db){
     $stmt = $db->query("
         SELECT DISTINCT An_installation AS annee
@@ -155,18 +155,20 @@ function getAnneesDisponibles($db){
     ");
     return $stmt->fetchAll(PDO::FETCH_COLUMN);
 }
-// 13. Puissance crête par installation (Puissance_crete)
+
+// Get peak power for each installation
 function getPuissanceCreteParInstallation($db){
     $stmt = $db->query("SELECT id, Puissance_crete FROM installation ORDER BY Puissance_crete");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// 12. Surface des panneaux par installation (Surface)
+// Get panel surface for each installation
 function getSurfacePanneauxParInstallation($db){
     $stmt = $db->query("SELECT id, Surface FROM installation ORDER BY Surface");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Add a new installation
 function addInstallation($db, $data){
     $query = "
         INSERT INTO installation (Iddoc, An_installation, Mois_installation, id_panneau, id_onduleur, 
@@ -212,6 +214,7 @@ function addInstallation($db, $data){
     }
 }
 
+// Update an existing installation
 function updateInstallation($db, $data)
 {
     $query = "
@@ -260,5 +263,19 @@ function updateInstallation($db, $data)
         }
     } catch (PDOException $e) {
         return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
+    }
+}
+
+function deleteInstallation($db, $id)
+{
+    try{
+        $stmt = $db->prepare("DELETE FROM installation WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    } catch (\Exception $e) {
+        return false;
     }
 }

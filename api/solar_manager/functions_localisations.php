@@ -1,8 +1,8 @@
 <?php
-//vérification que la localisation existe
+// Check if a localisation exists by latitude and longitude (with a small tolerance)
 function localisationExists($db, $lat, $lon)
 {
-    // Vérifier par coordonnées (avec une petite marge de tolérance)
+    // Check by coordinates (with a small tolerance)
     $stmt = $db->prepare("SELECT COUNT(*) FROM localisation WHERE ABS(Lat - :lat) < 0.001 AND ABS(Lon - :lon) < 0.001");
     $stmt->bindParam(':lat', $lat);
     $stmt->bindParam(':lon', $lon);
@@ -11,12 +11,14 @@ function localisationExists($db, $lat, $lon)
     return $stmt->fetchColumn() > 0;
 }
 
+// Get all localisations
 function getLocalisations($db)
 {
     $stmt = $db->query("SELECT * FROM localisation");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Get a localisation by its ID
 function getLocalisationParId($db, $id)
 {
     $stmt = $db->prepare("SELECT * FROM localisation WHERE id = :id");
@@ -25,6 +27,7 @@ function getLocalisationParId($db, $id)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Get a localisation by latitude and longitude (with a small tolerance)
 function getLocalisationParLatLon($db, $lat, $lon)
 {
     $stmt = $db->prepare("SELECT * FROM localisation WHERE ABS(Lat - :lat) < 0.001 AND ABS(Lon - :lon) < 0.001");
@@ -34,11 +37,11 @@ function getLocalisationParLatLon($db, $lat, $lon)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-
+// Create a new localisation or return the existing one if it already exists
 function createLocalisation($db, $data)
 {
     if(localisationExists($db, $data['Lat'], $data['Lon'])) {
-        //return the ID of the existing localisation
+        // Return the ID of the existing localisation
         $stmt = $db->prepare("SELECT id FROM localisation WHERE ABS(Lat - :lat) < 0.001 AND ABS(Lon - :lon) < 0.001");
         $stmt->bindParam(':lat', $data['Lat']);
         $stmt->bindParam(':lon', $data['Lon']);
@@ -64,6 +67,7 @@ function createLocalisation($db, $data)
     }
 }
 
+// Update a localisation's data by its ID
 function updateLocalisation($db, $data)
 {
     $stmt = $db->prepare("UPDATE localisation SET Lat = :lat, Lon = :lon, code_insee = :code_insee WHERE id = :id");
@@ -84,25 +88,22 @@ function updateLocalisation($db, $data)
     }
 }
 
+// Delete a localisation by its ID
 function deleteLocalisation($db, $id)
 {
-    $stmt = $db->prepare("DELETE FROM localisation WHERE id = :id");
-    $stmt->bindParam(':id', $id);
-
     try {
-        if ($stmt->execute()) {
-            return ['status' => 'success', 'id' => $db->lastInsertId()];
-        } else {
-            $errorInfo = $stmt->errorInfo();
-            return ['status' => 'error', 'message' => 'SQL Error: ' . $errorInfo[2]];
-        }
+        $stmt = $db->prepare("DELETE FROM localisation WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return true;
     } catch (PDOException $e) {
-        return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
+        return false;
+    } catch (\Exception $e) {
+        return false;
     }
 }
 
-
-//Localisation des installations (Lat, Lon)
+// Get the localisation (latitude, longitude) of all installations
 function getLocalisationInstallations($db)
 {
     $stmt = $db->query("
