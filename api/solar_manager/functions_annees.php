@@ -1,5 +1,6 @@
 <?php
 
+// Get all distinct installation years, ordered by year
 function getAnnees($db) {
     $stmt = $db->query("SELECT DISTINCT An_installation AS annee
         FROM installation

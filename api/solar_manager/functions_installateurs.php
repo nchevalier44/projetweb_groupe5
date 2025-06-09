@@ -1,17 +1,20 @@
 <?php
 
-// Function to check if an installateur exists by name
+// Check if an installateur exists by name
 function installateurExists($db, $name) {
     $stmt = $db->prepare("SELECT COUNT(*) FROM installateur WHERE Installateur = :name");
     $stmt->bindParam(':name', $name);
     $stmt->execute();
     return $stmt->fetchColumn() > 0;
 }
+
+// Get all installateurs, ordered by name
 function getInstallateurs($db) {
     $stmt = $db->query("SELECT * FROM installateur ORDER BY Installateur");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Get an installateur by its ID
 function getInstallateurParId($db, $id) {
     $stmt = $db->prepare("SELECT * FROM installateur WHERE id = :id");
     $stmt->bindParam(':id', $id);
@@ -19,6 +22,7 @@ function getInstallateurParId($db, $id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Get the ID of an installateur by its name
 function getIdInstallateurParInstallateur($db, $installateur) {
     $stmt = $db->prepare("SELECT id FROM installateur WHERE Installateur = :installateur");
     $stmt->bindParam(':installateur', $installateur);
@@ -26,7 +30,7 @@ function getIdInstallateurParInstallateur($db, $installateur) {
     return $stmt->fetchColumn();
 }
 
-//POST method to create a new installateur
+// Create a new installateur or return the existing one if it already exists
 function createInstallateur($db, $data) {
     if (installateurExists($db, $data['Installateur'])) {
         // Return the ID of the existing installateur
@@ -52,7 +56,7 @@ function createInstallateur($db, $data) {
     }
 }
 
-//PUT method to update an installateur
+// Update an installateur's name by its ID
 function updateInstallateur($db, $data) {
     $stmt = $db->prepare("UPDATE installateur SET Installateur = :name WHERE id = :id");
     $stmt->bindParam(':id', $data['id']);
@@ -70,7 +74,7 @@ function updateInstallateur($db, $data) {
     }
 }
 
-//DELETE method to delete an installateur
+// Delete an installateur by its ID
 function deleteInstallateur($db, $id) {
     $stmt = $db->prepare("DELETE FROM installateur WHERE id = :id");
     $stmt->bindParam(':id', $id);
@@ -87,6 +91,7 @@ function deleteInstallateur($db, $id) {
     }
 }
 
+// Get the total number of installateurs
 function getNbInstallateurs($db){
     $stmt = $db->query("SELECT COUNT(*) AS nombre_installateurs FROM installateur");
     return $stmt->fetch(PDO::FETCH_ASSOC);

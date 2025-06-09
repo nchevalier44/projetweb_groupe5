@@ -1,33 +1,35 @@
 <?php
 require_once '../database.php';
 require_once '../functions_localisations.php';
+
 $db = connectDB();
 header('Content-Type: application/json');
 
-
-//GET METHOD
+// Handle GET requests for localisations
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
+    // Get localisation by ID
     if (isset($_GET['id'])) {
         echo json_encode(getLocalisationParId($db, $_GET['id']));
         return;
-    }else if (isset($_GET['Lat']) && isset($_GET['Lon'])) {
+    // Get localisation by latitude and longitude
+    } else if (isset($_GET['Lat']) && isset($_GET['Lon'])) {
         $lat = $_GET['Lat'];
         $lon = $_GET['Lon'];
         echo json_encode(getLocalisationParLatLon($db, $lat, $lon));
         return;
-    }else {
+    // Get all localisations
+    } else {
         echo json_encode(getLocalisations($db));
         return;
     }
 
-    //POST METHOD
+    // Handle POST requests to create a localisation
 } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $data = json_decode(file_get_contents("php://input"), true);
     echo json_encode(createLocalisation($db, $data));
     return;
 
-
-    //PUT METHOD
+    // Handle PUT requests to update a localisation
 } else if ($_SERVER['REQUEST_METHOD'] == "PUT") {
     $data = json_decode(file_get_contents("php://input"), true);
     if (isset($data['id'])) {
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
         return;
     }
 
-    //DELETE METHOD
+    // Handle DELETE requests to remove a localisation
 } else if ($_SERVER['REQUEST_METHOD'] == "DELETE") {
     if (isset($_GET['id'])) {
         echo json_encode(deleteLocalisation($db, $_GET['id']));

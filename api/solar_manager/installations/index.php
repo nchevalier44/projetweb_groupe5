@@ -1,18 +1,21 @@
 <?php
     require_once '../database.php';
-    require_once '../functions_installations.php';
+    require_once '../functions_installations.php'; // Functions for installations
+
     $db = connectDB();
     header('Content-Type: application/json');
     
 
-    //GET METHOD
+    // Handle GET requests for installations
     if($_SERVER['REQUEST_METHOD'] == "GET"){
         $parameters = [];
+        // Get installation by ID if only 'id' is provided
         if(isset($_GET['id']) && count($_GET) == 1){
             
             echo json_encode(getInformationInstallationParId($db, $_GET['id']));
             return;
         } 
+        // Add filters if present in query parameters
         if(isset($_GET['id-marque-onduleur']) && !empty($_GET['id-marque-onduleur'])){
             $parameters['id_marque_onduleur'] = explode(',', $_GET['id-marque-onduleur']);
         } 
@@ -35,13 +38,15 @@
             $parameters['offset'] = $_GET['offset'];
         }
 
+        // Return filtered installations
         echo json_encode(getInstallationsFilters($db, $parameters));
         return;
 
 
-    //POST METHOD
+    // Handle POST requests to add a new installation
     } else if($_SERVER['REQUEST_METHOD'] == "POST"){
         $data = json_decode(file_get_contents("php://input"), true);
+        // Check for required fields
         if (isset($data['Iddoc']) && isset($data['Mois_installation']) && isset($data['An_installation']) && isset($data['Nb_panneaux']) &&
             isset($data['Nb_onduleurs']) && isset($data['Puissance_crete']) && isset($data['Surface']) && isset($data['Pente']) && 
             isset($data['Orientation']) && isset($data['id_localisation']) && isset($data['id_installateur']) &&
@@ -57,7 +62,7 @@
         
 
 
-    //PUT METHOD
+    // Handle PUT requests to update an installation
     } else if ($_SERVER['REQUEST_METHOD'] == "PUT"){
         $data = json_decode(file_get_contents("php://input"), true);
         if (isset($data['id'])) {
@@ -75,7 +80,7 @@
 
 
 
-    //DELETE METHOD
+    // Handle DELETE requests (not implemented)
     } else if ($_SERVER['REQUEST_METHOD'] == "DELETE"){
 
     }

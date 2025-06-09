@@ -1,4 +1,5 @@
 <?php
+// Connect to the database and return a PDO instance
 function connectDB()
 {
     $host = 'localhost';
