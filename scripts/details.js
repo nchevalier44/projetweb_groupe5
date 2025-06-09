@@ -1,5 +1,13 @@
 import { getLocalisation, getInstallateur, getPanneau, getOnduleur, displayErrorMessage } from "./utils.js";
 
+//Content loaded when the DOM is ready
+// This function fills the details of the installation and creates the map
+document.addEventListener("DOMContentLoaded", () => {
+  fillDetails();
+  createMap();
+});
+
+
 //Create the icon for the solar panels
 var solarIcon = L.icon({
   iconUrl: "../images/panneau-solaire-icone.png",
@@ -9,6 +17,7 @@ var solarIcon = L.icon({
 });
 
 async function fillDetails(){
+    //Load the installation from the API using the id and display the details in the HTML elements
     let id = document.getElementById("installation-id").value;
     let installation_info = document.getElementById("installation-info");
     let location_info = document.getElementById("location-info");
@@ -43,6 +52,7 @@ async function fillDetails(){
     location_info.innerHTML = "";
 
     //Vérify if pente_optimum and orientation_optimum are not null, if set them to "Non renseigné"
+    //This is the two only fields that can be null
     if (installation.Pente_optimum === null) {
         installation.Pente_optimum = "Non renseigné";
     }
@@ -88,6 +98,8 @@ async function fillDetails(){
     `;
 }
 
+//Create the map and add a marker for the installation
+// The map is centered on the installation's latitude and longitude
 async function createMap() {
     let id = document.getElementById("installation-id").value;
     let response = await fetch(`../api/solar_manager/installations/?id=${id}`);
@@ -113,8 +125,4 @@ async function createMap() {
     console.log(marker);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    fillDetails();
-    createMap();
-});
 

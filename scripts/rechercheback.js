@@ -1,3 +1,5 @@
+
+//Adds a button to the page that redirects to the installation addition page
 document.addEventListener("DOMContentLoaded", function () {
   const addButtonDiv = document.getElementById("addbutton");
   if (addButtonDiv) {

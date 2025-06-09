@@ -1,3 +1,6 @@
+
+//Dynamically add a logout button to the log section
+//Replacing the login button with a logout button
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementsByClassName("log")[0].innerHTML = "";
   document.getElementsByClassName("log")[0].innerHTML += `

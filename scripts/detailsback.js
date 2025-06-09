@@ -1,3 +1,4 @@
+// This script is used to add buttons for modifying and deleting an installation
 document.addEventListener("DOMContentLoaded", function () {
   const addButtonDiv = document.getElementById("modifbutton");
   if (addButtonDiv) {

@@ -167,6 +167,51 @@ function getSurfacePanneauxParInstallation($db){
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function addInstallation($db, $data){
+    $query = "
+        INSERT INTO installation (Iddoc, An_installation, Mois_installation, id_panneau, id_onduleur, 
+            Puissance_crete, Surface, Pente, Pente_optimum, Orientation, Orientation_opti, 
+            id_installateur, Production_pvgis, id_localisation, Nb_panneaux, Nb_onduleurs)
+        VALUES (:Iddoc, :An_installation, :Mois_installation, :id_panneau, :id_onduleur,
+            :Puissance_crete, :Surface, :Pente, :Pente_optimum, :Orientation, :Orientation_opti,
+            :id_installateur, :Production_pvgis, :id_localisation, :Nb_panneaux, :Nb_onduleurs)";
+
+    //if pente_optimum and orientation_optimum are not provided, they will be set to NULL
+    if (empty($data['Pente_optimum'])) {
+        $data['Pente_optimum'] = null;
+    }
+    if (empty($data['Orientation_opti'])) {
+        $data['Orientation_opti'] = null;
+    }
+
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':Iddoc', $data['Iddoc']);
+    $stmt->bindParam(':An_installation', $data['An_installation']);
+    $stmt->bindParam(':Mois_installation', $data['Mois_installation']);
+    $stmt->bindParam(':id_panneau', $data['id_panneau']);
+    $stmt->bindParam(':id_onduleur', $data['id_onduleur']);
+    $stmt->bindParam(':Puissance_crete', $data['Puissance_crete']);
+    $stmt->bindParam(':Surface', $data['Surface']);
+    $stmt->bindParam(':Pente', $data['Pente']);
+    $stmt->bindParam(':Pente_optimum', $data['Pente_optimum']);
+    $stmt->bindParam(':Orientation', $data['Orientation']);
+    $stmt->bindParam(':Orientation_opti', $data['Orientation_opti']);
+    $stmt->bindParam(':id_installateur', $data['id_installateur']);
+    $stmt->bindParam(':Production_pvgis', $data['Production_pvgis']);
+    $stmt->bindParam(':id_localisation', $data['id_localisation']);
+    $stmt->bindParam(':Nb_panneaux', $data['Nb_panneaux']);
+    $stmt->bindParam(':Nb_onduleurs', $data['Nb_onduleurs']);
+    try {
+        if ($stmt->execute()) {
+            return ['status' => 'success', 'id' => $db->lastInsertId()];
+        } else {
+            return ['status' => 'error', 'message' => 'SQL Error: ' . implode(', ', $stmt->errorInfo())];
+        }
+    } catch (PDOException $e) {
+        return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
+    }
+}
+
 function updateInstallation($db, $data)
 {
     $query = "
@@ -175,10 +220,11 @@ function updateInstallation($db, $data)
             id_panneau = :id_panneau, id_onduleur = :id_onduleur, 
             Puissance_crete = :Puissance_crete, Surface = :Surface, 
             Pente = :Pente, Pente_optimum = :Pente_optimum, 
-            Orientation = :Orientation, Orientation_opti= :Orientation_optimum, 
-            id_installateur = :Installateur, Production_pvgis = :Production_pvgis,
+            Orientation = :Orientation, Orientation_opti = :Orientation_opti, 
+            id_installateur = :id_installateur, Production_pvgis = :Production_pvgis,
             id_localisation = :id_localisation, Nb_panneaux = :Nb_panneaux, Nb_onduleurs = :Nb_onduleurs
         WHERE id = :id";
+
     //if pente_optimum and orientation_optimum are not provided, they will be set to NULL
     if (empty($data['Pente_optimum'])) {
         $data['Pente_optimum'] = null;
@@ -186,6 +232,7 @@ function updateInstallation($db, $data)
     if (empty($data['Orientation_optimum'])) {
         $data['Orientation_optimum'] = null;
     }
+
     $stmt = $db->prepare($query);
     $stmt->bindParam(':id', $data['id']);
     $stmt->bindParam(':Iddoc', $data['Iddoc']);
@@ -198,20 +245,20 @@ function updateInstallation($db, $data)
     $stmt->bindParam(':Pente', $data['Pente']);
     $stmt->bindParam(':Pente_optimum', $data['Pente_optimum']);
     $stmt->bindParam(':Orientation', $data['Orientation']);
-    $stmt->bindParam(':Orientation_optimum', $data['Orientation_optimum']);
-    $stmt->bindParam(':Installateur', $data['id_installateur']);
-    $stmt->bindParam(':Production_PVGIS', $data['Production_pvgis']);
+    $stmt->bindParam(':Orientation_opti', $data['Orientation_optimum']);  // ← Correction ici
+    $stmt->bindParam(':id_installateur', $data['id_installateur']);
+    $stmt->bindParam(':Production_pvgis', $data['Production_pvgis']);  // ← Correction ici
     $stmt->bindParam(':id_localisation', $data['id_localisation']);
     $stmt->bindParam(':Nb_panneaux', $data['Nb_panneaux']);
     $stmt->bindParam(':Nb_onduleurs', $data['Nb_onduleurs']);
 
     try {
         if ($stmt->execute()) {
-            return ['status' => 'success', 'id' => $db->lastInsertId()];
+            return ['status' => 'success', 'id' => $data['id']];
         } else {
             return ['status' => 'error', 'message' => 'SQL Error: ' . implode(', ', $stmt->errorInfo())];
         }
     } catch (PDOException $e) {
         return ['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()];
-    } 
+    }
 }

@@ -37,7 +37,6 @@ function getLocalisationParLatLon($db, $lat, $lon)
 
 function createLocalisation($db, $data)
 {
-    echo "creating localisaiton with data: " . json_encode($data) . "\n";
     if(localisationExists($db, $data['Lat'], $data['Lon'])) {
         //return the ID of the existing localisation
         $stmt = $db->prepare("SELECT id FROM localisation WHERE ABS(Lat - :lat) < 0.001 AND ABS(Lon - :lon) < 0.001");

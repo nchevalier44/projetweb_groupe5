@@ -1,5 +1,14 @@
 import { displayErrorMessage, fillSelect } from "./utils.js";
 
+//Content loaded when the DOM is ready
+// This function fills the select element with options from the API and adds randoms pin to the map
+document.addEventListener("DOMContentLoaded", () => {
+  fillSelect("annee-installation-select");
+  fillSelect("departements-select");
+  getRandomInstallationsAndAddPin();
+});
+
+
 //Set the icon for the solar panels
 var solarIcon = L.icon({
   iconUrl: "../images/panneau-solaire-icone.png",
@@ -8,6 +17,7 @@ var solarIcon = L.icon({
   popupAnchor: [0, -38], 
 });
 
+// Initialize the map
 var map = L.map("map").setView([47.811399, 1.950145], 6);
 
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -16,12 +26,16 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
+
+//Add random pin when no date or departement is selected
 async function getRandomInstallationsAndAddPin() {
   //Loading item spinner
   addSpinner();
 
   // Remove existing info if any
+  removeInfo();
 
+  // Fetch installations from the API
   let response = await fetch("../api/solar_manager/installations");
   if (!response.ok) {
     displayErrorMessage("Erreur lors de la récupération des installations");
@@ -43,12 +57,8 @@ async function getRandomInstallationsAndAddPin() {
   removeSpinner();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  fillSelect("annee-installation-select");
-  fillSelect("departements-select");
-  getRandomInstallationsAndAddPin();
-});
 
+//Update the map whenever the user selects a year or a department
 async function updateCarte() {
   //add loading spinner
   addSpinner();
@@ -95,6 +105,8 @@ async function updateCarte() {
     nbInstal++;
   });
 
+
+  //Add an info message with the number of installations according to the selected year and department
   let innerText = "";
   if (annee === "") {
     innerText =
@@ -117,12 +129,10 @@ async function updateCarte() {
   addInfo(innerText);
 }
 
-document
-  .getElementById("annee-installation-select")
-  .addEventListener("change", updateCarte);
-document
-  .getElementById("departements-select")
-  .addEventListener("change", updateCarte);
+//Event listeners for the year and department select elements
+document.getElementById("annee-installation-select").addEventListener("change", updateCarte);
+document.getElementById("departements-select").addEventListener("change", updateCarte);
+
 
 function addSpinner() {
   //add loading spinner

@@ -4,6 +4,10 @@ import {
   getPanneau,
   getOnduleur,
   setupVilleAutocomplete,
+  disableSubmitButton,
+  getIdFromExistingOrNewInstallateur,
+  getIdFromExistingOrNewPanneau,
+  getIdFromExistingOrNewOnduleur,
 } from "./utils.js";
 
 //Add event listener to the submit button
@@ -122,207 +126,28 @@ async function updateInstallation() {
   console.log(JSON.stringify({ marque_panneau: dataToSend.Marque_panneau }));
 
   //For each of these blocks, we will first check if the marque/model exists, if not we will create it and get the ID
+  //Function located in utils.js
 
-  //marque panneau
-  let id_marque_panneau = await fetch(`../api/solar_manager/panneaux/marques/?Marque_panneau=${dataToSend.Marque_panneau}`);
-  if (!id_marque_panneau.ok) {
-    let new_id_marque_panneau = await fetch(`../api/solar_manager/panneaux/marques/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ marque_panneau: dataToSend.Marque_panneau }),
-    });
-    if (!new_id_marque_panneau.ok) {
-      console.error(
-        "Erreur lors de la création de la marque de panneau : " +
-          new_id_marque_panneau.statusText
-      );
-      return;
-    }
-    id_marque_panneau = await new_id_marque_panneau.json();
+  let id_panneau = await getIdFromExistingOrNewPanneau(dataToSend.Marque_panneau, dataToSend.Modele_panneau);
+  if (id_panneau === null) {
+    console.error("Erreur lors de la récupération de l'ID du panneau");
+    return;
   }
-  else{
-    id_marque_panneau = await id_marque_panneau.json();
-  }
-  id_marque_panneau = id_marque_panneau['id'];
-  console.log("ID marque_panneau : " + id_marque_panneau);
+  id_panneau = parseInt(id_panneau);
 
-  //modele panneau
-  let id_modele_panneau = await fetch(`../api/solar_manager/panneaux/modeles/?Modele_panneau=${dataToSend.Modele_panneau}`);
-  if (!id_modele_panneau.ok) {
-    let new_id_modele_panneau = await fetch(`../api/solar_manager/panneaux/modeles/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ modele_panneau: dataToSend.Modele_panneau, id_marque_panneau: id_marque_panneau }),
-    });
-    if (!new_id_modele_panneau.ok) {
-      console.error(
-        "Erreur lors de la création du modèle de panneau : " +
-          new_id_modele_panneau.statusText
-      );
-      return;
-    }
-    id_modele_panneau = await new_id_modele_panneau.json();
+  let id_onduleur = await getIdFromExistingOrNewOnduleur(dataToSend.Marque_onduleur, dataToSend.Modele_onduleur);
+  if (id_onduleur === null) {
+    console.error("Erreur lors de la récupération de l'ID de l'onduleur");
+    return;
   }
-  else{
-    id_modele_panneau = await id_modele_panneau.json();
-  }
-  id_modele_panneau = id_modele_panneau['id'];
+  id_onduleur = parseInt(id_onduleur);
 
-  console.log("ID modele_panneau : " + id_modele_panneau);
-
-  //We now have the id of the modele and marque of the panel, we can check if the panel exists and create it if not
-
-  let id_panneau = await fetch(`../api/solar_manager/panneaux/?id_modele_panneau=${id_modele_panneau}&id_marque_panneau=${id_marque_panneau}`);
-  if (!id_panneau.ok) {
-    console.log(
-      "Aucun panneau trouvé avec le modèle et la marque spécifiés, création d'un nouveau panneau."
-    );
-    let new_id_panneau = await fetch(`../api/solar_manager/panneaux/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id_modele_panneau: id_modele_panneau,
-        id_marque_panneau: id_marque_panneau,
-      }),
-    });
-    if (!new_id_panneau.ok) {
-      console.error(
-        "Erreur lors de la création du panneau : " +
-          new_id_panneau.statusText
-      );
-      return;
-    }
-    id_panneau = await new_id_panneau.json();
+  let id_installateur = await getIdFromExistingOrNewInstallateur(dataToSend.Installateur);
+  if (id_installateur === null) {
+    console.error("Erreur lors de la récupération de l'ID de l'installateur");
+    return;
   }
-  else{
-    id_panneau = await id_panneau.json();
-  }
-  id_panneau = id_panneau['id'];
-  console.log("ID panneau : " + id_panneau);
-
-
-  //marque onduleur
-  let id_marque_onduleur = await fetch(`../api/solar_manager/onduleurs/marques/?Marque_onduleur=${dataToSend.Marque_onduleur}`);
-  if (!id_marque_onduleur.ok) {
-    console.log(
-      "Aucune marque d'onduleur trouvée avec le nom spécifié, création d'une nouvelle marque."
-    );
-    let new_id_marque_onduleur = await fetch(`../api/solar_manager/onduleurs/marques/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ marque_onduleur: dataToSend.Marque_onduleur }),
-    });
-    if (!new_id_marque_onduleur.ok) {
-      console.error(
-        "Erreur lors de la création de la marque d'onduleur : " +
-          new_id_marque_onduleur.statusText
-      );
-      return;
-    }
-    id_marque_onduleur = await new_id_marque_onduleur.json();
-  }
-  else{
-    id_marque_onduleur = await id_marque_onduleur.json();
-  }
-  id_marque_onduleur = id_marque_onduleur['id'];
-  console.log("ID marque_onduleur : " + id_marque_onduleur);
-  //modele onduleur
-  let id_modele_onduleur = await fetch(`../api/solar_manager/onduleurs/modeles/?Modele_onduleur=${dataToSend.Modele_onduleur}`);
-  if (!id_modele_onduleur.ok) {
-    console.log(
-      "Aucun modèle d'onduleur trouvé avec le nom spécifié, création d'un nouveau modèle."
-    );
-    let new_id_modele_onduleur = await fetch(`../api/solar_manager/onduleurs/modeles/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ modele_onduleur: dataToSend.Modele_onduleur, id_marque_onduleur: id_marque_onduleur }),
-    });
-    if (!new_id_modele_onduleur.ok) {
-      console.error(
-        "Erreur lors de la création du modèle d'onduleur : " +
-          new_id_modele_onduleur.statusText
-      );
-      return;
-    }
-    id_modele_onduleur = await new_id_modele_onduleur.json();
-  }
-  else{
-    id_modele_onduleur = await id_modele_onduleur.json();
-  }
-  id_modele_onduleur = id_modele_onduleur['id'];
-
-  console.log("ID modele_onduleur : " + id_modele_onduleur);
-
-  //We now have the id of the modele and marque of the onduleur, we can check if the inverter exists and create it if not
-
-  let id_onduleur = await fetch(`../api/solar_manager/onduleurs/?id_modele_onduleur=${id_modele_onduleur}&id_marque_onduleur=${id_marque_onduleur}`);
-  if (!id_onduleur.ok) {
-    console.log(
-      "Aucun onduleur trouvé avec le modèle et la marque spécifiés, création d'un nouvel onduleur."
-    );
-    let new_id_onduleur = await fetch(`../api/solar_manager/onduleurs/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id_modele_onduleur: id_modele_onduleur,
-        id_marque_onduleur: id_marque_onduleur,
-      }),
-    });
-    if (!new_id_onduleur.ok) {
-      console.error(
-        "Erreur lors de la création de l'onduleur : " +
-          new_id_onduleur.statusText
-      );
-      return;
-    }
-    id_onduleur = await new_id_onduleur.json();
-  }
-  else{
-    id_onduleur = await id_onduleur.json();
-  }
-  id_onduleur = id_onduleur['id']['id'];
-  console.log("ID onduleur : " + id_onduleur);
-
-
-  //installateur
-  let id_installateur = await fetch(`../api/solar_manager/installateurs/?Installateur=${dataToSend.Installateur}`);
-  if (!id_installateur.ok) {
-    console.log(
-      "Aucun installateur trouvé avec le nom spécifié, création d'un nouvel installateur."
-    );
-    let new_id_installateur = await fetch(`../api/solar_manager/installateurs/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ Installateur: dataToSend.Installateur }),
-    });
-    if (!new_id_installateur.ok) {
-      console.error(
-        "Erreur lors de la création de l'installateur : " +
-          new_id_installateur.statusText
-      );
-      return;
-    }
-    id_installateur = await new_id_installateur.json();
-  }
-  else{
-    id_installateur = await id_installateur.json();
-  }
-  id_installateur = id_installateur['id'];
-  console.log("ID installateur : " + id_installateur);
+  id_installateur = parseInt(id_installateur);
 
   
   //localisation
@@ -343,8 +168,6 @@ async function updateInstallation() {
     Lat: dataToSend.Lat,
     Lon: dataToSend.Lon,
   };
-
-  console.log(JSON.stringify(localisation));
 
   let localisationResponse = await fetch(`../api/solar_manager/localisations/?id=${dataToSend.location_id}`, {
     method: "PUT",
@@ -368,24 +191,25 @@ async function updateInstallation() {
 
   let installation = {
     id: id,
-    Iddoc: dataToSend.Iddoc,
-    Nb_panneaux: dataToSend.Nb_panneaux,
-    Nb_onduleurs: dataToSend.Nb_onduleurs,
-    Puissance_crete: dataToSend.Puissance_crete,
-    Pente: dataToSend.Pente,
+    Iddoc: parseInt(dataToSend.Iddoc),
+    Nb_panneaux: parseInt(dataToSend.Nb_panneaux),
+    Nb_onduleurs: parseInt(dataToSend.Nb_onduleurs),
+    Puissance_crete: parseInt(dataToSend.Puissance_crete),
+    Pente: parseInt(dataToSend.Pente),
     Orientation: dataToSend.Orientation,
-    Surface: dataToSend.Surface,
-    Production_pvgis: dataToSend.Production_pvgis,
-    Pente_optimum: dataToSend.Pente_optimum,
+    Surface: parseInt(dataToSend.Surface),
+    Production_pvgis: parseInt(dataToSend.Production_pvgis),
+    Pente_optimum: parseInt(dataToSend.Pente_optimum),
     Orientation_optimum: dataToSend.Orientation_opti,
-    Mois_installation: dataToSend.Mois_installation,
-    An_installation: dataToSend.An_installation,
-    id_panneau: id_panneau,
-    id_onduleur: id_onduleur,
-    id_installateur: id_installateur,
-    id_localisation: localisation.id,
+    Mois_installation: parseInt(dataToSend.Mois_installation),
+    An_installation: parseInt(dataToSend.An_installation),
+    id_panneau: parseInt(id_panneau),
+    id_onduleur: parseInt(id_onduleur),
+    id_installateur: parseInt(id_installateur),
+    id_localisation: parseInt(localisation.id),
   
   };
+  console.log(JSON.stringify(installation));
   console.log("Installation data to send:", installation);
   let installationResponse = await fetch(`../api/solar_manager/installations/`, {
     method: "PUT",
@@ -404,7 +228,11 @@ async function updateInstallation() {
     }
   console.log("Installation mise à jour avec succès");
   alert("Installation modifiée avec succès !");
+
 }
 
 
-
+// Add event listeners to the input fields to check if all required fields are filled
+document.querySelectorAll("input, select").forEach((input) => {
+  input.addEventListener("input", disableSubmitButton);
+});

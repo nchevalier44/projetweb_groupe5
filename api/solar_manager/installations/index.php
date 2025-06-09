@@ -41,6 +41,20 @@
 
     //POST METHOD
     } else if($_SERVER['REQUEST_METHOD'] == "POST"){
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (isset($data['Iddoc']) && isset($data['Mois_installation']) && isset($data['An_installation']) && isset($data['Nb_panneaux']) &&
+            isset($data['Nb_onduleurs']) && isset($data['Puissance_crete']) && isset($data['Surface']) && isset($data['Pente']) && 
+            isset($data['Orientation']) && isset($data['id_localisation']) && isset($data['id_installateur']) &&
+            isset($data['id_onduleur']) && isset($data['id_panneau'])) {
+            echo json_encode(addInstallation($db, $data));
+            return;
+        } else {
+            http_response_code(400);
+            echo json_encode(["error" => "Missing required fields."]);
+            return;
+        }
+
+        
 
 
     //PUT METHOD

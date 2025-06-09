@@ -13,3 +13,47 @@
 #installations-list {
   gap: 2%;
 }
+
+.container-installation {
+  background-color: #0077b6 !important;
+  border: solid 3px #000000;
+  color: white;
+}
+
+#installations-list {
+  gap: 2%;
+}
+
+
+
+#searchForm {
+  background-color: #48bfff;
+  border: 2px solid #333;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+#searchForm label.form-label {
+  font-weight: 600;
+  color: #044f78;
+  margin-bottom: 0.3rem;
+}
+
+#searchForm input.form-control {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  border-radius: 1rem;
+  border: 1.5px solid #4e9cff;
+  margin-bottom: 1.1rem;
+  font-size: 1rem;
+  padding: 0.6rem 1rem;
+  background: #f8fbff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}

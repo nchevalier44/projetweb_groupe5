@@ -1,5 +1,7 @@
 import { displayErrorMessage, fillSelect } from "./utils.js";
 
+//Content loaded when the DOM is ready
+// This function fills the select elements with options from the API
 document.addEventListener("DOMContentLoaded", () => {
   fillSelect("region-select");
   fillSelect("annee-installation-select");
@@ -8,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+//Update the text of the paragraph with the number of installations according to the selected year and regions
 async function updateTextNbInstallation() {
   let paragraphe = document.getElementById("nb-installation-annee-region");
 
@@ -35,5 +38,6 @@ async function updateTextNbInstallation() {
   document.getElementById("value-select").innerText = installations.length;
 }
 
+//Update the text when the select elements change
 document.getElementById("annee-installation-select").addEventListener("change", updateTextNbInstallation);
 document.getElementById("region-select").addEventListener("change", updateTextNbInstallation);

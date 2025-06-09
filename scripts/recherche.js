@@ -2,6 +2,7 @@ import { displayErrorMessage, fillSelect } from "./utils.js";
 
 const INSTALLATIONS_LIMIT_PER_PAGE = 99;
 
+// Fill the select elements with options from the API
 document.addEventListener("DOMContentLoaded", () => {
   fillSelect("departements-select", 20);
   fillSelect("marques-onduleurs-select", 20);
@@ -15,7 +16,7 @@ document.getElementById("marques-panneaux-select").addEventListener("change", ()
 document.getElementById("previous-page").addEventListener("click", () => changePage(-1));
 document.getElementById("next-page").addEventListener("click", () => changePage(1));
 
-
+// Search installations based on selected filters
 async function searchInstallation(limit=99, offset=0) {
   let departements_id = Array.from(document.getElementById("departements-select").selectedOptions).map(opt => opt.value);
   let marques_onduleurs_id = Array.from(document.getElementById("marques-onduleurs-select").selectedOptions).map(opt => opt.value);
@@ -34,10 +35,12 @@ async function searchInstallation(limit=99, offset=0) {
   displayResults(installations);
 }
 
+// Display the results in the HTML
 function displayResults(installations) {
   let container = document.getElementById("installations-list");
   container.innerHTML = ""; // Clear previous results
 
+  // If no installations found, display a message
   if(installations.length === 0) {
 container.innerHTML = `
   <div class="alert alert-info text-center mx-auto mt-4 " role="alert">
@@ -58,6 +61,8 @@ container.innerHTML = `
       mois = "0" + installation.Mois_installation
     }
 
+    // Create a new div for each installation
+    // and add it to the container
     container.innerHTML += `
     <div class='rounded-5 container w-25 mb-5 pb-3 pt-3 ps-5 pe-5 container-installation' onclick="window.location.href='details.php?id=${installation.id}'">
       <h3 class='text-center'>${installation.nom_ville} | ${mois}/${installation.An_installation}</h3>
@@ -73,7 +78,7 @@ container.innerHTML = `
 
 }
 
-
+// Change the current page and fetch new results
 async function changePage(page){
   let current_page = document.getElementById("current-page");
   if(current_page.innerText + page > 0){

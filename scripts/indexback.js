@@ -1,3 +1,4 @@
+//Add an info message to the page when the user is logged in as an admin
 document.addEventListener("DOMContentLoaded", function () {
   let info = document.createElement("div");
   info.id = "info";
@@ -23,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add the info
   document.getElementsByTagName("header")[0].insertAdjacentElement("afterend", info);
+  //Timeout to remove the info after 5 seconds
   setTimeout(() => {document.getElementById("info").remove();}, 5000);
 });
 

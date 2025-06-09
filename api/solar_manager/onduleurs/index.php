@@ -16,7 +16,7 @@
             $id_marque = htmlspecialchars($_GET['id_marque_onduleur']);
             $idOnduleur = getIdOnduleurParIds($db, $id_marque, $id_modele);
             if($idOnduleur){
-                echo json_encode(['id' => $idOnduleur]);
+                echo json_encode($idOnduleur);
                 return;
             } else {
                 http_response_code(404);

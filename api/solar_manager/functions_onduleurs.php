@@ -86,7 +86,7 @@ function deleteOnduleur($db, $id) {
 
 
 function getIdOnduleurParIds($db, $id_marque, $id_modele) {
-    $stmt = $db->prepare("SELECT id FROM onduleur WHERE id_marque_onduleur = :id_marque AND id_modele_onduleur = :id_modele");
+    $stmt = $db->prepare("SELECT * FROM onduleur WHERE id_marque_onduleur = :id_marque AND id_modele_onduleur = :id_modele");
     $stmt->bindParam(':id_marque', $id_marque, PDO::PARAM_INT);
     $stmt->bindParam(':id_modele', $id_modele, PDO::PARAM_INT);
     $stmt->execute();
