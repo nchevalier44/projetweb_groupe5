@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
           let response = await fetch(`../api/solar_manager/localisations/?id=${localisationsId}`, {
             method: "DELETE",
           });
-          //window.location.href = "../back/index.php";
+          window.location.href = "../back/index.php";
         }
       }
     };
