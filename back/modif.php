@@ -84,10 +84,10 @@
             <input type="number" class="form-control" id="production-pvgis" required>
 
             <label class="form-label mt-3" for="latitude">Latitude</label>
-            <input type="number" class="form-control" id="latitude" required>
+            <input type="number" class="form-control" id="latitude" step="any" required>
 
             <label class="form-label mt-3" for="longitude">Longitude</label>
-            <input type="number" class="form-control" id="longitude" required>
+            <input type="number" class="form-control" id="longitude" step="any" required>
 
             <label class="form-label mt-3" for="ville">Ville</label>
             <input list="villes" class="form-control" id="ville" required>
@@ -108,7 +108,7 @@
     <!-- Back office and modification JS logic -->
     <script src="../scripts/back.js"></script>
     <script src="../scripts/modif.js" type="module"></script>
-    
+
 </body>
 
 </html>
