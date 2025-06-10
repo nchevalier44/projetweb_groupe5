@@ -208,7 +208,7 @@ Affichage des installations correspondantes avec :
 #### 4. Détail d'installation
 - Affichage complet de toutes les données
 - Page dédiée accessible depuis les résultats
-- Carte intéractive
+- Carte interactive
 
 #### 5. Carte interactive
 - Formulaire de sélection :
@@ -315,6 +315,7 @@ Projet réalisé par :
 ### Outils de collaboration
 - **Git** - Gestionnaire de versions
 - **Figma** - Maquettes et design
+- **lien** -https://github.com/nchevalier44/projetweb_groupe5
 
 ---
 
