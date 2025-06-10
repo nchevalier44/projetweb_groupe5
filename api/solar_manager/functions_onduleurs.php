@@ -18,7 +18,7 @@ function getOnduleurParId($db, $id) {
     ORDER BY Onduleur_marque, Onduleur_modele");
     $stmt->bindParam(':id', $id);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // Get the number of unique onduleur brands

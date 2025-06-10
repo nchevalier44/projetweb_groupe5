@@ -208,7 +208,7 @@ Affichage des installations correspondantes avec :
 #### 4. Détail d'installation
 - Affichage complet de toutes les données
 - Page dédiée accessible depuis les résultats
-- Carte intéractive
+- Carte interactive
 
 #### 5. Carte interactive
 - Formulaire de sélection :
@@ -286,20 +286,19 @@ Des endpoints afin de lister, récupérer, modifier, supprimer pour les modèles
 
 1. **Cloner le repository**
 ```bash
-git clone [url-du-repository]
+git clone https://github.com/nchevalier44/projetweb_groupe5
 cd projetweb_groupe5
 ```
 
 2. **Configuration de la base de données**
 ```bash
 # Créer la base de données
-# Importer le schéma
-mysql -u root -p < bdd/model.sql
+mysql -u user -p < bdd/sql/model.sql
 ```
 
 3. **Import des données**
 ```bash
-php bdd/sql/data.sql
+mysql -u user -p < bdd/sql/data.sql
 ```
 
 ---
@@ -315,6 +314,7 @@ Projet réalisé par :
 ### Outils de collaboration
 - **Git** - Gestionnaire de versions
 - **Figma** - Maquettes et design
+- **lien** -https://github.com/nchevalier44/projetweb_groupe5
 
 ---
 

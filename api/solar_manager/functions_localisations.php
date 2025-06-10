@@ -24,7 +24,7 @@ function getLocalisationParId($db, $id)
     $stmt = $db->prepare("SELECT * FROM localisation WHERE id = :id");
     $stmt->bindParam(':id', $id);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // Get a localisation by latitude and longitude (with a small tolerance)
@@ -34,7 +34,7 @@ function getLocalisationParLatLon($db, $lat, $lon)
     $stmt->bindParam(':lat', $lat);
     $stmt->bindParam(':lon', $lon);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // Create a new localisation or return the existing one if it already exists

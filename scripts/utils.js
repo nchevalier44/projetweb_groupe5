@@ -25,8 +25,7 @@ export async function fillSelect(id, limit=-1) {
       error_message = "Erreur lors de la récupération des regions";
       default_option_message = "Sélectionner une region";
       text = "Reg_nom";
-      value = "Reg_code";
-
+      value = "id";
       break;
 
     //Recherche page
@@ -34,7 +33,7 @@ export async function fillSelect(id, limit=-1) {
       path += "departements/";
       error_message = "Erreur lors de la récupération des départements : ";
       default_option_message = "Choisissez un département";
-      value = "Dep_code";
+      value = "id";
       text = "Dep_nom";
       break;
     case "marques-onduleurs-select":
@@ -154,7 +153,7 @@ export function displayErrorMessage(message){
 export async function fillCityDepReg() {
 
   // Fetch departments and regions from the API
-  let responsedep = await fetch(`../api/solar_manager/departements`);
+  let responsedep = await fetch(`../api/solar_manager/departements/`);
   if (!responsedep.ok) {
     responsedep.error(
       "Erreur lors de la récupération des informations de départements : " +
@@ -165,7 +164,7 @@ export async function fillCityDepReg() {
 
   let departements = await responsedep.json();
 
-  let responsereg = await fetch(`../api/solar_manager/regions`);
+  let responsereg = await fetch(`../api/solar_manager/regions/`);
   if (!responsereg.ok) {
     console.error(
       "Erreur lors de la récupération des informations des regions : " +
@@ -200,7 +199,7 @@ export async function setupVilleAutocomplete() {
   let villes = [];
 
   try {
-    let response = await fetch(`../api/solar_manager/villes`);
+    let response = await fetch(`../api/solar_manager/villes/`);
     villes = await response.json();
   } catch (error) {
     console.error("Erreur chargement villes:", error);

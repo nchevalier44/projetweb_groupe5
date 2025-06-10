@@ -36,7 +36,7 @@ async function getRandomInstallationsAndAddPin() {
   removeInfo();
 
   // Fetch installations from the API
-  let response = await fetch("../api/solar_manager/installations");
+  let response = await fetch("../api/solar_manager/installations/");
   if (!response.ok) {
     displayErrorMessage("Erreur lors de la récupération des installations");
     return;
@@ -46,6 +46,7 @@ async function getRandomInstallationsAndAddPin() {
   for (let i = 0; i < 50; i++) {
     let randomId = Math.floor(Math.random() * installations.length);
     let installation = installations[randomId];
+    console.log(installation);
     var marker = L.marker([installation["Lat"], installation["Lon"]], {
       icon: solarIcon,
     }).addTo(map);
@@ -86,6 +87,7 @@ async function updateCarte() {
   });
 
   // Fetch installations based on selected year and department
+  console.log('departement:', departement);
   let response = await fetch(`../api/solar_manager/installations/?annee=${annee}&id-departement=${departement}`);
   if (!response.ok) {
     displayErrorMessage("Erreur lors de la récupération des installations");
