@@ -2,7 +2,15 @@
 
 // Get all installation information
 function getInformationsInstallations($db){
-    $stmt = $db->query("SELECT * FROM installation");
+    $stmt = $db->query("SELECT *, i.id as id, region.id as id_region, departement.id as id_departement, v.id as id_ville, v.nom_standard AS nom_ville
+        FROM installation i
+        JOIN onduleur o ON i.id_onduleur = o.id
+        JOIN panneau p ON i.id_panneau = p.id
+        JOIN localisation l ON i.id_localisation = l.id
+        JOIN ville v ON l.code_insee = v.code_insee
+        JOIN departement ON v.id = departement.id
+        JOIN region On departement.id_region = region.id
+        ORDER BY RAND() LIMIT 100;"); // Limit to 100 installations for performance
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -133,8 +141,7 @@ function getInstallationsFilters($db, $filters){
 
     if($limit != 0) $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     if($offset != 0) $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    
-
+        
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

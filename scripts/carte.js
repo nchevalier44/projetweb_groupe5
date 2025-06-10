@@ -46,6 +46,7 @@ async function getRandomInstallationsAndAddPin() {
   for (let i = 0; i < 50; i++) {
     let randomId = Math.floor(Math.random() * installations.length);
     let installation = installations[randomId];
+    console.log(installation);
     var marker = L.marker([installation["Lat"], installation["Lon"]], {
       icon: solarIcon,
     }).addTo(map);
