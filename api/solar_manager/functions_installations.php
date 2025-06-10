@@ -10,7 +10,7 @@ function getInformationsInstallations($db){
         JOIN ville v ON l.code_insee = v.code_insee
         JOIN departement ON v.id = departement.id
         JOIN region On departement.id_region = region.id
-        ORDER BY RAND() LIMIT 100;"); // Limit to 100 installations for performance
+        ORDER BY RAND() LIMIT 1000;"); // Limit to 1000 installations for performance
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
