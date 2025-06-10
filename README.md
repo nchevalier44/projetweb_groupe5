@@ -286,7 +286,7 @@ Des endpoints afin de lister, récupérer, modifier, supprimer pour les modèles
 
 1. **Cloner le repository**
 ```bash
-git clone [url-du-repository]
+git clone https://github.com/nchevalier44/projetweb_groupe5
 cd projetweb_groupe5
 ```
 
