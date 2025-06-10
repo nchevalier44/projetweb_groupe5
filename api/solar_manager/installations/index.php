@@ -2,6 +2,10 @@
     require_once '../database.php';
     require_once '../functions_installations.php'; // Functions for installations
 
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
     $db = connectDB();
     header('Content-Type: application/json');
     
@@ -9,6 +13,13 @@
     // Handle GET requests for installations
     if($_SERVER['REQUEST_METHOD'] == "GET"){
         $parameters = [];
+
+        if(count($_GET) == 0){
+            // If no parameters are provided, return all installations
+            echo json_encode(getInformationsInstallations($db)); 
+            return;
+        }
+
         // Get installation by ID if only 'id' is provided
         if(isset($_GET['id']) && count($_GET) == 1){
 

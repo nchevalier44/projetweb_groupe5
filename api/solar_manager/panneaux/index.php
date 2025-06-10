@@ -52,7 +52,7 @@
                 return;
             } else {
                 // If panel already exists, return error
-                http_response_code(response_code: 400);
+                http_response_code(400);
                 echo json_encode(['error' => 'Panneau already exists']);
                 return;
             }
