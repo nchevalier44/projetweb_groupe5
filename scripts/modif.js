@@ -36,7 +36,7 @@ async function fillDetails() {
   let panneau = await getPanneau(installation.id_panneau);
   let onduleur = await getOnduleur(installation.id_onduleur);
   let installateur = await getInstallateur(installation.id_installateur);
-  
+
   //Prefill the form fields
   document.getElementById("iddoc").value = installation.Iddoc || "";
   document.getElementById("date-installation").value = installation.An_installation + "-" + String(installation.Mois_installation).padStart(2, "0");
