@@ -25,8 +25,7 @@ export async function fillSelect(id, limit=-1) {
       error_message = "Erreur lors de la récupération des regions";
       default_option_message = "Sélectionner une region";
       text = "Reg_nom";
-      value = "Reg_code";
-
+      value = "id";
       break;
 
     //Recherche page
@@ -34,7 +33,7 @@ export async function fillSelect(id, limit=-1) {
       path += "departements/";
       error_message = "Erreur lors de la récupération des départements : ";
       default_option_message = "Choisissez un département";
-      value = "Dep_code";
+      value = "id";
       text = "Dep_nom";
       break;
     case "marques-onduleurs-select":

@@ -91,7 +91,7 @@ function getInstallationsFilters($db, $filters){
         WHERE 1=1"; //'Add WHERE 1=1' to return all installations if no filters are applied
 
     //Create end of query with order, limit and offset
-    $end_query = " ORDER BY v.nom_standard";
+    $end_query = " ORDER BY nom_ville";
     $limit = 0;
     $offset = 0;
     if(isset($filters['limit'])){
@@ -120,7 +120,6 @@ function getInstallationsFilters($db, $filters){
         $query .= ")";
     }
 
-
     //Prepare the query
     $query .= $end_query;
     $stmt = $db->prepare($query);
@@ -137,6 +136,7 @@ function getInstallationsFilters($db, $filters){
     
 
     $stmt->execute();
+
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

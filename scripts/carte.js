@@ -36,7 +36,7 @@ async function getRandomInstallationsAndAddPin() {
   removeInfo();
 
   // Fetch installations from the API
-  let response = await fetch("../api/solar_manager/installations");
+  let response = await fetch("../api/solar_manager/installations/");
   if (!response.ok) {
     displayErrorMessage("Erreur lors de la récupération des installations");
     return;
@@ -86,6 +86,7 @@ async function updateCarte() {
   });
 
   // Fetch installations based on selected year and department
+  console.log('departement:', departement);
   let response = await fetch(`../api/solar_manager/installations/?annee=${annee}&id-departement=${departement}`);
   if (!response.ok) {
     displayErrorMessage("Erreur lors de la récupération des installations");
