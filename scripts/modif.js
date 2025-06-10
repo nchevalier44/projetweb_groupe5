@@ -149,6 +149,14 @@ async function updateInstallation() {
     }
   }
   code_insee = await code_insee.json();
+  console.log(code_insee);
+  if(code_insee.length === 0){
+    if(confirm("Ville non reconnue, veuillez entrer une ville valide")){
+      return;
+    }
+    console.error("Aucune ville trouvée avec le nom : " + dataToSend.Nom_standard);
+    return;
+  }
   code_insee = code_insee[0].code_insee;
 
   //We just update the localisation with the new data

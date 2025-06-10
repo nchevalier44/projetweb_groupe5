@@ -293,13 +293,12 @@ cd projetweb_groupe5
 2. **Configuration de la base de données**
 ```bash
 # Créer la base de données
-# Importer le schéma
-mysql -u root -p < bdd/model.sql
+mysql -u user -p < bdd/sql/model.sql
 ```
 
 3. **Import des données**
 ```bash
-php bdd/sql/data.sql
+mysql -u user -p < bdd/sql/data.sql
 ```
 
 ---
