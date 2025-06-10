@@ -43,12 +43,6 @@ async function fillDetails() {
   onduleur = onduleur[0];
   installateur = installateur[0];
 
-  console.log("Installation data:", installation);
-  console.log("Location data:", location);
-  console.log("Panneau data:", panneau);
-  console.log("Onduleur data:", onduleur);
-  console.log("Installateur data:", installateur);
-
   //Prefill the form fields
   document.getElementById("iddoc").value = installation.Iddoc || "";
   document.getElementById("date-installation").value =
@@ -120,10 +114,6 @@ async function updateInstallation() {
     Nom_standard: document.getElementById("ville").value,
     localisation_id: document.getElementById("location-id").value,
   };
-
-  console.log(dataToSend);
-  console.log(dataToSend.Marque_panneau);
-  console.log(JSON.stringify({ marque_panneau: dataToSend.Marque_panneau }));
 
   //For each of these blocks, we will first check if the marque/model exists, if not we will create it and get the ID
   //Function located in utils.js

@@ -99,6 +99,7 @@ $db = connectDB();
     <!-- Include the footer -->
     <?php include_once "../html/footer.html"; ?>
     <script src="../scripts/ajout.js" type="module"></script>
+    <script src="../scripts/back.js"></script>
 </body>
 
 </html>

@@ -108,6 +108,7 @@
     <!-- Back office and modification JS logic -->
     <script src="../scripts/back.js"></script>
     <script src="../scripts/modif.js" type="module"></script>
+    
 </body>
 
 </html>
