@@ -88,5 +88,4 @@ async function changePage(page){
       current_page.innerText = parseInt(current_page.innerText) - page; // Revert page change if no results
     }
   }
-  
 }
