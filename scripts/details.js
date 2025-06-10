@@ -55,7 +55,7 @@ async function fillDetails(){
     //Fill the HTML elements with the installation information
     installation_info.innerHTML = `
         <li><b>Id Doc</b> : ${installation.Iddoc}</li>
-        <li><b>Date d'installation</b> : ${installation.Mois_installation}/${installation.An_installation}</li>
+        <li><b>Date d'installation</b> : ${String(installation.Mois_installation).padStart(2, "0")}/${installation.An_installation}</li>
         <li><b>Nombre de panneaux</b> : ${installation.Nb_panneaux}</li>
         <li><b>Nombre d'onduleurs</b> : ${installation.Nb_onduleurs}</li>
         <li><b>Puissance crête</b> : ${installation.Puissance_crete}</li>

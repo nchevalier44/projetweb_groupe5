@@ -81,7 +81,7 @@ container.innerHTML = `
 // Change the current page and fetch new results
 async function changePage(page){
   let current_page = document.getElementById("current-page");
-  if(current_page.innerText + page > 0){
+  if(parseInt(current_page.innerText) + page >= 0){
     current_page.innerText = parseInt(current_page.innerText) + page;
     await searchInstallation(INSTALLATIONS_LIMIT_PER_PAGE, parseInt(current_page.innerText) * INSTALLATIONS_LIMIT_PER_PAGE);
     if(document.getElementById("installations-list").children.length == 0){
