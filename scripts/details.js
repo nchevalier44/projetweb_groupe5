@@ -37,14 +37,6 @@ async function fillDetails(){
     let onduleur = await getOnduleur(installation.id_onduleur);
     let installateur = await getInstallateur(installation.id_installateur);
 
-    //Take the ['0'] element of each
-    location = location[0];
-    panneau = panneau[0];
-    onduleur = onduleur[0];
-    installateur = installateur[0];
-
-
-
     //Clear existing content
     installation_info.innerHTML = "";
     panneau_infos.innerHTML = "";
