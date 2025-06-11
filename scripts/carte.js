@@ -111,19 +111,11 @@ async function updateCarte() {
   //Add an info message with the number of installations according to the selected year and department
   let innerText = "";
   if (annee === "") {
-    innerText =
-      nbInstal +
-      " installations ont été réalisées dans le departement " +
-      departementText;
+    innerText = nbInstal + " installations ont été réalisées dans le departement " + departementText;
   } else if (departement === "") {
     innerText = nbInstal + "  installations ont été réalisées en " + annee;
   } else {
-    innerText =
-      nbInstal +
-      " installations ont été réalisées en " +
-      annee +
-      " dans le département " +
-      departementText;
+    innerText = nbInstal + " installations ont été réalisées en " + annee + " dans le département " + departementText;
   }
   // Remove the loading spinner
   removeSpinner();

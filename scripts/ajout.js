@@ -79,9 +79,7 @@ async function submitForm(){
 
 
   //We first get the insee code of the city, if it doesn't exist we alert the user
-  let code_insee = await fetch(
-    `../api/solar_manager/villes/?Nom_standard=${dataToSend.Nom_standard}`
-  );
+  let code_insee = await fetch(`../api/solar_manager/villes/?Nom_standard=${dataToSend.Nom_standard}`);
   if (!code_insee.ok) {
     if (alert("Ville non reconnue, veuillez entrer une ville valide")) {
       return;
@@ -143,9 +141,7 @@ async function submitForm(){
     body: JSON.stringify(installation),
   });
   if (!response.ok) {
-    console.error(
-      "Erreur lors de la création de l'installation : " + response.statusText
-    );
+    console.error("Erreur lors de la création de l'installation : " + response.statusText);
     return;
   }
   console.log("Installation créée avec succès");

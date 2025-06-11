@@ -166,10 +166,7 @@ export async function fillCityDepReg() {
 
   let responsereg = await fetch(`../api/solar_manager/regions/`);
   if (!responsereg.ok) {
-    console.error(
-      "Erreur lors de la récupération des informations des regions : " +
-        responsereg.statusText
-    );
+    console.error("Erreur lors de la récupération des informations des regions : " + responsereg.statusText);
     return;
   }
 
@@ -177,18 +174,12 @@ export async function fillCityDepReg() {
 // Fill the select elements with the fetched data
   let selectDep = document.getElementById("departements");
   departements.forEach((departement) => {
-    selectDep.innerHTML +=
-      `<option value="` +
-      departement.Dep_nom +
-      `">` +
-      departement.Dep_code +
-      `</option>`;
+    selectDep.innerHTML += `<option value="` + departement.Dep_nom + `">` + departement.Dep_code + `</option>`;
   });
 
   let selectReg = document.getElementById("regions");
   regions.forEach((region) => {
-    selectReg.innerHTML +=
-      `<option value="` + region.Reg_nom + `">` + region.Reg_code + `</option>`;
+    selectReg.innerHTML += `<option value="` + region.Reg_nom + `">` + region.Reg_code + `</option>`;
   });
 }
 
@@ -369,9 +360,7 @@ export async function getIdFromExistingOrNewOnduleur(Marque_onduleur, Modele_ond
   //marque onduleur
   let id_marque_onduleur = await fetch(`../api/solar_manager/onduleurs/marques/?Marque_onduleur=${Marque_onduleur}`);
   if (!id_marque_onduleur.ok) {
-    console.log(
-      "Aucune marque d'onduleur trouvée avec le nom spécifié, création d'une nouvelle marque."
-    );
+    console.log("Aucune marque d'onduleur trouvée avec le nom spécifié, création d'une nouvelle marque.");
     let new_id_marque_onduleur = await fetch(`../api/solar_manager/onduleurs/marques/`, {
       method: "POST",
       headers: {
@@ -476,10 +465,7 @@ export async function getIdFromExistingOrNewInstallateur(Nom_installateur) {
       }
     );
     if (!new_id_installateur.ok) {
-      console.error(
-        "Erreur lors de la création de l'installateur : " +
-          new_id_installateur.statusText
-      );
+      console.error("Erreur lors de la création de l'installateur : " + new_id_installateur.statusText);
       return;
     }
     id_installateur = await new_id_installateur.json();
