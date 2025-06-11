@@ -21,7 +21,9 @@ if (isset($_SESSION['username']) && isset($_SESSION['password'])) {
         } else {
             // Redirect to previous page or index with error if login fails
             if(isset($_SERVER['HTTP_REFERER'])){
-                header('Location: ' . $_SERVER['HTTP_REFERER'] . '?login-error=1');
+                $ref = $_SERVER['HTTP_REFERER'];
+                $sep = (strpos($ref, '?') === false) ? '?' : '&';
+                header('Location: ' . $ref . $sep  . '?login-error=1');
                 exit();
             } else{
                 header('Location: ../html/index.php?login-error=1');
